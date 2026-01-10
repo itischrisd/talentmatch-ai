@@ -1,0 +1,183 @@
+[app]
+name = "TalentMatch AI"
+env = "dev"
+timezone = "Europe/Warsaw"
+
+[paths]
+data_dir = "/data"
+runs_dir = "/data/runs"
+inbox_dir = "/data/inbox"
+raw_dir = "/data/raw"
+generated_dir = "/data/generated"
+interim_dir = "/data/interim"
+indexes_dir = "/data/indexes"
+reports_dir = "/data/reports"
+
+[runs]
+use_run_folders = true
+default_run_prefix = "run"
+
+[azure_openai]
+temperature = 0.2
+max_tokens = 1200
+top_p = 0.95
+request_timeout_s = 60
+
+[neo4j]
+database_default = "neo4j"
+
+[neo4j.keys]
+person_key = "person_id"
+skill_key = "name"
+company_key = "name"
+project_key = "name"
+rfp_key = "rfp_id"
+
+[chroma]
+collection_cv = "cv_docs"
+collection_rfp = "rfp_docs"
+
+[ingest]
+default_cv_pdf_dir = "/data/raw/cvs_pdf"
+default_rfp_dir = "/data/raw/rfps"
+default_assignments_dir = "/data/raw/assignments"
+
+[chunking]
+chunk_size = 900
+chunk_overlap = 150
+separator = "\n"
+
+[rag_vector]
+k = 6
+score_threshold = 0.0
+use_mmr = false
+mmr_lambda = 0.5
+include_metadata = true
+
+[rag_vector.hybrid]
+enabled = false
+bm25_weight = 0.4
+vector_weight = 0.6
+
+[rag_vector.query_expansion]
+enabled = false
+n_variants = 2
+
+[rag_vector.rerank]
+enabled = false
+top_n = 6
+
+[rag_graph]
+mode = "cypher_qa"
+max_returned_rows = 50
+allow_write_queries = false
+
+[kg]
+strict_schema = true
+max_nodes_per_cv = 120
+max_edges_per_cv = 250
+
+[matching]
+top_k = 10
+min_score = 0.0
+
+[matching.weights]
+skills = 0.55
+experience = 0.25
+availability = 0.20
+
+[matching.availability]
+default_allocation = 1.0
+time_unit = "day"
+assume_open_end_assignments = true
+
+[matching.llm_judge]
+enabled = false
+temperature = 0.0
+max_tokens = 400
+
+[bi]
+default_engine = "graph"
+fallback_engine = "vector"
+
+[orchestration]
+enabled = true
+memory_enabled = true
+max_turns = 30
+
+[evaluation]
+enabled = true
+n_questions_smoke = 8
+measure_latency = true
+
+[evaluation.ragas]
+enabled = true
+faithfulness = true
+answer_relevancy = true
+context_precision = true
+context_recall = true
+
+[logging]
+json_logs = false
+log_prompts = false
+
+[datasets]
+default_seed = 12345
+
+[datasets.projects]
+default_count = 20
+start_date_past_years = 2
+start_date_future_months = 6
+duration_months_min = 3
+duration_months_max = 18
+team_size_min = 2
+team_size_max = 8
+budget_amount_min = 50000
+budget_amount_max = 500000
+budget_is_optional = true
+budget_present_probability = 0.5
+end_date_only_for_completed = true
+project_type_labels = [
+  "E-commerce Platform",
+  "Data Analytics Dashboard",
+  "Mobile App Development",
+  "Cloud Migration",
+  "AI-Powered Recommendation System",
+  "CRM System Modernization",
+  "IoT Device Management Platform",
+  "Cybersecurity Hardening",
+  "DevOps Automation",
+  "Microservices Refactor"
+]
+client_name_labels = [
+  "TechCorp",
+  "FinTech Innovations",
+  "BioTech Labs",
+  "RetailPro",
+  "CloudScale Inc",
+  "HealthPlus",
+  "AutoMotive Systems",
+  "EduNext",
+  "GreenEnergy Co",
+  "MediaStream"
+]
+name_template = "{project_type} for {client}"
+description_template = "Development of {project_type_lower} with focus on scalability and performance"
+
+[datasets.projects.status_weights]
+completed = 50
+active = 30
+planned = 15
+on_hold = 5
+
+[datasets.project_requirements]
+requirements_count_min = 3
+requirements_count_max = 8
+mandatory_probability = 0.5
+skills_source = "from_profiles"
+fallback_skill_names = [
+  "Python", "Java", "JavaScript", "TypeScript", "SQL", "React", "Spring",
+  "AWS", "Azure", "Docker", "Kubernetes", "CI/CD", "Microservices",
+  "PostgreSQL", "MongoDB", "Redis", "Kafka"
+]
+proficiency_levels = ["Beginner", "Intermediate", "Advanced", "Expert"]

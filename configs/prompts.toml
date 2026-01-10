@@ -1,0 +1,96 @@
+[prompts.system]
+base = """
+Jesteś asystentem systemu TalentMatch AI. Odpowiadasz po polsku.
+Zawsze trzymaj się faktów dostępnych w kontekście. Jeśli czegoś nie ma w kontekście, powiedz czego brakuje.
+Jeżeli użytkownik wydaje komendę (np. "wygeneruj 50 CV"), potraktuj ją jako zadanie do wykonania, nie jako pytanie.
+"""
+
+[prompts.commands]
+router = """
+Klasyfikuj intencję użytkownika jako jedną z:
+- "generate_dataset" (generacja CV/RFP)
+- "ingest_documents"
+- "build_kg"
+- "build_vector_index"
+- "ask_bi" (pytanie analityczne)
+- "match_candidates"
+- "other"
+
+Zwróć wyłącznie JSON: {"intent": "...", "params": {...}}.
+"""
+
+[prompts.kg]
+extraction_instructions = """
+Wyciągnij informacje o kandydacie z tekstu CV i przekształć je do grafu wiedzy.
+Używaj wyłącznie poniższych typów węzłów:
+Person, Skill, Company, Project, RFP, Certification, University
+
+Używaj wyłącznie poniższych relacji:
+HAS_SKILL (Person->Skill)
+WORKED_AT (Person->Company)
+WORKED_ON (Person->Project)
+STUDIED_AT (Person->University)
+EARNED (Person->Certification)
+
+Zawsze staraj się podać daty (od/do) oraz krótki opis roli/projektu, jeśli jest w CV.
+Nie wymyślaj danych.
+"""
+
+[prompts.graphrag]
+cypher_generation = """
+Masz schemat grafu Neo4j z węzłami: Person, Skill, Company, Project, RFP, Certification, University
+i relacjami: HAS_SKILL, WORKED_AT, WORKED_ON, STUDIED_AT, EARNED, ASSIGNED_TO, REQUIRES.
+
+Napisz zapytanie Cypher odpowiadające na pytanie użytkownika.
+Zasady:
+- tylko READ (MATCH/RETURN/WITH)
+- ogranicz zwracane wiersze do rozsądnej liczby
+- jeśli pytanie wymaga agregacji, użyj COUNT/SUM/AVG
+Zwróć wyłącznie Cypher (bez komentarzy i bez Markdown).
+"""
+
+answer_from_cypher_result = """
+Na podstawie wyników zapytania Cypher odpowiedz na pytanie użytkownika po polsku.
+Jeśli wynik jest pusty, powiedz, że brak danych w grafie.
+Podaj odpowiedź konkretnie; jeśli to ma sens, podaj liczby.
+"""
+
+[prompts.rag]
+answer = """
+Odpowiedz na pytanie użytkownika na podstawie kontekstu.
+Zasady:
+- jeśli kontekst nie zawiera odpowiedzi, powiedz jakie informacje są potrzebne
+- nie halucynuj
+- odpowiedź po polsku, krótko i konkretnie
+"""
+
+[prompts.matching]
+judge_relevance = """
+Oceń dopasowanie kandydata do RFP.
+Wejście zawiera: wymagane umiejętności, opis roli, CV/skrót profilu.
+Zwróć wyłącznie JSON:
+{
+  "score": <0..100>,
+  "strengths": ["..."],
+  "gaps": ["..."],
+  "notes": "..."
+}
+"""
+
+explain = """
+Wygeneruj krótkie uzasadnienie wyniku dopasowania (po polsku).
+Uwzględnij: kluczowe umiejętności, doświadczenie, dostępność, oraz najważniejsze braki.
+Nie wymyślaj faktów.
+"""
+
+[prompts.bi]
+intent = """
+Rozpoznaj, czy pytanie jest:
+- "counting" (liczby, ile, ilu)
+- "filtering" (warunki, kto spełnia)
+- "aggregation" (średnia/suma/top)
+- "multi_hop" (wymaga połączenia wielu relacji)
+- "time_based" (daty/okresy)
+- "what_if" (scenariuszowe)
+Zwróć JSON: {"bi_type":"..."}.
+"""
