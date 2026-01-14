@@ -300,10 +300,157 @@ class ProjectRequirementsPolicy(BaseModel):
         return value
 
 
+class CvCountRange(BaseModel):
+    min: int
+    max: int
+
+
+class CvSeniorityPolicy(BaseModel):
+    labels: list[str]
+    weights: list[float]
+
+
+class CvPersonLinkPolicy(BaseModel):
+    type: str
+    url_template: str
+
+
+class CvPersonPolicy(BaseModel):
+    name_format: str
+    email_local_part_format: str
+    email_format: str
+    link_slug_format: str
+    email_domains: list[str]
+    locations: list[str]
+    seniority: CvSeniorityPolicy
+    headline_by_seniority: dict[str, str]
+    links: list[CvPersonLinkPolicy]
+
+
+class CvSkillsProficiencyPolicy(BaseModel):
+    levels: list[str]
+    weights: list[float]
+
+
+class CvSkillsPolicy(BaseModel):
+    all: list[str]
+    count: CvCountRange
+    proficiency: CvSkillsProficiencyPolicy
+
+
+class CvCertificationsPolicy(BaseModel):
+    all: list[str]
+    count: CvCountRange
+
+
+class CvEducationEndYearOffsetPolicy(BaseModel):
+    min: int
+    max: int
+
+
+class CvEducationPolicy(BaseModel):
+    universities: list[str]
+    degrees: list[str]
+    fields: list[str]
+    duration_years: list[int]
+    count: CvCountRange
+    end_year_offset: CvEducationEndYearOffsetPolicy
+
+
+class CvJobsBySeniorityRange(BaseModel):
+    min: int
+    max: int
+
+
+class CvJobsBySeniorityPolicy(BaseModel):
+    junior: CvJobsBySeniorityRange
+    mid: CvJobsBySeniorityRange
+    senior: CvJobsBySeniorityRange
+    lead: CvJobsBySeniorityRange
+
+
+class CvJobDurationMonthsPolicy(BaseModel):
+    min: int
+    max: int
+
+
+class CvGapDaysPolicy(BaseModel):
+    min: int
+    max: int
+
+
+class CvTechStackSizePolicy(BaseModel):
+    min: int
+    max: int
+
+
+class CvResponsibilitiesCountPolicy(BaseModel):
+    min: int
+    max: int
+
+
+class CvExperiencePolicy(BaseModel):
+    max_total_years: int
+    month_to_days: int
+    company_names: list[str]
+    job_titles: list[str]
+    domains: list[str]
+    jobs_by_seniority: CvJobsBySeniorityPolicy
+    job_duration_months: CvJobDurationMonthsPolicy
+    gap_days: CvGapDaysPolicy
+    tech_stack_size: CvTechStackSizePolicy
+    responsibilities_count: CvResponsibilitiesCountPolicy
+
+
+class CvProjectsPolicy(BaseModel):
+    count: CvCountRange
+    project_types: list[str]
+    name_prefixes: list[str]
+    name_template: str
+    impact_verbs: list[str]
+    metrics: list[str]
+    description_template: str
+    attach_company_probability: float
+    primary_tech_count: int
+    highlights_count: int
+    highlight_templates: list[str]
+    tech_stack_size: CvTechStackSizePolicy
+
+
+class CvTextPolicy(BaseModel):
+    fallback_skill: str
+    summary_top_skills: int
+    summary_max_certs: int
+    summary_cert_part_template: str
+    summary_cert_part_empty: str
+    min_years_of_experience: int
+    max_years_of_experience: int
+    identifier_replacements: dict[str, str]
+    summary_templates: list[str]
+    bullets_templates: list[str]
+
+
+class CvErrorsPolicy(BaseModel):
+    count_must_be_positive: str
+
+
+class CvDatasetPolicy(BaseModel):
+    schema_version: str
+    errors: CvErrorsPolicy
+    person: CvPersonPolicy
+    skills: CvSkillsPolicy
+    certifications: CvCertificationsPolicy
+    education: CvEducationPolicy
+    experience: CvExperiencePolicy
+    projects: CvProjectsPolicy
+    text: CvTextPolicy
+
+
 class DatasetsSettings(BaseModel):
     default_seed: int
     projects: ProjectsPolicy
     project_requirements: ProjectRequirementsPolicy
+    cv: CvDatasetPolicy
 
 
 class Settings(BaseModel):

@@ -181,3 +181,169 @@ fallback_skill_names = [
   "PostgreSQL", "MongoDB", "Redis", "Kafka"
 ]
 proficiency_levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
+
+[datasets.cv]
+schema_version = "1.0"
+
+[datasets.cv.errors]
+count_must_be_positive = "count must be positive"
+
+[datasets.cv.person]
+name_format = "{first_name} {last_name}"
+email_local_part_format = "{first_name}.{last_name}"
+email_format = "{local_part}@{domain}"
+link_slug_format = "{first_name}{last_name}"
+email_domains = ["gmail.com", "outlook.com", "proton.me"]
+locations = ["Warsaw, PL", "Krakow, PL", "Wroclaw, PL", "Gdansk, PL"]
+
+[datasets.cv.person.seniority]
+labels = ["junior", "mid", "senior", "lead"]
+weights = [25, 40, 25, 10]
+
+[datasets.cv.person.headline_by_seniority]
+junior = "Junior Software Engineer"
+mid = "Software Engineer"
+senior = "Senior Software Engineer"
+lead = "Tech Lead / Staff Engineer"
+
+[[datasets.cv.person.links]]
+type = "github"
+url_template = "https://github.com/{slug}"
+
+[[datasets.cv.person.links]]
+type = "linkedin"
+url_template = "https://www.linkedin.com/in/{slug}/"
+
+[datasets.cv.skills.count]
+min = 10
+max = 18
+
+[datasets.cv.skills]
+all = [
+  "Python", "Java", "JavaScript", "TypeScript", "SQL", "React", "Spring",
+  "FastAPI", "Django", "Node.js", "Azure", "AWS", "Docker", "Kubernetes",
+  "PostgreSQL", "MongoDB", "Redis", "Kafka", "CI/CD", "Microservices"
+]
+
+[datasets.cv.skills.proficiency]
+levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
+weights = [10, 45, 35, 10]
+
+[datasets.cv.certifications.count]
+min = 0
+max = 3
+
+[datasets.cv.certifications]
+all = [
+  "Azure Fundamentals (AZ-900)",
+  "AWS Certified Cloud Practitioner",
+  "Scrum Master (PSM I)",
+  "Kubernetes (CKA)",
+  "Terraform Associate"
+]
+
+[datasets.cv.education.count]
+min = 1
+max = 2
+
+[datasets.cv.education]
+universities = ["Warsaw University of Technology", "AGH University of Krakow", "University of Wroclaw", "Gdansk University of Technology"]
+degrees = ["BSc", "MSc", "Engineer"]
+fields = ["Computer Science", "Software Engineering", "Data Science", "Information Systems"]
+duration_years = [2, 3, 4, 5]
+
+[datasets.cv.education.end_year_offset]
+min = 1
+max = 12
+
+[datasets.cv.experience]
+max_total_years = 12
+month_to_days = 30
+company_names = ["TechCorp", "FinTech Innovations", "CloudScale Inc", "RetailPro", "HealthPlus", "MediaStream"]
+job_titles = ["Software Engineer", "Backend Engineer", "Full-Stack Engineer", "Data Engineer", "DevOps Engineer"]
+domains = ["FinTech", "E-commerce", "Healthcare", "Media", "SaaS", "Logistics"]
+
+[datasets.cv.experience.jobs_by_seniority.junior]
+min = 1
+max = 2
+
+[datasets.cv.experience.jobs_by_seniority.mid]
+min = 2
+max = 3
+
+[datasets.cv.experience.jobs_by_seniority.senior]
+min = 3
+max = 4
+
+[datasets.cv.experience.jobs_by_seniority.lead]
+min = 3
+max = 5
+
+[datasets.cv.experience.job_duration_months]
+min = 8
+max = 22
+
+[datasets.cv.experience.gap_days]
+min = 0
+max = 45
+
+[datasets.cv.experience.tech_stack_size]
+min = 3
+max = 6
+
+[datasets.cv.experience.responsibilities_count]
+min = 3
+max = 5
+
+[datasets.cv.projects.count]
+min = 2
+max = 5
+
+[datasets.cv.projects]
+project_types = ["Platform", "API", "Data Pipeline", "Dashboard", "Mobile App", "Migration"]
+name_prefixes = ["Nova", "Atlas", "Pulse", "Orion", "Nimbus", "Zenith", "Echo", "Vertex"]
+name_template = "{prefix} {project_type}"
+impact_verbs = ["Delivered", "Designed", "Implemented", "Optimized", "Automated", "Migrated"]
+metrics = ["latency by 30%", "cloud costs by 20%", "error rate by 40%", "deployment frequency by 2x", "throughput by 50%"]
+description_template = "{verb} {project_type_lower} with focus on reliability, performance, and maintainability"
+attach_company_probability = 0.7
+primary_tech_count = 3
+highlights_count = 2
+highlight_templates = [
+  "Built core components using {tech_stack}.",
+  "Improved {metric}.",
+  "Reduced incident rate and improved observability.",
+  "Introduced CI/CD improvements and automated checks."
+]
+
+[datasets.cv.projects.tech_stack_size]
+min = 3
+max = 6
+
+[datasets.cv.text]
+fallback_skill = "Python"
+summary_top_skills = 4
+summary_max_certs = 2
+summary_cert_part_template = " Certified ({certs})."
+summary_cert_part_empty = ""
+min_years_of_experience = 1
+max_years_of_experience = 20
+summary_templates = [
+  "{years}+ years of experience delivering software across domains. Strong in {skills}.{cert_part}",
+  "Engineer with {years}+ years of experience. Focus: {skills}.{cert_part}",
+  "{years}+ years in software development. Key strengths: {skills}.{cert_part}"
+]
+bullets_templates = [
+  "Implemented solutions in {domain} using {skill}.",
+  "Improved system reliability and performance in {domain} with {skill}.",
+  "Collaborated cross-functionally to deliver {domain} features leveraging {skill}.",
+  "Automated workflows and reduced manual effort in {domain} using {skill}.",
+  "Built and maintained services in {domain} with {skill}."
+]
+
+[datasets.cv.text.identifier_replacements]
+" " = ""
+"'" = ""
+"\"" = ""
+"_" = ""
+"-" = ""

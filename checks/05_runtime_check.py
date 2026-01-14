@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from pydantic import BaseModel
+
 from src.talentmatch.runtime import load_logging_config, load_prompts, load_settings
 
 CHECK_OK = "✅"
@@ -105,7 +107,9 @@ def validate_parameter(
         )
         return False
 
-    if model_value != source_value:
+    normalized_model_value = normalize_model_value(model_value)
+
+    if normalized_model_value != source_value:
         print_fail(
             f'{source_name} Parameter "{source_key}" mapped to "{model_path}" but value differs: '
             f'file={format_value(source_value)} model={format_value(model_value)}'
@@ -171,6 +175,21 @@ def build_toml_to_model_mappings(
         model_path = f"{root_model_prefix}{dotted_key}" if not root_model_prefix else f"{root_model_prefix}.{dotted_key}"
         mappings.append(MappingSpec("toml", dotted_key, model_path))
     return mappings
+
+
+def normalize_model_value(value: Any) -> Any:
+    """Normalizes Pydantic values to TOML-like primitives for stable comparisons."""
+    if isinstance(value, BaseModel):
+        return normalize_model_value(value.model_dump(mode="python"))
+    if isinstance(value, dict):
+        return {k: normalize_model_value(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [normalize_model_value(v) for v in value]
+    if isinstance(value, tuple):
+        return [normalize_model_value(v) for v in value]
+    if isinstance(value, Path):
+        return str(value)
+    return value
 
 
 def run() -> int:
