@@ -20,6 +20,7 @@ class PathsSettings(BaseModel):
     interim_dir: str
     indexes_dir: str
     reports_dir: str
+    cv_struct_json_dir: str
 
 
 class RunsSettings(BaseModel):

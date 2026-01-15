@@ -12,6 +12,7 @@ generated_dir = "/data/generated"
 interim_dir = "/data/interim"
 indexes_dir = "/data/indexes"
 reports_dir = "/data/reports"
+cv_struct_json_dir = "data/generated/cv/struct_json"
 
 [runs]
 use_run_folders = true
