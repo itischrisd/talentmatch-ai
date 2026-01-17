@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from src.talentmatch.runtime import load_logging_config, load_prompts, load_settings
+from talentmatch.runtime import load_logging_config, load_prompts, load_settings
 
 CHECK_OK = "✅"
 CHECK_FAIL = "❌"

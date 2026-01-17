@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from src.talentmatch.datasets import StructuredCvGenerator
-from src.talentmatch.runtime import load_settings
+from talentmatch.datasets import StructuredCvGenerator
+from talentmatch.runtime import load_settings
 
 CHECK_OK = "✅"
 CHECK_FAIL = "❌"
