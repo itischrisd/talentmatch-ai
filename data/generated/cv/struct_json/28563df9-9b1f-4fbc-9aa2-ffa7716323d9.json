@@ -1,0 +1,229 @@
+{
+  "uuid": "28563df9-9b1f-4fbc-9aa2-ffa7716323d9",
+  "schema_version": "1.0",
+  "person": {
+    "name": "Thomas Haas",
+    "email": "thomas.haas@proton.me",
+    "location": "Warsaw, PL",
+    "seniority": "mid",
+    "headline": "Software Engineer",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/thomashaas"
+      },
+      {
+        "type": "linkedin",
+        "url": "https://www.linkedin.com/in/thomashaas/"
+      }
+    ]
+  },
+  "summary": "2+ years of experience delivering software across domains. Strong in AWS, Redis, Microservices, Kubernetes. Certified (Scrum Master (PSM I)).",
+  "skills": [
+    {
+      "name": "AWS",
+      "proficiency": "Beginner"
+    },
+    {
+      "name": "Redis",
+      "proficiency": "Beginner"
+    },
+    {
+      "name": "Microservices",
+      "proficiency": "Beginner"
+    },
+    {
+      "name": "Kubernetes",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Django",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "SQL",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "React",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Java",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "FastAPI",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "CI/CD",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Spring",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Python",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Kafka",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "Node.js",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "MongoDB",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "TypeScript",
+      "proficiency": "Expert"
+    }
+  ],
+  "certifications": [
+    "Scrum Master (PSM I)"
+  ],
+  "experience": [
+    {
+      "company": "TechCorp",
+      "title": "Software Engineer",
+      "domain": "FinTech",
+      "location": "Warsaw, PL",
+      "start_date": "2025-05-22",
+      "end_date": null,
+      "responsibilities": [
+        "Implemented solutions in FinTech using SQL.",
+        "Built and maintained services in FinTech with SQL.",
+        "Implemented solutions in FinTech using TypeScript.",
+        "Built and maintained services in FinTech with MongoDB."
+      ],
+      "tech_stack": [
+        "AWS",
+        "MongoDB",
+        "SQL",
+        "TypeScript"
+      ]
+    },
+    {
+      "company": "CloudScale Inc",
+      "title": "Data Engineer",
+      "domain": "Logistics",
+      "location": "Warsaw, PL",
+      "start_date": "2023-12-24",
+      "end_date": "2025-04-17",
+      "responsibilities": [
+        "Improved system reliability and performance in Logistics with TypeScript.",
+        "Automated workflows and reduced manual effort in Logistics using Spring.",
+        "Automated workflows and reduced manual effort in Logistics using Python.",
+        "Implemented solutions in Logistics using Django."
+      ],
+      "tech_stack": [
+        "CI/CD",
+        "TypeScript",
+        "React",
+        "Spring",
+        "Django",
+        "Python"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Nova Mobile App",
+      "type": "Mobile App",
+      "company": "CloudScale Inc",
+      "description": "Automated mobile app with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Reduced incident rate and improved observability.",
+        "Introduced CI/CD improvements and automated checks."
+      ],
+      "tech_stack": [
+        "Django",
+        "Python",
+        "React",
+        "SQL",
+        "AWS",
+        "Kafka"
+      ]
+    },
+    {
+      "name": "Atlas Data Pipeline",
+      "type": "Data Pipeline",
+      "company": null,
+      "description": "Delivered data pipeline with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Built core components using FastAPI, Python, Kafka.",
+        "Reduced incident rate and improved observability."
+      ],
+      "tech_stack": [
+        "FastAPI",
+        "Python",
+        "Kafka",
+        "Node.js",
+        "SQL"
+      ]
+    },
+    {
+      "name": "Vertex Mobile App",
+      "type": "Mobile App",
+      "company": null,
+      "description": "Automated mobile app with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Introduced CI/CD improvements and automated checks.",
+        "Reduced incident rate and improved observability."
+      ],
+      "tech_stack": [
+        "Redis",
+        "TypeScript",
+        "Kubernetes",
+        "Python"
+      ]
+    },
+    {
+      "name": "Nimbus Platform",
+      "type": "Platform",
+      "company": null,
+      "description": "Delivered platform with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Introduced CI/CD improvements and automated checks.",
+        "Built core components using Spring, Kafka, Kubernetes."
+      ],
+      "tech_stack": [
+        "Spring",
+        "Kafka",
+        "Kubernetes"
+      ]
+    },
+    {
+      "name": "Echo Dashboard",
+      "type": "Dashboard",
+      "company": "CloudScale Inc",
+      "description": "Optimized dashboard with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Reduced incident rate and improved observability.",
+        "Introduced CI/CD improvements and automated checks."
+      ],
+      "tech_stack": [
+        "MongoDB",
+        "Java",
+        "Redis",
+        "Python"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Wroclaw",
+      "degree": "Engineer",
+      "field": "Software Engineering",
+      "location": "Warsaw, PL",
+      "start_year": 2016,
+      "end_year": 2020
+    }
+  ]
+}

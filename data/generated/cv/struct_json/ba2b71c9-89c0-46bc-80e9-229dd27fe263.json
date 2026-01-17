@@ -1,0 +1,186 @@
+{
+  "uuid": "ba2b71c9-89c0-46bc-80e9-229dd27fe263",
+  "schema_version": "1.0",
+  "person": {
+    "name": "Nancy Wright",
+    "email": "nancy.wright@outlook.com",
+    "location": "Warsaw, PL",
+    "seniority": "junior",
+    "headline": "Junior Software Engineer",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/nancywright"
+      },
+      {
+        "type": "linkedin",
+        "url": "https://www.linkedin.com/in/nancywright/"
+      }
+    ]
+  },
+  "summary": "Engineer with 1+ years of experience. Focus: Node.js, Kubernetes, AWS, Django. Certified (Scrum Master (PSM I)).",
+  "skills": [
+    {
+      "name": "Node.js",
+      "proficiency": "Beginner"
+    },
+    {
+      "name": "Kubernetes",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "AWS",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Django",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Java",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "JavaScript",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Redis",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "TypeScript",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "Python",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "PostgreSQL",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "Microservices",
+      "proficiency": "Expert"
+    },
+    {
+      "name": "Docker",
+      "proficiency": "Expert"
+    },
+    {
+      "name": "FastAPI",
+      "proficiency": "Expert"
+    }
+  ],
+  "certifications": [
+    "Scrum Master (PSM I)"
+  ],
+  "experience": [
+    {
+      "company": "TechCorp",
+      "title": "Full-Stack Engineer",
+      "domain": "E-commerce",
+      "location": "Warsaw, PL",
+      "start_date": "2025-05-22",
+      "end_date": null,
+      "responsibilities": [
+        "Improved system reliability and performance in E-commerce with AWS.",
+        "Improved system reliability and performance in E-commerce with AWS.",
+        "Automated workflows and reduced manual effort in E-commerce using JavaScript.",
+        "Improved system reliability and performance in E-commerce with Java."
+      ],
+      "tech_stack": [
+        "Java",
+        "AWS",
+        "JavaScript"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Atlas Data Pipeline",
+      "type": "Data Pipeline",
+      "company": "TechCorp",
+      "description": "Automated data pipeline with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Introduced CI/CD improvements and automated checks.",
+        "Reduced incident rate and improved observability."
+      ],
+      "tech_stack": [
+        "JavaScript",
+        "Microservices",
+        "Docker",
+        "Python",
+        "Node.js",
+        "Django"
+      ]
+    },
+    {
+      "name": "Nimbus Platform",
+      "type": "Platform",
+      "company": "TechCorp",
+      "description": "Designed platform with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Introduced CI/CD improvements and automated checks.",
+        "Built core components using Redis, Node.js, Microservices."
+      ],
+      "tech_stack": [
+        "Redis",
+        "Node.js",
+        "Microservices",
+        "AWS"
+      ]
+    },
+    {
+      "name": "Vertex Platform",
+      "type": "Platform",
+      "company": null,
+      "description": "Implemented platform with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Introduced CI/CD improvements and automated checks.",
+        "Reduced incident rate and improved observability."
+      ],
+      "tech_stack": [
+        "Java",
+        "Docker",
+        "PostgreSQL",
+        "FastAPI",
+        "TypeScript"
+      ]
+    },
+    {
+      "name": "Atlas API",
+      "type": "API",
+      "company": "TechCorp",
+      "description": "Automated api with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Built core components using AWS, Redis, PostgreSQL.",
+        "Improved error rate by 40%."
+      ],
+      "tech_stack": [
+        "AWS",
+        "Redis",
+        "PostgreSQL"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Gdansk University of Technology",
+      "degree": "MSc",
+      "field": "Computer Science",
+      "location": "Warsaw, PL",
+      "start_year": 2023,
+      "end_year": 2025
+    },
+    {
+      "institution": "AGH University of Krakow",
+      "degree": "MSc",
+      "field": "Computer Science",
+      "location": "Warsaw, PL",
+      "start_year": 2017,
+      "end_year": 2022
+    }
+  ]
+}

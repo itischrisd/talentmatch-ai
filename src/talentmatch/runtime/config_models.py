@@ -21,6 +21,8 @@ class PathsSettings(BaseModel):
     indexes_dir: str
     reports_dir: str
     cv_struct_json_dir: str
+    cv_pdf_dir: str
+    cv_markdown_dir: str
 
 
 class RunsSettings(BaseModel):
@@ -431,6 +433,40 @@ class CvTextPolicy(BaseModel):
     bullets_templates: list[str]
 
 
+class CvMarkdownPolicy(BaseModel):
+    h1_template: str
+    contact_template: str
+    links_separator: str
+
+    section_header_template: str
+
+    summary_title: str
+    skills_title: str
+    certifications_title: str
+    experience_title: str
+    projects_title: str
+    education_title: str
+
+    date_format: str
+    present_label: str
+
+    skill_item_template: str
+    certification_item_template: str
+
+    experience_header_template: str
+    experience_date_range_template: str
+    experience_responsibility_template: str
+    experience_tech_stack_template: str
+
+    project_header_template: str
+    project_company_template: str
+    project_description_template: str
+    project_highlight_template: str
+    project_tech_stack_template: str
+
+    education_item_template: str
+
+
 class CvErrorsPolicy(BaseModel):
     count_must_be_positive: str
 
@@ -445,6 +481,7 @@ class CvDatasetPolicy(BaseModel):
     experience: CvExperiencePolicy
     projects: CvProjectsPolicy
     text: CvTextPolicy
+    markdown: CvMarkdownPolicy
 
 
 class DatasetsSettings(BaseModel):

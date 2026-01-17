@@ -1,0 +1,167 @@
+{
+  "uuid": "b3287f68-16e6-4155-8753-cf27693dea54",
+  "schema_version": "1.0",
+  "person": {
+    "name": "Joseph Costa",
+    "email": "joseph.costa@proton.me",
+    "location": "Warsaw, PL",
+    "seniority": "junior",
+    "headline": "Junior Software Engineer",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/josephcosta"
+      },
+      {
+        "type": "linkedin",
+        "url": "https://www.linkedin.com/in/josephcosta/"
+      }
+    ]
+  },
+  "summary": "2+ years in software development. Key strengths: PostgreSQL, FastAPI, JavaScript, SQL. Certified (AWS Certified Cloud Practitioner, Terraform Associate).",
+  "skills": [
+    {
+      "name": "PostgreSQL",
+      "proficiency": "Beginner"
+    },
+    {
+      "name": "FastAPI",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "JavaScript",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "SQL",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "TypeScript",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Redis",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Python",
+      "proficiency": "Intermediate"
+    },
+    {
+      "name": "Kubernetes",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "Django",
+      "proficiency": "Advanced"
+    },
+    {
+      "name": "Azure",
+      "proficiency": "Expert"
+    },
+    {
+      "name": "Kafka",
+      "proficiency": "Expert"
+    },
+    {
+      "name": "Node.js",
+      "proficiency": "Expert"
+    }
+  ],
+  "certifications": [
+    "AWS Certified Cloud Practitioner",
+    "Terraform Associate",
+    "Kubernetes (CKA)"
+  ],
+  "experience": [
+    {
+      "company": "HealthPlus",
+      "title": "Software Engineer",
+      "domain": "Healthcare",
+      "location": "Warsaw, PL",
+      "start_date": "2024-04-27",
+      "end_date": null,
+      "responsibilities": [
+        "Implemented solutions in Healthcare using Kafka.",
+        "Automated workflows and reduced manual effort in Healthcare using Kafka.",
+        "Improved system reliability and performance in Healthcare with FastAPI.",
+        "Automated workflows and reduced manual effort in Healthcare using FastAPI.",
+        "Collaborated cross-functionally to deliver Healthcare features leveraging Redis."
+      ],
+      "tech_stack": [
+        "TypeScript",
+        "Node.js",
+        "FastAPI",
+        "Kafka",
+        "Redis"
+      ]
+    },
+    {
+      "company": "HealthPlus",
+      "title": "Software Engineer",
+      "domain": "FinTech",
+      "location": "Warsaw, PL",
+      "start_date": "2023-02-03",
+      "end_date": "2024-03-29",
+      "responsibilities": [
+        "Implemented solutions in FinTech using SQL.",
+        "Implemented solutions in FinTech using SQL.",
+        "Built and maintained services in FinTech with Kafka.",
+        "Automated workflows and reduced manual effort in FinTech using Kafka."
+      ],
+      "tech_stack": [
+        "FastAPI",
+        "Kafka",
+        "TypeScript",
+        "SQL"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Nimbus Mobile App",
+      "type": "Mobile App",
+      "company": "HealthPlus",
+      "description": "Implemented mobile app with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Improved error rate by 40%.",
+        "Introduced CI/CD improvements and automated checks."
+      ],
+      "tech_stack": [
+        "Redis",
+        "JavaScript",
+        "PostgreSQL",
+        "Python",
+        "SQL",
+        "TypeScript"
+      ]
+    },
+    {
+      "name": "Nova Mobile App",
+      "type": "Mobile App",
+      "company": null,
+      "description": "Automated mobile app with focus on reliability, performance, and maintainability",
+      "highlights": [
+        "Introduced CI/CD improvements and automated checks.",
+        "Reduced incident rate and improved observability."
+      ],
+      "tech_stack": [
+        "JavaScript",
+        "Django",
+        "SQL",
+        "PostgreSQL"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "AGH University of Krakow",
+      "degree": "BSc",
+      "field": "Information Systems",
+      "location": "Warsaw, PL",
+      "start_year": 2011,
+      "end_year": 2014
+    }
+  ]
+}

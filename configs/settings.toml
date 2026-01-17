@@ -13,6 +13,8 @@ interim_dir = "/data/interim"
 indexes_dir = "/data/indexes"
 reports_dir = "/data/reports"
 cv_struct_json_dir = "data/generated/cv/struct_json"
+cv_pdf_dir = "data/generated/cv/pdf"
+cv_markdown_dir = "data/generated/cv/markdown"
 
 [runs]
 use_run_folders = true
@@ -348,3 +350,36 @@ bullets_templates = [
 "\"" = ""
 "_" = ""
 "-" = ""
+
+[datasets.cv.markdown]
+h1_template = "# {name}"
+contact_template = "{email} | {location} | {links}"
+links_separator = " | "
+
+section_header_template = "## {title}"
+
+summary_title = "Summary"
+skills_title = "Skills"
+certifications_title = "Certifications"
+experience_title = "Experience"
+projects_title = "Projects"
+education_title = "Education"
+
+date_format = "%b %Y"
+present_label = "Present"
+
+skill_item_template = "{name} — {proficiency}"
+certification_item_template = "{name}"
+
+experience_header_template = "**{title}**, {company} ({domain}) — {date_range}"
+experience_date_range_template = "{start} – {end}"
+experience_responsibility_template = "{text}"
+experience_tech_stack_template = "Tech stack: {tech_stack}"
+
+project_header_template = "**{name}** ({type})"
+project_company_template = "Client/Company: {company}"
+project_description_template = "{text}"
+project_highlight_template = "{text}"
+project_tech_stack_template = "Tech stack: {tech_stack}"
+
+education_item_template = "**{degree} {field}**, {institution} ({start_year}–{end_year})"
