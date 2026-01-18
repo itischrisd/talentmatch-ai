@@ -9,6 +9,7 @@ class PathsSettings(BaseModel):
     cv_markdown_dir: str
     rfp_struct_json_dir: str
     rfp_markdown_dir: str
+    rfp_pdf_dir: str
 
 
 class AzureOpenAISettings(BaseModel):

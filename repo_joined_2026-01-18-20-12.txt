@@ -2349,6 +2349,198 @@ if __name__ == "__main__":
     raise SystemExit(run())
 ***** koniec pliku 17_rfp_struct_to_json_check.py *****
 
+***** plik 18_rfp_struct_to_markdown_check.py w lokalizacji checks\18_rfp_struct_to_markdown_check.py *****
+from __future__ import annotations
+
+from pathlib import Path
+
+from common import assert_true, build_check_context, is_uuid, load_settings_from_context, print_fail, print_ok
+from talentmatch.datasets import RfpStructMarkdownStore, StructuredRfpGenerator
+
+
+def run() -> int:
+    context = build_check_context(Path(__file__))
+    settings = load_settings_from_context(context)
+    if settings is None:
+        return 1
+
+    try:
+        generator = StructuredRfpGenerator(settings)
+        print_ok("StructuredRfpGenerator(settings) succeeded")
+    except Exception as exc:
+        print_fail(f"StructuredRfpGenerator(settings) failed: {exc}")
+        return 1
+
+    try:
+        rfp_result = generator.generate_one()
+        print_ok("generate_one() succeeded")
+    except Exception as exc:
+        print_fail(f"generate_one() failed: {exc}")
+        return 1
+
+    failures = 0
+    failures += 0 if assert_true(is_uuid(rfp_result.uuid), ok="uuid format ok",
+                                 fail=f"uuid invalid: {rfp_result.uuid}") else 1
+    failures += 0 if assert_true(isinstance(rfp_result.rfp_struct, dict), ok="rfp_struct is dict",
+                                 fail="rfp_struct is not dict") else 1
+
+    try:
+        store = RfpStructMarkdownStore(settings)
+        print_ok("RfpStructMarkdownStore(settings) succeeded")
+    except Exception as exc:
+        print_fail(f"RfpStructMarkdownStore(settings) failed: {exc}")
+        return 1
+
+    base_dir = Path(settings.paths.rfp_markdown_dir)
+    md_path = base_dir / f"{rfp_result.uuid}.md"
+
+    try:
+        store.store(rfp_result.uuid, rfp_result.rfp_struct)
+        print_ok("store(uuid, rfp_struct) succeeded")
+    except Exception as exc:
+        print_fail(f"store(uuid, rfp_struct) failed: {exc}")
+        return 1
+
+    failures += 0 if assert_true(md_path.exists(), ok="markdown file exists",
+                                 fail=f'markdown file not found: "{md_path}"') else 1
+
+    if md_path.exists():
+        content = md_path.read_text(encoding="utf-8")
+
+        failures += 0 if assert_true(len(content.strip()) > 0, ok="markdown is non-empty",
+                                     fail="markdown is empty") else 1
+        failures += 0 if assert_true(content.lstrip().startswith("# "), ok="markdown starts with H1",
+                                     fail="markdown does not start with H1") else 1
+        failures += 0 if assert_true("```" not in content, ok="markdown has no code fences",
+                                     fail="markdown contains code fences") else 1
+
+        rfp_id = rfp_result.rfp_struct.get("rfp_id")
+        if isinstance(rfp_id, str) and rfp_id.strip():
+            failures += 0 if assert_true(rfp_id in content, ok="rfp_id present in markdown",
+                                         fail=f'rfp_id missing in markdown: "{rfp_id}"') else 1
+
+        start_date = rfp_result.rfp_struct.get("start_date")
+        if isinstance(start_date, str) and start_date.strip():
+            failures += 0 if assert_true(start_date in content, ok="start_date present in markdown",
+                                         fail=f'start_date missing in markdown: "{start_date}"') else 1
+
+        staffing = rfp_result.rfp_struct.get("staffing_profile")
+        if isinstance(staffing, list):
+            roles = [
+                item.get("role")
+                for item in staffing
+                if isinstance(item, dict) and isinstance(item.get("role"), str) and item.get("role").strip()
+            ]
+            for role in roles[:3]:
+                failures += 0 if assert_true(role in content, ok=f'role present in markdown: "{role}"',
+                                             fail=f'role missing in markdown: "{role}"') else 1
+
+    try:
+        store.store(rfp_result.uuid, rfp_result.rfp_struct)
+        print_ok("overwrite store() succeeded")
+    except Exception as exc:
+        print_fail(f"overwrite store() failed: {exc}")
+        return 1
+
+    failures += 0 if assert_true(md_path.exists(), ok="markdown file still exists after overwrite",
+                                 fail="markdown file missing after overwrite") else 1
+
+    if failures == 0:
+        print_ok("RFP struct -> Markdown checks passed")
+        return 0
+
+    print_fail(f"RFP struct -> Markdown checks failed: {failures} issue(s)")
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(run())
+***** koniec pliku 18_rfp_struct_to_markdown_check.py *****
+
+***** plik 19_rfp_markdown_to_pdf_check.py w lokalizacji checks\19_rfp_markdown_to_pdf_check.py *****
+from __future__ import annotations
+
+from pathlib import Path
+
+from common import assert_true, build_check_context, is_uuid, load_settings_from_context, print_fail, print_ok
+from talentmatch.datasets import RfpMarkdownPdfStore
+
+
+def run() -> int:
+    context = build_check_context(Path(__file__))
+    settings = load_settings_from_context(context)
+    if settings is None:
+        return 1
+
+    try:
+        store = RfpMarkdownPdfStore(settings)
+        print_ok("RfpMarkdownPdfStore(settings) succeeded")
+    except Exception as exc:
+        print_fail(f"RfpMarkdownPdfStore(settings) failed: {exc}")
+        return 1
+
+    uuid = "22222222-2222-4222-8222-222222222222"
+    markdown = "\n".join(
+        [
+            "# Request for Proposal (RFP): Platforma danych",
+            "",
+            "## Overview",
+            "Celem projektu jest wdrożenie platformy danych wspierającej analitykę oraz integracje systemowe.",
+            "",
+            "## Staffing Profile",
+            "| Role | Qty | Seniority | Notes |",
+            "| --- | ---: | --- | --- |",
+            "| Data Engineer | 2 | Senior | ETL/ELT, orchestration |",
+            "| Backend Engineer | 1 | Mid | API dla integracji |",
+            "| QA Engineer | 1 | Mid | Testy automatyczne |",
+            "",
+            "## Timeline",
+            "- Kick-off i discovery (2 tygodnie)",
+            "- MVP (6 tygodni)",
+            "- Stabilizacja i przekazanie (2 tygodnie)",
+        ]
+    )
+
+    failures = 0
+    base_dir = Path(settings.paths.rfp_pdf_dir)
+    pdf_path = base_dir / f"{uuid}.pdf"
+
+    try:
+        result = store.store(uuid, markdown)
+        print_ok("store(uuid, markdown) succeeded")
+    except Exception as exc:
+        print_fail(f"store(uuid, markdown) failed: {exc}")
+        return 1
+
+    failures += 0 if assert_true(is_uuid(result.uuid), ok="result uuid format ok",
+                                 fail=f"result uuid invalid: {result.uuid}") else 1
+    failures += 0 if assert_true(pdf_path.exists(), ok="pdf file exists",
+                                 fail=f'pdf file not found: "{pdf_path}"') else 1
+    failures += 0 if assert_true(pdf_path.stat().st_size > 0, ok="pdf file non-empty",
+                                 fail="pdf file is empty") else 1
+
+    try:
+        store.store(uuid, markdown)
+        print_ok("overwrite store() succeeded")
+    except Exception as exc:
+        print_fail(f"overwrite store() failed: {exc}")
+        return 1
+
+    failures += 0 if assert_true(pdf_path.exists(), ok="pdf file still exists after overwrite",
+                                 fail="pdf file missing after overwrite") else 1
+
+    if failures == 0:
+        print_ok("RFP Markdown -> PDF checks passed")
+        return 0
+
+    print_fail(f"RFP Markdown -> PDF checks failed: {failures} issue(s)")
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(run())
+***** koniec pliku 19_rfp_markdown_to_pdf_check.py *****
+
 ***** plik common.py w lokalizacji checks\common.py *****
 from __future__ import annotations
 
@@ -2476,6 +2668,8 @@ Hard rules:
 - You may improve wording and formatting for narrative fields, but factual values (numbers, dates, counts, ranges, ids) must stay unchanged.
 - Do not invent new requirements or facts that are not present in the JSON. You may add neutral, non-factual connective phrasing.
 - Keep placeholders as-is (e.g. [Contact Person]).
+- All concrete values (dates, monetary amounts, counts etc.) must be clearly stated in the output document!
+- Start date, end date and budget must be included in first few points of the document!
 
 Coverage checklist (every path below must be represented in the Markdown):
 {checklist}
@@ -2489,6 +2683,8 @@ Document expectations:
 - Ensure staffing_profile is fully reflected (roles, counts, seniority, skills, responsibilities, allocation if present).
 - Ensure technical requirements reflect all required and preferred skills and any constraints present in the JSON.
 - Ensure proposal submission guidelines and evaluation process appear as real sections.
+- All fields present in source json must have their values represented in some way in the markdown document
+- You may introduce new descriptive content in the document, basing in on existing information in JSON
 
 Return ONLY the Markdown document.
 """
@@ -3052,7 +3248,7 @@ title_templates = [
 ***** plik llm.toml w lokalizacji configs\settings\llm.toml *****
 [llm.use_cases.json_to_markdown]
 deployment = "default"
-max_tokens = 2_000
+max_tokens = 4_000
 request_timeout_s = 120
 temperature = 0.8
 top_p = 0.95
@@ -3065,6 +3261,7 @@ cv_pdf_dir = "data/generated/cv/pdf"
 cv_struct_json_dir = "data/generated/cv/struct_json"
 rfp_struct_json_dir = "data/generated/rfp/struct_json"
 rfp_markdown_dir = "data/generated/rfp/markdown"
+rfp_pdf_dir = "data/generated/rfp/pdf"
 ***** koniec pliku paths.toml *****
 
 ***** plik docker-compose.yml w lokalizacji docker\docker-compose.yml *****
@@ -4015,6 +4212,405 @@ class CvStructMarkdownStore:
         return StoreCvStructMarkdownResult(uuid=uuid)
 ***** koniec pliku cv_struct_to_markdown.py *****
 
+***** plik rfp_markdown_to_pdf.py w lokalizacji src\talentmatch\datasets\rfp_markdown_to_pdf.py *****
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Iterable
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import (
+    ListFlowable,
+    ListItem,
+    Paragraph,
+    SimpleDocTemplate,
+    Spacer,
+    Table,
+    TableStyle,
+)
+
+from talentmatch.infra.llm.prompts import strip_markdown_code_fences
+
+
+@dataclass(frozen=True)
+class StoreRfpPdfResult:
+    """Result of storing RFP Markdown as a PDF file."""
+    uuid: str
+
+
+class RfpMarkdownPdfStore:
+    """Stores an RFP Markdown as a PDF file under a UUID-based name."""
+
+    def __init__(self, settings: Any) -> None:
+        self._base_dir = Path(settings.paths.rfp_pdf_dir)
+        self._font_name = self._register_unicode_font()
+
+    def store(self, uuid: str, markdown: str) -> StoreRfpPdfResult:
+        sanitized = strip_markdown_code_fences(markdown).strip()
+        if not sanitized:
+            raise ValueError("Markdown content is empty")
+
+        self._base_dir.mkdir(parents=True, exist_ok=True)
+        file_path = self._base_dir / f"{uuid}.pdf"
+
+        styles = getSampleStyleSheet()
+        base_style = ParagraphStyle(
+            name="Base",
+            parent=styles["BodyText"],
+            fontName=self._font_name,
+            fontSize=10,
+            leading=13,
+            spaceAfter=4,
+        )
+        heading_1 = ParagraphStyle(
+            name="Heading1",
+            parent=base_style,
+            fontSize=16,
+            leading=20,
+            spaceBefore=6,
+            spaceAfter=10,
+        )
+        heading_2 = ParagraphStyle(
+            name="Heading2",
+            parent=base_style,
+            fontSize=13,
+            leading=16,
+            spaceBefore=10,
+            spaceAfter=6,
+        )
+        heading_3 = ParagraphStyle(
+            name="Heading3",
+            parent=base_style,
+            fontSize=11,
+            leading=14,
+            spaceBefore=8,
+            spaceAfter=4,
+        )
+        table_cell_style = ParagraphStyle(
+            name="TableCell",
+            parent=base_style,
+            fontSize=9.4,
+            leading=11.5,
+            spaceAfter=0,
+        )
+        table_header_style = ParagraphStyle(
+            name="TableHeader",
+            parent=table_cell_style,
+            fontSize=9.4,
+            leading=11.5,
+        )
+
+        doc = SimpleDocTemplate(
+            str(file_path),
+            pagesize=A4,
+            leftMargin=36,
+            rightMargin=36,
+            topMargin=36,
+            bottomMargin=36,
+            title=f"{uuid}",
+        )
+
+        story = list(
+            self._markdown_to_flowables(
+                sanitized,
+                base_style=base_style,
+                heading_1=heading_1,
+                heading_2=heading_2,
+                heading_3=heading_3,
+                table_cell_style=table_cell_style,
+                table_header_style=table_header_style,
+                available_width=A4[0] - 36 - 36,
+            )
+        )
+        doc.build(story)
+
+        return StoreRfpPdfResult(uuid=uuid)
+
+    def _markdown_to_flowables(
+            self,
+            markdown: str,
+            *,
+            base_style: ParagraphStyle,
+            heading_1: ParagraphStyle,
+            heading_2: ParagraphStyle,
+            heading_3: ParagraphStyle,
+            table_cell_style: ParagraphStyle,
+            table_header_style: ParagraphStyle,
+            available_width: float,
+    ) -> Iterable[object]:
+        lines = markdown.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+
+        paragraph_lines: list[str] = []
+        bullet_lines: list[str] = []
+
+        def flush_paragraph() -> Iterable[object]:
+            if not paragraph_lines:
+                return []
+            text = " ".join(part.strip() for part in paragraph_lines if part.strip())
+            paragraph_lines.clear()
+            if not text:
+                return []
+            return [Paragraph(self._to_paragraph_markup(text), base_style), Spacer(1, 6)]
+
+        def flush_bullets() -> Iterable[object]:
+            if not bullet_lines:
+                return []
+            items = [
+                ListItem(Paragraph(self._to_paragraph_markup(item), base_style), leftIndent=12)
+                for item in bullet_lines
+            ]
+            bullet_lines.clear()
+            return [ListFlowable(items, bulletType="bullet", leftIndent=12), Spacer(1, 6)]
+
+        i = 0
+        while i < len(lines):
+            raw = lines[i]
+            line = raw.strip()
+
+            if not line:
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                i += 1
+                continue
+
+            if self._is_table_header_line(line) and i + 1 < len(lines) and self._is_table_separator_line(
+                    lines[i + 1].strip()):
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                table, next_index = self._parse_table(
+                    lines=lines,
+                    start_index=i,
+                    table_cell_style=table_cell_style,
+                    table_header_style=table_header_style,
+                    available_width=available_width,
+                )
+                yield table
+                yield Spacer(1, 8)
+                i = next_index
+                continue
+
+            if line.startswith("# "):
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                yield Paragraph(self._to_paragraph_markup(line[2:].strip()), heading_1)
+                yield Spacer(1, 8)
+                i += 1
+                continue
+
+            if line.startswith("## "):
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                yield Paragraph(self._to_paragraph_markup(line[3:].strip()), heading_2)
+                yield Spacer(1, 6)
+                i += 1
+                continue
+
+            if line.startswith("### "):
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                yield Paragraph(self._to_paragraph_markup(line[4:].strip()), heading_3)
+                yield Spacer(1, 4)
+                i += 1
+                continue
+
+            if line.startswith(("- ", "* ")):
+                for f in flush_paragraph():
+                    yield f
+                bullet_lines.append(line[2:].strip())
+                i += 1
+                continue
+
+            paragraph_lines.append(line)
+            i += 1
+
+        for f in flush_bullets():
+            yield f
+        for f in flush_paragraph():
+            yield f
+
+    def _parse_table(
+            self,
+            *,
+            lines: list[str],
+            start_index: int,
+            table_cell_style: ParagraphStyle,
+            table_header_style: ParagraphStyle,
+            available_width: float,
+    ) -> tuple[Table, int]:
+        header_line = lines[start_index].strip()
+        i = start_index + 2
+
+        header_cells = self._split_table_row(header_line)
+        body_rows: list[list[str]] = []
+
+        while i < len(lines):
+            line = lines[i].strip()
+            if not line:
+                break
+            if not self._looks_like_table_row(line):
+                break
+            body_rows.append(self._split_table_row(line))
+            i += 1
+
+        column_count = max([len(header_cells)] + [len(r) for r in body_rows] + [1])
+        header_cells = self._pad_row(header_cells, column_count)
+        body_rows = [self._pad_row(r, column_count) for r in body_rows]
+
+        data: list[list[Paragraph]] = [
+            [Paragraph(self._to_paragraph_markup(cell), table_header_style) for cell in header_cells],
+            *[
+                [Paragraph(self._to_paragraph_markup(cell), table_cell_style) for cell in row]
+                for row in body_rows
+            ],
+        ]
+
+        col_width = available_width / column_count
+        table = Table(data, colWidths=[col_width] * column_count, repeatRows=1)
+
+        table.setStyle(
+            TableStyle(
+                [
+                    ("FONTNAME", (0, 0), (-1, -1), table_cell_style.fontName),
+                    ("FONTSIZE", (0, 0), (-1, -1), table_cell_style.fontSize),
+                    ("LEADING", (0, 0), (-1, -1), table_cell_style.leading),
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.whitesmoke),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+                    ("LINEBELOW", (0, 0), (-1, 0), 0.8, colors.lightgrey),
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.lightgrey),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                    ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                    ("TOPPADDING", (0, 0), (-1, -1), 4),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ]
+            )
+        )
+
+        return table, i
+
+    @staticmethod
+    def _looks_like_table_row(line: str) -> bool:
+        return "|" in line
+
+    @staticmethod
+    def _is_table_header_line(line: str) -> bool:
+        if "|" not in line:
+            return False
+        cells = RfpMarkdownPdfStore._split_table_row(line)
+        return any(cell.strip() for cell in cells)
+
+    @staticmethod
+    def _is_table_separator_line(line: str) -> bool:
+        if "|" not in line:
+            return False
+        allowed = set("|:- ")
+        if any(ch not in allowed for ch in line):
+            return False
+        core = line.replace("|", "").replace(":", "").replace(" ", "")
+        return core and all(ch == "-" for ch in core)
+
+    @staticmethod
+    def _split_table_row(line: str) -> list[str]:
+        trimmed = line.strip()
+        if trimmed.startswith("|"):
+            trimmed = trimmed[1:]
+        if trimmed.endswith("|"):
+            trimmed = trimmed[:-1]
+        return [cell.strip() for cell in trimmed.split("|")]
+
+    @staticmethod
+    def _pad_row(row: list[str], target_len: int) -> list[str]:
+        if len(row) >= target_len:
+            return row[:target_len]
+        return row + [""] * (target_len - len(row))
+
+    @staticmethod
+    def _to_paragraph_markup(text: str) -> str:
+        i = 0
+        bold_on = False
+        italic_on = False
+        out: list[str] = []
+
+        def push_char(ch: str) -> None:
+            if ch == "&":
+                out.append("&amp;")
+                return
+            if ch == "<":
+                out.append("&lt;")
+                return
+            if ch == ">":
+                out.append("&gt;")
+                return
+            out.append(ch)
+
+        while i < len(text):
+            ch = text[i]
+
+            if ch == "\\" and i + 1 < len(text):
+                push_char(text[i + 1])
+                i += 2
+                continue
+
+            if text.startswith("**", i):
+                out.append("</b>" if bold_on else "<b>")
+                bold_on = not bold_on
+                i += 2
+                continue
+
+            if ch == "*":
+                out.append("</i>" if italic_on else "<i>")
+                italic_on = not italic_on
+                i += 1
+                continue
+
+            push_char(ch)
+            i += 1
+
+        if italic_on:
+            out.append("</i>")
+        if bold_on:
+            out.append("</b>")
+
+        return "".join(out)
+
+    @staticmethod
+    def _register_unicode_font() -> str:
+        candidates = [
+            Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+            Path("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed.ttf"),
+            Path("C:/Windows/Fonts/arial.ttf"),
+            Path("C:/Windows/Fonts/calibri.ttf"),
+            Path("/Library/Fonts/Arial.ttf"),
+            Path("/System/Library/Fonts/Supplemental/Arial.ttf"),
+        ]
+
+        for path in candidates:
+            if path.exists():
+                font_name = f"TM_{path.stem}"
+                try:
+                    pdfmetrics.registerFont(TTFont(font_name, str(path)))
+                    return font_name
+                except Exception:
+                    continue
+
+        return "Helvetica"
+***** koniec pliku rfp_markdown_to_pdf.py *****
+
 ***** plik rfp_struct_generator.py w lokalizacji src\talentmatch\datasets\rfp_struct_generator.py *****
 from __future__ import annotations
 
@@ -4805,6 +5401,7 @@ class PathsSettings(BaseModel):
     cv_markdown_dir: str
     rfp_struct_json_dir: str
     rfp_markdown_dir: str
+    rfp_pdf_dir: str
 
 
 class AzureOpenAISettings(BaseModel):
@@ -5407,8 +6004,10 @@ src/talentmatch/datasets/cv_pipeline.py
 src/talentmatch/datasets/cv_struct_generator.py
 src/talentmatch/datasets/cv_struct_to_json.py
 src/talentmatch/datasets/cv_struct_to_markdown.py
+src/talentmatch/datasets/rfp_markdown_to_pdf.py
 src/talentmatch/datasets/rfp_struct_generator.py
 src/talentmatch/datasets/rfp_struct_to_json.py
+src/talentmatch/datasets/rfp_struct_to_markdown.py
 src/talentmatch/domain/__init__.py
 src/talentmatch/domain/models.py
 src/talentmatch/domain/types.py
