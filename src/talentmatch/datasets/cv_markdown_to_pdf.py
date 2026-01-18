@@ -4,11 +4,22 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import ListFlowable, ListItem, Paragraph, SimpleDocTemplate, Spacer
+from reportlab.platypus import (
+    ListFlowable,
+    ListItem,
+    Paragraph,
+    SimpleDocTemplate,
+    Spacer,
+    Table,
+    TableStyle,
+)
+
+from talentmatch.infra.llm.prompts import strip_markdown_code_fences
 
 
 @dataclass(frozen=True)
@@ -25,6 +36,10 @@ class CvMarkdownPdfStore:
         self._font_name = self._register_unicode_font()
 
     def store(self, uuid: str, markdown: str) -> StoreCvPdfResult:
+        sanitized = strip_markdown_code_fences(markdown).strip()
+        if not sanitized:
+            raise ValueError("Markdown content is empty")
+
         self._base_dir.mkdir(parents=True, exist_ok=True)
         file_path = self._base_dir / f"{uuid}.pdf"
 
@@ -53,6 +68,27 @@ class CvMarkdownPdfStore:
             spaceBefore=10,
             spaceAfter=6,
         )
+        heading_3 = ParagraphStyle(
+            name="Heading3",
+            parent=base_style,
+            fontSize=11,
+            leading=14,
+            spaceBefore=8,
+            spaceAfter=4,
+        )
+        table_cell_style = ParagraphStyle(
+            name="TableCell",
+            parent=base_style,
+            fontSize=9.4,
+            leading=11.5,
+            spaceAfter=0,
+        )
+        table_header_style = ParagraphStyle(
+            name="TableHeader",
+            parent=table_cell_style,
+            fontSize=9.4,
+            leading=11.5,
+        )
 
         doc = SimpleDocTemplate(
             str(file_path),
@@ -64,7 +100,18 @@ class CvMarkdownPdfStore:
             title=f"{uuid}",
         )
 
-        story = list(self._markdown_to_flowables(markdown, base_style, heading_1, heading_2))
+        story = list(
+            self._markdown_to_flowables(
+                sanitized,
+                base_style=base_style,
+                heading_1=heading_1,
+                heading_2=heading_2,
+                heading_3=heading_3,
+                table_cell_style=table_cell_style,
+                table_header_style=table_header_style,
+                available_width=A4[0] - 36 - 36,
+            )
+        )
         doc.build(story)
 
         return StoreCvPdfResult(uuid=uuid)
@@ -72,9 +119,14 @@ class CvMarkdownPdfStore:
     def _markdown_to_flowables(
             self,
             markdown: str,
+            *,
             base_style: ParagraphStyle,
             heading_1: ParagraphStyle,
             heading_2: ParagraphStyle,
+            heading_3: ParagraphStyle,
+            table_cell_style: ParagraphStyle,
+            table_header_style: ParagraphStyle,
+            available_width: float,
     ) -> Iterable[object]:
         lines = markdown.replace("\r\n", "\n").replace("\r", "\n").split("\n")
 
@@ -100,7 +152,9 @@ class CvMarkdownPdfStore:
             bullet_lines.clear()
             return [ListFlowable(items, bulletType="bullet", leftIndent=12), Spacer(1, 6)]
 
-        for raw in lines:
+        i = 0
+        while i < len(lines):
+            raw = lines[i]
             line = raw.strip()
 
             if not line:
@@ -108,6 +162,26 @@ class CvMarkdownPdfStore:
                     yield f
                 for f in flush_paragraph():
                     yield f
+                i += 1
+                continue
+
+            if self._is_table_header_line(line) and i + 1 < len(lines) and self._is_table_separator_line(
+                    lines[i + 1].strip()
+            ):
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                table, next_index = self._parse_table(
+                    lines=lines,
+                    start_index=i,
+                    table_cell_style=table_cell_style,
+                    table_header_style=table_header_style,
+                    available_width=available_width,
+                )
+                yield table
+                yield Spacer(1, 8)
+                i = next_index
                 continue
 
             if line.startswith("# "):
@@ -117,6 +191,7 @@ class CvMarkdownPdfStore:
                     yield f
                 yield Paragraph(self._to_paragraph_markup(line[2:].strip()), heading_1)
                 yield Spacer(1, 8)
+                i += 1
                 continue
 
             if line.startswith("## "):
@@ -126,24 +201,132 @@ class CvMarkdownPdfStore:
                     yield f
                 yield Paragraph(self._to_paragraph_markup(line[3:].strip()), heading_2)
                 yield Spacer(1, 6)
+                i += 1
+                continue
+
+            if line.startswith("### "):
+                for f in flush_bullets():
+                    yield f
+                for f in flush_paragraph():
+                    yield f
+                yield Paragraph(self._to_paragraph_markup(line[4:].strip()), heading_3)
+                yield Spacer(1, 4)
+                i += 1
                 continue
 
             if line.startswith(("- ", "* ")):
                 for f in flush_paragraph():
                     yield f
                 bullet_lines.append(line[2:].strip())
+                i += 1
                 continue
 
             paragraph_lines.append(line)
+            i += 1
 
         for f in flush_bullets():
             yield f
         for f in flush_paragraph():
             yield f
 
+    def _parse_table(
+            self,
+            *,
+            lines: list[str],
+            start_index: int,
+            table_cell_style: ParagraphStyle,
+            table_header_style: ParagraphStyle,
+            available_width: float,
+    ) -> tuple[Table, int]:
+        header_line = lines[start_index].strip()
+        i = start_index + 2
+
+        header_cells = self._split_table_row(header_line)
+        body_rows: list[list[str]] = []
+
+        while i < len(lines):
+            line = lines[i].strip()
+            if not line:
+                break
+            if not self._looks_like_table_row(line):
+                break
+            body_rows.append(self._split_table_row(line))
+            i += 1
+
+        column_count = max([len(header_cells)] + [len(r) for r in body_rows] + [1])
+        header_cells = self._pad_row(header_cells, column_count)
+        body_rows = [self._pad_row(r, column_count) for r in body_rows]
+
+        data: list[list[Paragraph]] = [
+            [Paragraph(self._to_paragraph_markup(cell), table_header_style) for cell in header_cells],
+            *[
+                [Paragraph(self._to_paragraph_markup(cell), table_cell_style) for cell in row]
+                for row in body_rows
+            ],
+        ]
+
+        col_width = available_width / column_count
+        table = Table(data, colWidths=[col_width] * column_count, repeatRows=1)
+
+        table.setStyle(
+            TableStyle(
+                [
+                    ("FONTNAME", (0, 0), (-1, -1), table_cell_style.fontName),
+                    ("FONTSIZE", (0, 0), (-1, -1), table_cell_style.fontSize),
+                    ("LEADING", (0, 0), (-1, -1), table_cell_style.leading),
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.whitesmoke),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+                    ("LINEBELOW", (0, 0), (-1, 0), 0.8, colors.lightgrey),
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.lightgrey),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                    ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                    ("TOPPADDING", (0, 0), (-1, -1), 4),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ]
+            )
+        )
+
+        return table, i
+
+    @staticmethod
+    def _looks_like_table_row(line: str) -> bool:
+        return "|" in line
+
+    @staticmethod
+    def _is_table_header_line(line: str) -> bool:
+        if "|" not in line:
+            return False
+        cells = CvMarkdownPdfStore._split_table_row(line)
+        return any(cell.strip() for cell in cells)
+
+    @staticmethod
+    def _is_table_separator_line(line: str) -> bool:
+        if "|" not in line:
+            return False
+        allowed = set("|:- ")
+        if any(ch not in allowed for ch in line):
+            return False
+        core = line.replace("|", "").replace(":", "").replace(" ", "")
+        return core and all(ch == "-" for ch in core)
+
+    @staticmethod
+    def _split_table_row(line: str) -> list[str]:
+        trimmed = line.strip()
+        if trimmed.startswith("|"):
+            trimmed = trimmed[1:]
+        if trimmed.endswith("|"):
+            trimmed = trimmed[:-1]
+        return [cell.strip() for cell in trimmed.split("|")]
+
+    @staticmethod
+    def _pad_row(row: list[str], target_len: int) -> list[str]:
+        if len(row) >= target_len:
+            return row[:target_len]
+        return row + [""] * (target_len - len(row))
+
     @staticmethod
     def _to_paragraph_markup(text: str) -> str:
-        """Convert a minimal subset of Markdown inline emphasis to ReportLab paragraph markup."""
         i = 0
         bold_on = False
         italic_on = False

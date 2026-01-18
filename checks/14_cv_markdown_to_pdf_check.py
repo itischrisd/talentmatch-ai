@@ -22,6 +22,7 @@ def run() -> int:
     uuid = "11111111-1111-4111-8111-111111111111"
     markdown = "\n".join(
         [
+            "```markdown",
             "# Jan Kowalski",
             "Senior Python Developer",
             "",
@@ -30,8 +31,16 @@ def run() -> int:
             "- FastAPI",
             "- PostgreSQL",
             "",
+            "## Experience",
+            "### ABC Sp. z o.o.",
+            "| Period | Role | Highlights |",
+            "| --- | --- | --- |",
+            "| 2022-01 – 2024-12 | Senior Backend Engineer | **API** design, *performance* tuning |",
+            "| 2020-03 – 2021-12 | Backend Engineer | Integrations, testing |",
+            "",
             "## Summary",
             "Doświadczony inżynier oprogramowania z naciskiem na backend i dane.",
+            "```",
         ]
     )
 
@@ -50,8 +59,7 @@ def run() -> int:
                                  fail=f"result uuid invalid: {result.uuid}") else 1
     failures += 0 if assert_true(pdf_path.exists(), ok="pdf file exists",
                                  fail=f'pdf file not found: "{pdf_path}"') else 1
-    failures += 0 if assert_true(pdf_path.stat().st_size > 0, ok="pdf file non-empty",
-                                 fail="pdf file is empty") else 1
+    failures += 0 if assert_true(pdf_path.stat().st_size > 0, ok="pdf file non-empty", fail="pdf file is empty") else 1
 
     try:
         store.store(uuid, markdown)
