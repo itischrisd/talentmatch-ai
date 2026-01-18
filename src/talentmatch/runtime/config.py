@@ -7,7 +7,7 @@ from typing import Any
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from .config_models import Settings
-from .toml import read_toml
+from .toml import read_settings_toml
 
 
 class EnvironmentSettings(BaseSettings):
@@ -58,6 +58,6 @@ def load_settings(settings_toml_path: str | None = None) -> Settings:
     if not settings_path.exists():
         raise FileNotFoundError(f"Settings file not found: {settings_path}")
 
-    toml_data = read_toml(settings_path)
+    toml_data = read_settings_toml(settings_path)
     payload = build_settings_payload(toml_data, env)
     return Settings.model_validate(payload)

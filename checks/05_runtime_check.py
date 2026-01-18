@@ -9,6 +9,8 @@ from pydantic import BaseModel
 
 from common import print_fail, print_ok
 from talentmatch.runtime import load_logging_config, load_prompts, load_settings
+from talentmatch.runtime.toml import read_settings_toml
+
 
 
 @dataclass(frozen=True)
@@ -198,7 +200,7 @@ def run() -> int:
         print_fail(f'Logging TOML not found: "{logging_path}"')
         return 1
 
-    settings_toml = read_toml(settings_path)
+    settings_toml = read_settings_toml(settings_path)
     prompts_toml = read_toml(prompts_path)
     logging_toml = read_toml(logging_path)
 
