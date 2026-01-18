@@ -4,76 +4,12 @@ cv_pdf_dir = "data/generated/cv/pdf"
 cv_markdown_dir = "data/generated/cv/markdown"
 rfp_struct_json_dir = "data/generated/rfp/struct_json"
 
-[azure_openai]
-temperature = 0.2
-max_tokens = 1200
-top_p = 0.95
-request_timeout_s = 60
-
 [llm.use_cases.json_to_markdown]
 deployment = "default"
 temperature = 0.8
 max_tokens = 2000
 top_p = 0.95
 request_timeout_s = 120
-
-[datasets.projects]
-default_count = 20
-start_date_past_years = 2
-start_date_future_months = 6
-duration_months_min = 3
-duration_months_max = 18
-team_size_min = 2
-team_size_max = 8
-budget_amount_min = 50000
-budget_amount_max = 500000
-budget_is_optional = true
-budget_present_probability = 0.5
-end_date_only_for_completed = true
-project_type_labels = [
-    "E-commerce Platform",
-    "Data Analytics Dashboard",
-    "Mobile App Development",
-    "Cloud Migration",
-    "AI-Powered Recommendation System",
-    "CRM System Modernization",
-    "IoT Device Management Platform",
-    "Cybersecurity Hardening",
-    "DevOps Automation",
-    "Microservices Refactor"
-]
-client_name_labels = [
-    "TechCorp",
-    "FinTech Innovations",
-    "BioTech Labs",
-    "RetailPro",
-    "CloudScale Inc",
-    "HealthPlus",
-    "AutoMotive Systems",
-    "EduNext",
-    "GreenEnergy Co",
-    "MediaStream"
-]
-name_template = "{project_type} for {client}"
-description_template = "Development of {project_type_lower} with focus on scalability and performance"
-
-[datasets.projects.status_weights]
-completed = 50
-active = 30
-planned = 15
-on_hold = 5
-
-[datasets.project_requirements]
-requirements_count_min = 3
-requirements_count_max = 8
-mandatory_probability = 0.5
-skills_source = "from_profiles"
-fallback_skill_names = [
-    "Python", "Java", "JavaScript", "TypeScript", "SQL", "React", "Spring",
-    "AWS", "Azure", "Docker", "Kubernetes", "CI/CD", "Microservices",
-    "PostgreSQL", "MongoDB", "Redis", "Kafka"
-]
-proficiency_levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
 
 [datasets.cv]
 schema_version = "1.0"
