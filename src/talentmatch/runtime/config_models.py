@@ -23,6 +23,7 @@ class PathsSettings(BaseModel):
     cv_struct_json_dir: str
     cv_pdf_dir: str
     cv_markdown_dir: str
+    rfp_struct_json_dir: str
 
 
 class RunsSettings(BaseModel):
@@ -47,6 +48,32 @@ class AzureOpenAISettings(BaseModel):
         if not (0.0 <= value <= 1.0):
             raise ValueError("Value must be within [0.0, 1.0].")
         return value
+
+
+class LlmUseCaseSettings(BaseModel):
+    deployment: str
+    temperature: float
+    max_tokens: int
+    top_p: float
+    request_timeout_s: int
+
+    @field_validator("temperature", "top_p")
+    @classmethod
+    def validate_probability(cls, value: float) -> float:
+        if not (0.0 <= value <= 1.0):
+            raise ValueError("Value must be within [0.0, 1.0]")
+        return value
+
+
+class LlmUseCasesSettings(BaseModel):
+    dataset_generation: LlmUseCaseSettings
+    json_to_markdown: LlmUseCaseSettings
+    agent_orchestrator: LlmUseCaseSettings
+    matching_judge: LlmUseCaseSettings
+
+
+class LlmSettings(BaseModel):
+    use_cases: LlmUseCasesSettings
 
 
 class Neo4jKeySettings(BaseModel):
@@ -484,11 +511,110 @@ class CvDatasetPolicy(BaseModel):
     markdown: CvMarkdownPolicy
 
 
+class RfpErrorsPolicy(BaseModel):
+    count_must_be_positive: str
+
+
+class RfpTextPolicy(BaseModel):
+    id_token_length: int
+    id_template: str
+    title_templates: list[str]
+
+    start_date_min_days: int
+    start_date_max_days: int
+    duration_months_min: int
+    duration_months_max: int
+
+    team_size_min: int
+    team_size_max: int
+
+    executive_summary_templates: list[str]
+    business_context_templates: list[str]
+
+    objectives_min_count: int
+    objectives_max_count: int
+    objective_templates: list[str]
+
+    required_skills_min_count: int
+    required_skills_max_count: int
+    preferred_skills_min_count: int
+    preferred_skills_max_count: int
+    preferred_certifications_max_count: int
+
+    deliverables_min_count: int
+    deliverables_max_count: int
+    deliverable_templates: list[str]
+
+    milestones_min_count: int
+    milestones_max_count: int
+    milestone_title_templates: list[str]
+    milestone_description_templates: list[str]
+
+    acceptance_criteria_min_count: int
+    acceptance_criteria_max_count: int
+    acceptance_criteria_templates: list[str]
+
+    proposal_guidelines_min_count: int
+    proposal_guidelines_max_count: int
+    proposal_guideline_templates: list[str]
+
+    evaluation_process_templates: list[str]
+
+    role_responsibilities_min_count: int
+    role_responsibilities_max_count: int
+    role_responsibility_templates: list[str]
+
+
+class RfpCatalogPolicy(BaseModel):
+    domains: list[str]
+    clients: list[str]
+    project_types: list[str]
+
+    contract_types: list[str]
+    locations: list[str]
+    remote_modes: list[str]
+    budget_ranges: list[str]
+
+    skills: list[str]
+    certifications: list[str]
+    proficiency_levels: list[str]
+
+
+class RfpStaffingRoleSetPolicy(BaseModel):
+    name: str
+    match_keywords: list[str]
+    core_roles: list[str]
+    optional_roles: list[str]
+
+
+class RfpRoleSkillMapPolicy(BaseModel):
+    role: str
+    skills: list[str]
+
+
+class RfpStaffingPolicy(BaseModel):
+    always_roles: list[str]
+    max_per_role: int
+    role_weights: dict[str, float]
+    seniority_weights: dict[str, float]
+    role_sets: list[RfpStaffingRoleSetPolicy]
+    role_skill_map: list[RfpRoleSkillMapPolicy]
+
+
+class RfpDatasetPolicy(BaseModel):
+    schema_version: str
+    errors: RfpErrorsPolicy
+    text: RfpTextPolicy
+    catalog: RfpCatalogPolicy
+    staffing: RfpStaffingPolicy
+
+
 class DatasetsSettings(BaseModel):
     default_seed: int
     projects: ProjectsPolicy
     project_requirements: ProjectRequirementsPolicy
     cv: CvDatasetPolicy
+    rfp: RfpDatasetPolicy
 
 
 class Settings(BaseModel):
@@ -496,6 +622,7 @@ class Settings(BaseModel):
     paths: PathsSettings
     runs: RunsSettings
     azure_openai: AzureOpenAISettings
+    llm: LlmSettings
     neo4j: Neo4jSettings
     chroma: ChromaSettings
     ingest: IngestSettings

@@ -1,0 +1,202 @@
+{
+  "acceptance_criteria": [
+    "Documentation and knowledge transfer are sufficient for maintenance.",
+    "Security and compliance requirements for Public Sector are satisfied.",
+    "CI/CD and operational monitoring are in place and validated.",
+    "Solution meets functional requirements and agreed scope.",
+    "Performance and reliability targets are met under expected load."
+  ],
+  "budget_range": "$250K - $500K",
+  "business_context": "In a rapidly evolving market, Good-Thomas aims to strengthen capabilities in the Public Sector domain. This initiative will modernize key workflows and improve operational efficiency, with a focus on DevOps Automation.",
+  "client": "Good-Thomas",
+  "contact_information": {
+    "email": "[Contact Email]",
+    "name": "[Contact Person]",
+    "phone": "[Contact Phone Number]"
+  },
+  "contract_type": "B2B",
+  "deliverables": [
+    "Training session(s) for internal teams.",
+    "Working MVP/prototype suitable for stakeholder review.",
+    "Project plan and delivery roadmap for DevOps Automation.",
+    "Architecture design and system documentation for the Public Sector context.",
+    "Final deployment package ready for production usage.",
+    "Operational runbooks, monitoring dashboards, and maintenance procedures."
+  ],
+  "domain": "Public Sector",
+  "duration_months": 6,
+  "evaluation_process": "Proposals will be reviewed by a committee from Good-Thomas. Evaluation will include technical expertise, project methodology, team qualifications, delivery timelines, and cost-effectiveness. Shortlisted vendors may be invited for follow-up discussions.",
+  "executive_summary": "Good-Thomas invites qualified vendors to propose an implementation for \"Request for Proposal: DevOps Automation - Public Sector\". This RFP summarizes requirements, expectations, and proposal guidelines. Project type: DevOps Automation. Duration: 6 months. Team size: 5. Budget: $250K - $500K. Start: April 12, 2026. Location: Warsaw, PL (Remote Work Allowed).",
+  "location": "Warsaw, PL",
+  "milestones": [
+    {
+      "description": "Produce architecture, data flows, and technical decisions for Public Sector.",
+      "target_month": 1,
+      "title": "Architecture & Design"
+    },
+    {
+      "description": "Align on scope, constraints, stakeholders, and success criteria for DevOps Automation.",
+      "target_month": 2,
+      "title": "User Acceptance Testing"
+    },
+    {
+      "description": "Deliver a functional MVP/prototype for early feedback and iteration.",
+      "target_month": 3,
+      "title": "Kickoff & Discovery"
+    },
+    {
+      "description": "Support UAT and address feedback to meet acceptance criteria.",
+      "target_month": 4,
+      "title": "Integration & Hardening"
+    },
+    {
+      "description": "Deploy to production and hand over documentation and operational materials.",
+      "target_month": 5,
+      "title": "Final Deployment"
+    },
+    {
+      "description": "Integrate key components, address performance/reliability, and stabilize delivery.",
+      "target_month": 6,
+      "title": "MVP Delivery"
+    }
+  ],
+  "objectives": [
+    "Deliver a maintainable architecture and clear documentation suitable for enterprise usage.",
+    "Implement best practices and a robust delivery process for DevOps Automation.",
+    "Ensure observability, reliability, and performance under expected load.",
+    "Provide knowledge transfer and enable internal teams to operate the system post-delivery."
+  ],
+  "project_type": "DevOps Automation",
+  "proposal_submission_guidelines": [
+    "Commercial proposal with assumptions and breakdown.",
+    "Risk assessment and mitigation plan.",
+    "Proposed methodology, delivery approach, and timeline.",
+    "Company profile and relevant project references.",
+    "Team composition (roles/seniority) and engagement model."
+  ],
+  "remote_allowed": true,
+  "remote_mode": "Hybrid",
+  "rfp_id": "RFP-5AD324",
+  "schema_version": "1.1",
+  "staffing_profile": [
+    {
+      "count": 1,
+      "key_skills": [
+        "Java",
+        "Python",
+        "Microservices",
+        "REST APIs",
+        "SQL"
+      ],
+      "responsibilities": [
+        "Contribute to documentation, reviews, and continuous improvement.",
+        "Own delivery responsibilities for role: Backend Engineer within DevOps Automation.",
+        "Collaborate with stakeholders and ensure quality for assigned components."
+      ],
+      "role": "Backend Engineer",
+      "seniority": "mid"
+    },
+    {
+      "count": 2,
+      "key_skills": [
+        "CI/CD",
+        "Docker",
+        "Kubernetes",
+        "Observability",
+        "Security"
+      ],
+      "responsibilities": [
+        "Collaborate with stakeholders and ensure quality for assigned components.",
+        "Own delivery responsibilities for role: DevOps Engineer within DevOps Automation."
+      ],
+      "role": "DevOps Engineer",
+      "seniority": "mid"
+    },
+    {
+      "count": 1,
+      "key_skills": [
+        "Agile",
+        "Stakeholder Management",
+        "Delivery Management"
+      ],
+      "responsibilities": [
+        "Contribute to documentation, reviews, and continuous improvement.",
+        "Own delivery responsibilities for role: Project Manager within DevOps Automation."
+      ],
+      "role": "Project Manager",
+      "seniority": "mid"
+    },
+    {
+      "count": 1,
+      "key_skills": [
+        "Testing",
+        "CI/CD",
+        "Automation"
+      ],
+      "responsibilities": [
+        "Contribute to documentation, reviews, and continuous improvement.",
+        "Own delivery responsibilities for role: QA Engineer within DevOps Automation."
+      ],
+      "role": "QA Engineer",
+      "seniority": "senior"
+    }
+  ],
+  "start_date": "2026-04-12",
+  "team_size": 5,
+  "technical_requirements": {
+    "preferred_skills": [
+      {
+        "is_mandatory": false,
+        "min_proficiency": "Expert",
+        "preferred_certifications": [],
+        "skill_name": "GCP"
+      },
+      {
+        "is_mandatory": false,
+        "min_proficiency": "Advanced",
+        "preferred_certifications": [
+          "Azure Fundamentals"
+        ],
+        "skill_name": "Kubernetes"
+      }
+    ],
+    "required_skills": [
+      {
+        "is_mandatory": true,
+        "min_proficiency": "Beginner",
+        "preferred_certifications": [
+          "TOGAF",
+          "Azure Fundamentals"
+        ],
+        "skill_name": "Docker"
+      },
+      {
+        "is_mandatory": true,
+        "min_proficiency": "Intermediate",
+        "preferred_certifications": [
+          "Certified Kubernetes Administrator",
+          "Scrum Master (PSM I)"
+        ],
+        "skill_name": "Airflow"
+      },
+      {
+        "is_mandatory": true,
+        "min_proficiency": "Advanced",
+        "preferred_certifications": [
+          "Azure Fundamentals"
+        ],
+        "skill_name": "Python"
+      },
+      {
+        "is_mandatory": true,
+        "min_proficiency": "Advanced",
+        "preferred_certifications": [
+          "Certified Kubernetes Administrator"
+        ],
+        "skill_name": "Spark"
+      }
+    ]
+  },
+  "title": "Request for Proposal: DevOps Automation - Public Sector",
+  "uuid": "5ad324a6-f1c5-4f29-a0ae-9e89da0c56b1"
+}

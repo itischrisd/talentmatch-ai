@@ -5,6 +5,7 @@ description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
     "faker>=40.1.2",
+    "langchain-openai>=1.1.7",
     "pydantic>=2.5",
     "pydantic-settings>=2.2",
     "python-dotenv>=1.0",
