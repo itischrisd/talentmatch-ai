@@ -19,23 +19,17 @@ class EnvironmentSettings(BaseSettings):
     AZURE_OPENAI_API_KEY: str
     AZURE_OPENAI_API_VERSION: str = "2024-02-15-preview"
     AZURE_OPENAI_CHAT_DEPLOYMENT: str
-    AZURE_OPENAI_EMBED_DEPLOYMENT: str
-
-    NEO4J_URI: str
-    NEO4J_USER: str
-    NEO4J_PASSWORD: str
-    NEO4J_DATABASE: str = "neo4j"
-
-    CHROMA_URL: str = "http://chroma:8000"
-    CHROMA_TENANT: str = "default_tenant"
-    CHROMA_DATABASE: str = "default_database"
 
 
 def resolve_repo_root() -> Path:
+    """Returns the repository root directory."""
+
     return Path(__file__).resolve().parents[3]
 
 
 def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) -> dict[str, Any]:
+    """Merges settings TOML with environment-provided secrets."""
+
     payload = dict(toml_data)
 
     payload["azure_openai"] = {
@@ -44,22 +38,6 @@ def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) 
         "api_key": env.AZURE_OPENAI_API_KEY,
         "api_version": env.AZURE_OPENAI_API_VERSION,
         "chat_deployment": env.AZURE_OPENAI_CHAT_DEPLOYMENT,
-        "embed_deployment": env.AZURE_OPENAI_EMBED_DEPLOYMENT,
-    }
-
-    payload["neo4j"] = {
-        **payload.get("neo4j", {}),
-        "uri": env.NEO4J_URI,
-        "user": env.NEO4J_USER,
-        "password": env.NEO4J_PASSWORD,
-        "database": env.NEO4J_DATABASE,
-    }
-
-    payload["chroma"] = {
-        **payload.get("chroma", {}),
-        "url": env.CHROMA_URL,
-        "tenant": env.CHROMA_TENANT,
-        "database": env.CHROMA_DATABASE,
     }
 
     return payload

@@ -155,14 +155,6 @@ def build_env_to_settings_mappings() -> list[MappingSpec]:
         MappingSpec("env", "AZURE_OPENAI_API_KEY", "azure_openai.api_key"),
         MappingSpec("env", "AZURE_OPENAI_API_VERSION", "azure_openai.api_version"),
         MappingSpec("env", "AZURE_OPENAI_CHAT_DEPLOYMENT", "azure_openai.chat_deployment"),
-        MappingSpec("env", "AZURE_OPENAI_EMBED_DEPLOYMENT", "azure_openai.embed_deployment"),
-        MappingSpec("env", "NEO4J_URI", "neo4j.uri"),
-        MappingSpec("env", "NEO4J_USER", "neo4j.user"),
-        MappingSpec("env", "NEO4J_PASSWORD", "neo4j.password"),
-        MappingSpec("env", "NEO4J_DATABASE", "neo4j.database"),
-        MappingSpec("env", "CHROMA_URL", "chroma.url"),
-        MappingSpec("env", "CHROMA_TENANT", "chroma.tenant"),
-        MappingSpec("env", "CHROMA_DATABASE", "chroma.database"),
     ]
 
 
@@ -288,27 +280,10 @@ def run() -> int:
     print("")
     print("Unused .env keys validation")
 
-    allowed_unused_env_keys = {
-        "CHROMA_HOST",
-        "RUNS_DIR",
-        "LOG_LEVEL",
-        "ENV",
-        "A2A_USER_AGENT_URL",
-        "A2A_ORCHESTRATOR_URL",
-        "A2A_GRAPHDB_AGENT_URL",
-        "A2A_VECTOR_AGENT_URL",
-        "A2A_INGEST_AGENT_URL",
-        "A2A_DATASET_AGENT_URL",
-        "A2A_MATCHING_AGENT_URL",
-    }
-
     env_keys_used = {spec.source_key for spec in env_mappings}
     unused_env_keys = sorted(k for k in env_data.keys() if k not in env_keys_used)
 
     for key in unused_env_keys:
-        if key in allowed_unused_env_keys:
-            print_ok(f'env Parameter "{key}" exists and is intentionally not mapped by runtime loader')
-            continue
         print_fail(f'env Parameter "{key}" exists in .env but is not used by runtime loader')
         failures += 1
 

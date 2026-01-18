@@ -36,7 +36,6 @@ class AzureOpenAISettings(BaseModel):
     api_key: str
     api_version: str
     chat_deployment: str
-    embed_deployment: str
     temperature: float
     max_tokens: int
     top_p: float
@@ -85,18 +84,11 @@ class Neo4jKeySettings(BaseModel):
 
 
 class Neo4jSettings(BaseModel):
-    uri: str
-    user: str
-    password: str
-    database: str
     database_default: str
     keys: Neo4jKeySettings
 
 
 class ChromaSettings(BaseModel):
-    url: str
-    tenant: str
-    database: str
     collection_cv: str
     collection_rfp: str
 
