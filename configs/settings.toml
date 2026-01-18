@@ -1,25 +1,8 @@
-[app]
-name = "TalentMatch AI"
-env = "dev"
-timezone = "Europe/Warsaw"
-
 [paths]
-data_dir = "/data"
-runs_dir = "/data/runs"
-inbox_dir = "/data/inbox"
-raw_dir = "/data/raw"
-generated_dir = "/data/generated"
-interim_dir = "/data/interim"
-indexes_dir = "/data/indexes"
-reports_dir = "/data/reports"
 cv_struct_json_dir = "data/generated/cv/struct_json"
 cv_pdf_dir = "data/generated/cv/pdf"
 cv_markdown_dir = "data/generated/cv/markdown"
 rfp_struct_json_dir = "data/generated/rfp/struct_json"
-
-[runs]
-use_run_folders = true
-default_run_prefix = "run"
 
 [azure_openai]
 temperature = 0.2
@@ -27,134 +10,12 @@ max_tokens = 1200
 top_p = 0.95
 request_timeout_s = 60
 
-[llm.use_cases.dataset_generation]
-deployment = "default"
-temperature = 0.7
-max_tokens = 1400
-top_p = 0.95
-request_timeout_s = 120
-
 [llm.use_cases.json_to_markdown]
 deployment = "default"
 temperature = 0.8
 max_tokens = 2000
 top_p = 0.95
 request_timeout_s = 120
-
-[llm.use_cases.agent_orchestrator]
-deployment = "default"
-temperature = 0.2
-max_tokens = 1200
-top_p = 0.95
-request_timeout_s = 60
-
-[llm.use_cases.matching_judge]
-deployment = "default"
-temperature = 0.0
-max_tokens = 400
-top_p = 1.0
-request_timeout_s = 60
-
-[neo4j]
-database_default = "neo4j"
-
-[neo4j.keys]
-person_key = "person_id"
-skill_key = "name"
-company_key = "name"
-project_key = "name"
-rfp_key = "rfp_id"
-
-[chroma]
-collection_cv = "cv_docs"
-collection_rfp = "rfp_docs"
-
-[ingest]
-default_cv_pdf_dir = "/data/raw/cvs_pdf"
-default_rfp_dir = "/data/raw/rfps"
-default_assignments_dir = "/data/raw/assignments"
-
-[chunking]
-chunk_size = 900
-chunk_overlap = 150
-separator = "\n"
-
-[rag_vector]
-k = 6
-score_threshold = 0.0
-use_mmr = false
-mmr_lambda = 0.5
-include_metadata = true
-
-[rag_vector.hybrid]
-enabled = false
-bm25_weight = 0.4
-vector_weight = 0.6
-
-[rag_vector.query_expansion]
-enabled = false
-n_variants = 2
-
-[rag_vector.rerank]
-enabled = false
-top_n = 6
-
-[rag_graph]
-mode = "cypher_qa"
-max_returned_rows = 50
-allow_write_queries = false
-
-[kg]
-strict_schema = true
-max_nodes_per_cv = 120
-max_edges_per_cv = 250
-
-[matching]
-top_k = 10
-min_score = 0.0
-
-[matching.weights]
-skills = 0.55
-experience = 0.25
-availability = 0.20
-
-[matching.availability]
-default_allocation = 1.0
-time_unit = "day"
-assume_open_end_assignments = true
-
-[matching.llm_judge]
-enabled = false
-temperature = 0.0
-max_tokens = 400
-
-[bi]
-default_engine = "graph"
-fallback_engine = "vector"
-
-[orchestration]
-enabled = true
-memory_enabled = true
-max_turns = 30
-
-[evaluation]
-enabled = true
-n_questions_smoke = 8
-measure_latency = true
-
-[evaluation.ragas]
-enabled = true
-faithfulness = true
-answer_relevancy = true
-context_precision = true
-context_recall = true
-
-[logging]
-json_logs = false
-log_prompts = false
-
-[datasets]
-default_seed = 12345
 
 [datasets.projects]
 default_count = 20

@@ -67,10 +67,10 @@ def run() -> int:
         return 1
 
     try:
-        model = provider.get_chat_model("dataset_generation")
-        print_ok('provider.get_chat_model("dataset_generation") succeeded')
+        model = provider.get_chat_model("json_to_markdown")
+        print_ok('provider.get_chat_model("json_to_markdown") succeeded')
     except Exception as exc:
-        print_fail(f'provider.get_chat_model("dataset_generation") failed: {exc}')
+        print_fail(f'provider.get_chat_model("json_to_markdown") failed: {exc}')
         return 1
 
     prompt = "Ping. Reply with a single short word."

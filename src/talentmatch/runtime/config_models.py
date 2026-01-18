@@ -5,30 +5,11 @@ from typing import Literal
 from pydantic import BaseModel, field_validator
 
 
-class AppSettings(BaseModel):
-    name: str
-    env: Literal["dev", "prod"]
-    timezone: str
-
-
 class PathsSettings(BaseModel):
-    data_dir: str
-    runs_dir: str
-    inbox_dir: str
-    raw_dir: str
-    generated_dir: str
-    interim_dir: str
-    indexes_dir: str
-    reports_dir: str
     cv_struct_json_dir: str
     cv_pdf_dir: str
     cv_markdown_dir: str
     rfp_struct_json_dir: str
-
-
-class RunsSettings(BaseModel):
-    use_run_folders: bool
-    default_run_prefix: str
 
 
 class AzureOpenAISettings(BaseModel):
@@ -65,10 +46,7 @@ class LlmUseCaseSettings(BaseModel):
 
 
 class LlmUseCasesSettings(BaseModel):
-    dataset_generation: LlmUseCaseSettings
     json_to_markdown: LlmUseCaseSettings
-    agent_orchestrator: LlmUseCaseSettings
-    matching_judge: LlmUseCaseSettings
 
 
 class LlmSettings(BaseModel):
@@ -81,28 +59,6 @@ class Neo4jKeySettings(BaseModel):
     company_key: str
     project_key: str
     rfp_key: str
-
-
-class Neo4jSettings(BaseModel):
-    database_default: str
-    keys: Neo4jKeySettings
-
-
-class ChromaSettings(BaseModel):
-    collection_cv: str
-    collection_rfp: str
-
-
-class IngestSettings(BaseModel):
-    default_cv_pdf_dir: str
-    default_rfp_dir: str
-    default_assignments_dir: str
-
-
-class ChunkingSettings(BaseModel):
-    chunk_size: int
-    chunk_overlap: int
-    separator: str
 
 
 class RagVectorHybridSettings(BaseModel):
@@ -134,36 +90,6 @@ class RagVectorQueryExpansionSettings(BaseModel):
 class RagVectorRerankSettings(BaseModel):
     enabled: bool
     top_n: int
-
-
-class RagVectorSettings(BaseModel):
-    k: int
-    score_threshold: float
-    use_mmr: bool
-    mmr_lambda: float
-    include_metadata: bool
-    hybrid: RagVectorHybridSettings
-    query_expansion: RagVectorQueryExpansionSettings
-    rerank: RagVectorRerankSettings
-
-    @field_validator("mmr_lambda")
-    @classmethod
-    def validate_mmr_lambda(cls, value: float) -> float:
-        if not (0.0 <= value <= 1.0):
-            raise ValueError("mmr_lambda must be within [0.0, 1.0].")
-        return value
-
-
-class RagGraphSettings(BaseModel):
-    mode: Literal["cypher_qa", "template"]
-    max_returned_rows: int
-    allow_write_queries: bool
-
-
-class KgSettings(BaseModel):
-    strict_schema: bool
-    max_nodes_per_cv: int
-    max_edges_per_cv: int
 
 
 class MatchingWeightsSettings(BaseModel):
@@ -214,45 +140,6 @@ class MatchingLlmJudgeSettings(BaseModel):
         if not (0.0 <= value <= 1.0):
             raise ValueError("temperature must be within [0.0, 1.0].")
         return value
-
-
-class MatchingSettings(BaseModel):
-    top_k: int
-    min_score: float
-    weights: MatchingWeightsSettings
-    availability: MatchingAvailabilitySettings
-    llm_judge: MatchingLlmJudgeSettings
-
-
-class BiSettings(BaseModel):
-    default_engine: Literal["graph", "vector"]
-    fallback_engine: Literal["graph", "vector"]
-
-
-class OrchestrationSettings(BaseModel):
-    enabled: bool
-    memory_enabled: bool
-    max_turns: int
-
-
-class EvaluationRagasSettings(BaseModel):
-    enabled: bool
-    faithfulness: bool
-    answer_relevancy: bool
-    context_precision: bool
-    context_recall: bool
-
-
-class EvaluationSettings(BaseModel):
-    enabled: bool
-    n_questions_smoke: int
-    measure_latency: bool
-    ragas: EvaluationRagasSettings
-
-
-class LoggingSettings(BaseModel):
-    json_logs: bool
-    log_prompts: bool
 
 
 class ProjectsPolicy(BaseModel):
@@ -602,7 +489,6 @@ class RfpDatasetPolicy(BaseModel):
 
 
 class DatasetsSettings(BaseModel):
-    default_seed: int
     projects: ProjectsPolicy
     project_requirements: ProjectRequirementsPolicy
     cv: CvDatasetPolicy
@@ -610,21 +496,7 @@ class DatasetsSettings(BaseModel):
 
 
 class Settings(BaseModel):
-    app: AppSettings
     paths: PathsSettings
-    runs: RunsSettings
     azure_openai: AzureOpenAISettings
     llm: LlmSettings
-    neo4j: Neo4jSettings
-    chroma: ChromaSettings
-    ingest: IngestSettings
-    chunking: ChunkingSettings
-    rag_vector: RagVectorSettings
-    rag_graph: RagGraphSettings
-    kg: KgSettings
-    matching: MatchingSettings
-    bi: BiSettings
-    orchestration: OrchestrationSettings
-    evaluation: EvaluationSettings
-    logging: LoggingSettings
     datasets: DatasetsSettings
