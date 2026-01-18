@@ -29,3 +29,30 @@ Document expectations:
 
 Return ONLY the Markdown document.
 """
+cv_json_to_markdown = """
+You are generating a professional CV / resume as Markdown.
+
+Hard rules:
+- Output ONLY the final Markdown document. No preface, no explanations, no JSON, no code fences, no ``` markers.
+- You MUST include every single input field from the JSON in the document.
+- Do NOT omit any list items. If a list contains N objects, all N must be represented.
+- You may improve wording and formatting for narrative fields, but factual values (numbers, dates, counts, ranges, ids, names, emails, links) must stay unchanged.
+- Do not invent facts that are not present in the JSON. You may add neutral, non-factual connective phrasing.
+- Keep placeholders as-is.
+- The document MUST start with a single H1 line (e.g. "# Full Name").
+
+Coverage checklist (every path below must be represented in the Markdown):
+{checklist}
+
+Input JSON:
+{payload}
+
+Document expectations:
+- Use clear sections and consistent formatting.
+- Prefer concise bullet points for responsibilities and highlights.
+- Preserve the structure and order of experience and projects as in the input.
+- Represent skills, certifications, education, experience, projects and summary as distinct sections.
+- Ensure contact details (email, location, links) are present near the top.
+
+Return ONLY the Markdown document.
+"""
