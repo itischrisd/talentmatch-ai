@@ -1,66 +1,5 @@
-[paths]
-cv_struct_json_dir = "data/generated/cv/struct_json"
-cv_pdf_dir = "data/generated/cv/pdf"
-cv_markdown_dir = "data/generated/cv/markdown"
-rfp_struct_json_dir = "data/generated/rfp/struct_json"
-
-[llm.use_cases.json_to_markdown]
-deployment = "default"
-temperature = 0.8
-max_tokens = 2000
-top_p = 0.95
-request_timeout_s = 120
-
 [datasets.cv]
 schema_version = "1.0"
-
-[datasets.cv.errors]
-count_must_be_positive = "count must be positive"
-
-[datasets.cv.person]
-name_format = "{first_name} {last_name}"
-email_local_part_format = "{first_name}.{last_name}"
-email_format = "{local_part}@{domain}"
-link_slug_format = "{first_name}{last_name}"
-email_domains = ["gmail.com", "outlook.com", "proton.me"]
-locations = ["Warsaw, PL", "Krakow, PL", "Wroclaw, PL", "Gdansk, PL"]
-
-[datasets.cv.person.seniority]
-labels = ["junior", "mid", "senior", "lead"]
-weights = [25, 40, 25, 10]
-
-[datasets.cv.person.headline_by_seniority]
-junior = "Junior Software Engineer"
-mid = "Software Engineer"
-senior = "Senior Software Engineer"
-lead = "Tech Lead / Staff Engineer"
-
-[[datasets.cv.person.links]]
-type = "github"
-url_template = "https://github.com/{slug}"
-
-[[datasets.cv.person.links]]
-type = "linkedin"
-url_template = "https://www.linkedin.com/in/{slug}/"
-
-[datasets.cv.skills.count]
-min = 10
-max = 18
-
-[datasets.cv.skills]
-all = [
-    "Python", "Java", "JavaScript", "TypeScript", "SQL", "React", "Spring",
-    "FastAPI", "Django", "Node.js", "Azure", "AWS", "Docker", "Kubernetes",
-    "PostgreSQL", "MongoDB", "Redis", "Kafka", "CI/CD", "Microservices"
-]
-
-[datasets.cv.skills.proficiency]
-levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
-weights = [10, 45, 35, 10]
-
-[datasets.cv.certifications.count]
-min = 0
-max = 3
 
 [datasets.cv.certifications]
 all = [
@@ -71,97 +10,235 @@ all = [
     "Terraform Associate"
 ]
 
-[datasets.cv.education.count]
-min = 1
-max = 2
+[datasets.cv.certifications.count]
+max = 3
+min = 0
 
 [datasets.cv.education]
-universities = ["Warsaw University of Technology", "AGH University of Krakow", "University of Wroclaw", "Gdansk University of Technology"]
 degrees = ["BSc", "MSc", "Engineer"]
-fields = ["Computer Science", "Software Engineering", "Data Science", "Information Systems"]
 duration_years = [2, 3, 4, 5]
+fields = [
+    "Computer Science",
+    "Software Engineering",
+    "Data Science",
+    "Information Systems"
+]
+universities = [
+    "Warsaw University of Technology",
+    "AGH University of Krakow",
+    "University of Wroclaw",
+    "Gdansk University of Technology"
+]
+
+[datasets.cv.education.count]
+max = 2
+min = 1
 
 [datasets.cv.education.end_year_offset]
-min = 1
 max = 12
+min = 1
+
+[datasets.cv.errors]
+count_must_be_positive = "count must be positive"
 
 [datasets.cv.experience]
+company_names = [
+    "TechCorp",
+    "FinTech Innovations",
+    "CloudScale Inc",
+    "RetailPro",
+    "HealthPlus",
+    "MediaStream"
+]
+domains = [
+    "FinTech",
+    "E-commerce",
+    "Healthcare",
+    "Media",
+    "SaaS",
+    "Logistics"
+]
+job_titles = [
+    "Software Engineer",
+    "Backend Engineer",
+    "Full-Stack Engineer",
+    "Data Engineer",
+    "DevOps Engineer"
+]
 max_total_years = 12
 month_to_days = 30
-company_names = ["TechCorp", "FinTech Innovations", "CloudScale Inc", "RetailPro", "HealthPlus", "MediaStream"]
-job_titles = ["Software Engineer", "Backend Engineer", "Full-Stack Engineer", "Data Engineer", "DevOps Engineer"]
-domains = ["FinTech", "E-commerce", "Healthcare", "Media", "SaaS", "Logistics"]
-
-[datasets.cv.experience.jobs_by_seniority.junior]
-min = 1
-max = 2
-
-[datasets.cv.experience.jobs_by_seniority.mid]
-min = 2
-max = 3
-
-[datasets.cv.experience.jobs_by_seniority.senior]
-min = 3
-max = 4
-
-[datasets.cv.experience.jobs_by_seniority.lead]
-min = 3
-max = 5
-
-[datasets.cv.experience.job_duration_months]
-min = 8
-max = 22
 
 [datasets.cv.experience.gap_days]
-min = 0
 max = 45
+min = 0
 
-[datasets.cv.experience.tech_stack_size]
+[datasets.cv.experience.job_duration_months]
+max = 22
+min = 8
+
+[datasets.cv.experience.jobs_by_seniority.junior]
+max = 2
+min = 1
+
+[datasets.cv.experience.jobs_by_seniority.lead]
+max = 5
 min = 3
-max = 6
+
+[datasets.cv.experience.jobs_by_seniority.mid]
+max = 3
+min = 2
+
+[datasets.cv.experience.jobs_by_seniority.senior]
+max = 4
+min = 3
 
 [datasets.cv.experience.responsibilities_count]
+max = 5
 min = 3
-max = 5
 
-[datasets.cv.projects.count]
-min = 2
-max = 5
+[datasets.cv.experience.tech_stack_size]
+max = 6
+min = 3
+
+[datasets.cv.markdown]
+certification_item_template = "{name}"
+certifications_title = "Certifications"
+contact_template = "{email} | {location} | {links}"
+date_format = "%b %Y"
+education_item_template = "**{degree} {field}**, {institution} ({start_year}–{end_year})"
+education_title = "Education"
+experience_date_range_template = "{start} – {end}"
+experience_header_template = "**{title}**, {company} ({domain}) — {date_range}"
+experience_responsibility_template = "{text}"
+experience_tech_stack_template = "Tech stack: {tech_stack}"
+experience_title = "Experience"
+h1_template = "# {name}"
+links_separator = " | "
+present_label = "Present"
+project_company_template = "Client/Company: {company}"
+project_description_template = "{text}"
+project_header_template = "**{name}** ({type})"
+project_highlight_template = "{text}"
+project_tech_stack_template = "Tech stack: {tech_stack}"
+projects_title = "Projects"
+section_header_template = "## {title}"
+skill_item_template = "{name} — {proficiency}"
+skills_title = "Skills"
+summary_title = "Summary"
+
+[datasets.cv.person]
+email_domains = ["gmail.com", "outlook.com", "proton.me"]
+email_format = "{local_part}@{domain}"
+email_local_part_format = "{first_name}.{last_name}"
+link_slug_format = "{first_name}{last_name}"
+locations = ["Warsaw, PL", "Krakow, PL", "Wroclaw, PL", "Gdansk, PL"]
+name_format = "{first_name} {last_name}"
+
+[datasets.cv.person.headline_by_seniority]
+junior = "Junior Software Engineer"
+lead = "Tech Lead / Staff Engineer"
+mid = "Software Engineer"
+senior = "Senior Software Engineer"
+
+[[datasets.cv.person.links]]
+type = "github"
+url_template = "https://github.com/{slug}"
+
+[[datasets.cv.person.links]]
+type = "linkedin"
+url_template = "https://www.linkedin.com/in/{slug}/"
+
+[datasets.cv.person.seniority]
+labels = ["junior", "mid", "senior", "lead"]
+weights = [25, 40, 25, 10]
 
 [datasets.cv.projects]
-project_types = ["Platform", "API", "Data Pipeline", "Dashboard", "Mobile App", "Migration"]
-name_prefixes = ["Nova", "Atlas", "Pulse", "Orion", "Nimbus", "Zenith", "Echo", "Vertex"]
-name_template = "{prefix} {project_type}"
-impact_verbs = ["Delivered", "Designed", "Implemented", "Optimized", "Automated", "Migrated"]
-metrics = ["latency by 30%", "cloud costs by 20%", "error rate by 40%", "deployment frequency by 2x", "throughput by 50%"]
-description_template = "{verb} {project_type_lower} with focus on reliability, performance, and maintainability"
 attach_company_probability = 0.7
-primary_tech_count = 3
-highlights_count = 2
+description_template = "{verb} {project_type_lower} with focus on reliability, performance, and maintainability"
 highlight_templates = [
     "Built core components using {tech_stack}.",
     "Improved {metric}.",
     "Reduced incident rate and improved observability.",
     "Introduced CI/CD improvements and automated checks."
 ]
+highlights_count = 2
+impact_verbs = [
+    "Delivered",
+    "Designed",
+    "Implemented",
+    "Optimized",
+    "Automated",
+    "Migrated"
+]
+metrics = [
+    "latency by 30%",
+    "cloud costs by 20%",
+    "error rate by 40%",
+    "deployment frequency by 2x",
+    "throughput by 50%"
+]
+name_prefixes = [
+    "Nova",
+    "Atlas",
+    "Pulse",
+    "Orion",
+    "Nimbus",
+    "Zenith",
+    "Echo",
+    "Vertex"
+]
+name_template = "{prefix} {project_type}"
+primary_tech_count = 3
+project_types = [
+    "Platform",
+    "API",
+    "Data Pipeline",
+    "Dashboard",
+    "Mobile App",
+    "Migration"
+]
+
+[datasets.cv.projects.count]
+max = 5
+min = 2
 
 [datasets.cv.projects.tech_stack_size]
-min = 3
 max = 6
+min = 3
+
+[datasets.cv.skills]
+all = [
+    "Python",
+    "Java",
+    "JavaScript",
+    "TypeScript",
+    "SQL",
+    "React",
+    "Spring",
+    "FastAPI",
+    "Django",
+    "Node.js",
+    "Azure",
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "Kafka",
+    "CI/CD",
+    "Microservices"
+]
+
+[datasets.cv.skills.count]
+max = 18
+min = 10
+
+[datasets.cv.skills.proficiency]
+levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
+weights = [10, 45, 35, 10]
 
 [datasets.cv.text]
-fallback_skill = "Python"
-summary_top_skills = 4
-summary_max_certs = 2
-summary_cert_part_template = " Certified ({certs})."
-summary_cert_part_empty = ""
-min_years_of_experience = 1
-max_years_of_experience = 20
-summary_templates = [
-    "{years}+ years of experience delivering software across domains. Strong in {skills}.{cert_part}",
-    "Engineer with {years}+ years of experience. Focus: {skills}.{cert_part}",
-    "{years}+ years in software development. Key strengths: {skills}.{cert_part}"
-]
 bullets_templates = [
     "Implemented solutions in {domain} using {skill}.",
     "Improved system reliability and performance in {domain} with {skill}.",
@@ -169,190 +246,31 @@ bullets_templates = [
     "Automated workflows and reduced manual effort in {domain} using {skill}.",
     "Built and maintained services in {domain} with {skill}."
 ]
+fallback_skill = "Python"
+max_years_of_experience = 20
+min_years_of_experience = 1
+summary_cert_part_empty = ""
+summary_cert_part_template = " Certified ({certs})."
+summary_max_certs = 2
+summary_templates = [
+    "{years}+ years of experience delivering software across domains. Strong in {skills}.{cert_part}",
+    "Engineer with {years}+ years of experience. Focus: {skills}.{cert_part}",
+    "{years}+ years in software development. Key strengths: {skills}.{cert_part}"
+]
+summary_top_skills = 4
 
 [datasets.cv.text.identifier_replacements]
 " " = ""
-"'" = ""
 "\"" = ""
-"_" = ""
-"-" = ""
-
-[datasets.cv.markdown]
-h1_template = "# {name}"
-contact_template = "{email} | {location} | {links}"
-links_separator = " | "
-
-section_header_template = "## {title}"
-
-summary_title = "Summary"
-skills_title = "Skills"
-certifications_title = "Certifications"
-experience_title = "Experience"
-projects_title = "Projects"
-education_title = "Education"
-
-date_format = "%b %Y"
-present_label = "Present"
-
-skill_item_template = "{name} — {proficiency}"
-certification_item_template = "{name}"
-
-experience_header_template = "**{title}**, {company} ({domain}) — {date_range}"
-experience_date_range_template = "{start} – {end}"
-experience_responsibility_template = "{text}"
-experience_tech_stack_template = "Tech stack: {tech_stack}"
-
-project_header_template = "**{name}** ({type})"
-project_company_template = "Client/Company: {company}"
-project_description_template = "{text}"
-project_highlight_template = "{text}"
-project_tech_stack_template = "Tech stack: {tech_stack}"
-
-education_item_template = "**{degree} {field}**, {institution} ({start_year}–{end_year})"
+"'" = ""
+- = ""
+_ = ""
 
 [datasets.rfp]
 schema_version = "1.1"
 
-[datasets.rfp.errors]
-count_must_be_positive = "RFP count must be a positive integer."
-
-[datasets.rfp.text]
-id_token_length = 6
-id_template = "RFP-{token}"
-
-title_templates = [
-    "Request for Proposal (RFP): {project_type} for {client}",
-    "RFP: {project_type} initiative ({domain})",
-    "Request for Proposal: {project_type} - {domain}"
-]
-
-start_date_min_days = 14
-start_date_max_days = 90
-
-duration_months_min = 6
-duration_months_max = 24
-
-team_size_min = 5
-team_size_max = 12
-
-executive_summary_templates = [
-    "{client} is seeking proposals from experienced development teams to deliver \"{title}\". The project focuses on {project_type} in the {domain} domain. Expected duration is {duration_months} months with an estimated team size of {team_size} people. Budget range: {budget_range}. Planned start date: {start_date}. Location: {location} ({remote_allowed}).",
-    "{client} invites qualified vendors to propose an implementation for \"{title}\". This RFP summarizes requirements, expectations, and proposal guidelines. Project type: {project_type}. Duration: {duration_months} months. Team size: {team_size}. Budget: {budget_range}. Start: {start_date}. Location: {location} ({remote_allowed})."
-]
-
-business_context_templates = [
-    "In a rapidly evolving market, {client} aims to strengthen capabilities in the {domain} domain. This initiative will modernize key workflows and improve operational efficiency, with a focus on {project_type}.",
-    "{client} is pursuing a strategic transformation in {domain}. The organization seeks to implement {project_type} to improve scalability, reliability, and time-to-market."
-]
-
-objectives_min_count = 3
-objectives_max_count = 5
-objective_templates = [
-    "Develop a secure and scalable solution aligned with {domain} constraints.",
-    "Deliver a maintainable architecture and clear documentation suitable for enterprise usage.",
-    "Implement best practices and a robust delivery process for {project_type}.",
-    "Ensure observability, reliability, and performance under expected load.",
-    "Provide knowledge transfer and enable internal teams to operate the system post-delivery."
-]
-
-required_skills_min_count = 4
-required_skills_max_count = 7
-preferred_skills_min_count = 2
-preferred_skills_max_count = 4
-preferred_certifications_max_count = 2
-
-deliverables_min_count = 4
-deliverables_max_count = 6
-deliverable_templates = [
-    "Project plan and delivery roadmap for {project_type}.",
-    "Architecture design and system documentation for the {domain} context.",
-    "Working MVP/prototype suitable for stakeholder review.",
-    "Final deployment package ready for production usage.",
-    "Operational runbooks, monitoring dashboards, and maintenance procedures.",
-    "Training session(s) for internal teams."
-]
-
-milestones_min_count = 4
-milestones_max_count = 6
-milestone_title_templates = [
-    "Kickoff & Discovery",
-    "Architecture & Design",
-    "MVP Delivery",
-    "Integration & Hardening",
-    "User Acceptance Testing",
-    "Final Deployment"
-]
-milestone_description_templates = [
-    "Align on scope, constraints, stakeholders, and success criteria for {project_type}.",
-    "Produce architecture, data flows, and technical decisions for {domain}.",
-    "Deliver a functional MVP/prototype for early feedback and iteration.",
-    "Integrate key components, address performance/reliability, and stabilize delivery.",
-    "Support UAT and address feedback to meet acceptance criteria.",
-    "Deploy to production and hand over documentation and operational materials."
-]
-
-acceptance_criteria_min_count = 3
-acceptance_criteria_max_count = 5
-acceptance_criteria_templates = [
-    "Solution meets functional requirements and agreed scope.",
-    "Security and compliance requirements for {domain} are satisfied.",
-    "Performance and reliability targets are met under expected load.",
-    "Documentation and knowledge transfer are sufficient for maintenance.",
-    "CI/CD and operational monitoring are in place and validated."
-]
-
-proposal_guidelines_min_count = 3
-proposal_guidelines_max_count = 5
-proposal_guideline_templates = [
-    "Company profile and relevant project references.",
-    "Proposed methodology, delivery approach, and timeline.",
-    "Team composition (roles/seniority) and engagement model.",
-    "Commercial proposal with assumptions and breakdown.",
-    "Risk assessment and mitigation plan."
-]
-
-evaluation_process_templates = [
-    "Proposals will be reviewed by a committee from {client}. Evaluation will include technical expertise, project methodology, team qualifications, delivery timelines, and cost-effectiveness. Shortlisted vendors may be invited for follow-up discussions."
-]
-
-role_responsibilities_min_count = 2
-role_responsibilities_max_count = 3
-role_responsibility_templates = [
-    "Own delivery responsibilities for role: {role} within {project_type}.",
-    "Collaborate with stakeholders and ensure quality for assigned components.",
-    "Contribute to documentation, reviews, and continuous improvement."
-]
-
 [datasets.rfp.catalog]
-domains = ["FinTech", "E-commerce", "Healthcare", "Telecom", "Logistics", "Energy", "Public Sector"]
-
-clients = []
-
-project_types = [
-    "Enterprise Web Application Development",
-    "Machine Learning Implementation",
-    "Cloud Migration",
-    "DevOps Automation",
-    "Data Platform Modernization",
-    "Microservices Re-architecture"
-]
-
-contract_types = ["B2B", "UoP", "Contract"]
-locations = ["Warsaw, PL", "Krakow, PL", "Wroclaw, PL", "Gdansk, PL", "Remote (EU)"]
-remote_modes = ["On-site", "Hybrid", "Remote"]
 budget_ranges = ["$100K - $250K", "$250K - $500K", "$500K - $1M", "$1M+"]
-
-skills = [
-    "Python", "Java", "TypeScript", "SQL",
-    "React", "Django", "Spring Boot", "Node.js",
-    "Kafka", "Spark", "Airflow",
-    "Docker", "Kubernetes", "CI/CD",
-    "AWS", "Azure", "GCP",
-    "MongoDB", "PostgreSQL",
-    "Microservices", "REST APIs", "gRPC",
-    "Observability", "Security"
-]
-
 certifications = [
     "AWS Certified Solutions Architect",
     "AWS Certified Developer",
@@ -362,33 +280,111 @@ certifications = [
     "Scrum Master (PSM I)",
     "TOGAF"
 ]
-
+clients = []
+contract_types = ["B2B", "UoP", "Contract"]
+domains = [
+    "FinTech",
+    "E-commerce",
+    "Healthcare",
+    "Telecom",
+    "Logistics",
+    "Energy",
+    "Public Sector"
+]
+locations = [
+    "Warsaw, PL",
+    "Krakow, PL",
+    "Wroclaw, PL",
+    "Gdansk, PL",
+    "Remote (EU)"
+]
 proficiency_levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
+project_types = [
+    "Enterprise Web Application Development",
+    "Machine Learning Implementation",
+    "Cloud Migration",
+    "DevOps Automation",
+    "Data Platform Modernization",
+    "Microservices Re-architecture"
+]
+remote_modes = ["On-site", "Hybrid", "Remote"]
+skills = [
+    "Python",
+    "Java",
+    "TypeScript",
+    "SQL",
+    "React",
+    "Django",
+    "Spring Boot",
+    "Node.js",
+    "Kafka",
+    "Spark",
+    "Airflow",
+    "Docker",
+    "Kubernetes",
+    "CI/CD",
+    "AWS",
+    "Azure",
+    "GCP",
+    "MongoDB",
+    "PostgreSQL",
+    "Microservices",
+    "REST APIs",
+    "gRPC",
+    "Observability",
+    "Security"
+]
+
+[datasets.rfp.errors]
+count_must_be_positive = "RFP count must be a positive integer."
 
 [datasets.rfp.staffing]
 always_roles = ["Project Manager"]
 max_per_role = 4
 
-role_weights = { "Solution Architect" = 1.2, "Backend Engineer" = 1.4, "Frontend Engineer" = 1.2, "DevOps Engineer" = 1.1, "QA Engineer" = 1.0, "Data Engineer" = 1.1, "ML Engineer" = 1.1, "Business Analyst" = 1.0, "DBA" = 0.9 }
-seniority_weights = { "mid" = 0.45, "senior" = 0.40, "lead" = 0.10, "junior" = 0.05 }
-
 [[datasets.rfp.staffing.role_sets]]
 name = "default"
 match_keywords = []
-core_roles = ["Solution Architect", "Backend Engineer", "QA Engineer", "DevOps Engineer"]
+core_roles = [
+    "Solution Architect",
+    "Backend Engineer",
+    "QA Engineer",
+    "DevOps Engineer"
+]
 optional_roles = ["Frontend Engineer", "Business Analyst", "DBA"]
 
 [[datasets.rfp.staffing.role_sets]]
 name = "ml"
 match_keywords = ["machine learning", "ml"]
-core_roles = ["ML Engineer", "Data Engineer", "Backend Engineer", "DevOps Engineer", "QA Engineer"]
-optional_roles = ["Solution Architect", "Business Analyst", "DBA", "Frontend Engineer"]
+core_roles = [
+    "ML Engineer",
+    "Data Engineer",
+    "Backend Engineer",
+    "DevOps Engineer",
+    "QA Engineer"
+]
+optional_roles = [
+    "Solution Architect",
+    "Business Analyst",
+    "DBA",
+    "Frontend Engineer"
+]
 
 [[datasets.rfp.staffing.role_sets]]
 name = "cloud"
 match_keywords = ["cloud", "migration"]
-core_roles = ["Solution Architect", "DevOps Engineer", "Backend Engineer", "QA Engineer"]
-optional_roles = ["Data Engineer", "DBA", "Business Analyst", "Frontend Engineer"]
+core_roles = [
+    "Solution Architect",
+    "DevOps Engineer",
+    "Backend Engineer",
+    "QA Engineer"
+]
+optional_roles = [
+    "Data Engineer",
+    "DBA",
+    "Business Analyst",
+    "Frontend Engineer"
+]
 
 [[datasets.rfp.staffing.role_sets]]
 name = "devops"
@@ -435,3 +431,126 @@ skills = ["Requirements", "Documentation", "Stakeholders"]
 [[datasets.rfp.staffing.role_skill_map]]
 role = "DBA"
 skills = ["PostgreSQL", "MongoDB", "Performance", "Backups"]
+
+[datasets.rfp.staffing.role_weights]
+"Backend Engineer" = 1.4
+"Business Analyst" = 1
+DBA = 0.9
+"Data Engineer" = 1.1
+"DevOps Engineer" = 1.1
+"Frontend Engineer" = 1.2
+"ML Engineer" = 1.1
+"QA Engineer" = 1
+"Solution Architect" = 1.2
+
+[datasets.rfp.staffing.seniority_weights]
+junior = 0.05
+lead = 0.1
+mid = 0.45
+senior = 0.4
+
+[datasets.rfp.text]
+acceptance_criteria_max_count = 5
+acceptance_criteria_min_count = 3
+acceptance_criteria_templates = [
+    "Solution meets functional requirements and agreed scope.",
+    "Security and compliance requirements for {domain} are satisfied.",
+    "Performance and reliability targets are met under expected load.",
+    "Documentation and knowledge transfer are sufficient for maintenance.",
+    "CI/CD and operational monitoring are in place and validated."
+]
+business_context_templates = [
+    "In a rapidly evolving market, {client} aims to strengthen capabilities in the {domain} domain. This initiative will modernize key workflows and improve operational efficiency, with a focus on {project_type}.",
+    "{client} is pursuing a strategic transformation in {domain}. The organization seeks to implement {project_type} to improve scalability, reliability, and time-to-market."
+]
+deliverable_templates = [
+    "Project plan and delivery roadmap for {project_type}.",
+    "Architecture design and system documentation for the {domain} context.",
+    "Working MVP/prototype suitable for stakeholder review.",
+    "Final deployment package ready for production usage.",
+    "Operational runbooks, monitoring dashboards, and maintenance procedures.",
+    "Training session(s) for internal teams."
+]
+deliverables_max_count = 6
+deliverables_min_count = 4
+duration_months_max = 24
+duration_months_min = 6
+evaluation_process_templates = [
+    "Proposals will be reviewed by a committee from {client}. Evaluation will include technical expertise, project methodology, team qualifications, delivery timelines, and cost-effectiveness. Shortlisted vendors may be invited for follow-up discussions."
+]
+executive_summary_templates = [
+    "{client} is seeking proposals from experienced development teams to deliver \"{title}\". The project focuses on {project_type} in the {domain} domain. Expected duration is {duration_months} months with an estimated team size of {team_size} people. Budget range: {budget_range}. Planned start date: {start_date}. Location: {location} ({remote_allowed}).",
+    "{client} invites qualified vendors to propose an implementation for \"{title}\". This RFP summarizes requirements, expectations, and proposal guidelines. Project type: {project_type}. Duration: {duration_months} months. Team size: {team_size}. Budget: {budget_range}. Start: {start_date}. Location: {location} ({remote_allowed})."
+]
+id_template = "RFP-{token}"
+id_token_length = 6
+milestone_description_templates = [
+    "Align on scope, constraints, stakeholders, and success criteria for {project_type}.",
+    "Produce architecture, data flows, and technical decisions for {domain}.",
+    "Deliver a functional MVP/prototype for early feedback and iteration.",
+    "Integrate key components, address performance/reliability, and stabilize delivery.",
+    "Support UAT and address feedback to meet acceptance criteria.",
+    "Deploy to production and hand over documentation and operational materials."
+]
+milestone_title_templates = [
+    "Kickoff & Discovery",
+    "Architecture & Design",
+    "MVP Delivery",
+    "Integration & Hardening",
+    "User Acceptance Testing",
+    "Final Deployment"
+]
+milestones_max_count = 6
+milestones_min_count = 4
+objective_templates = [
+    "Develop a secure and scalable solution aligned with {domain} constraints.",
+    "Deliver a maintainable architecture and clear documentation suitable for enterprise usage.",
+    "Implement best practices and a robust delivery process for {project_type}.",
+    "Ensure observability, reliability, and performance under expected load.",
+    "Provide knowledge transfer and enable internal teams to operate the system post-delivery."
+]
+objectives_max_count = 5
+objectives_min_count = 3
+preferred_certifications_max_count = 2
+preferred_skills_max_count = 4
+preferred_skills_min_count = 2
+proposal_guideline_templates = [
+    "Company profile and relevant project references.",
+    "Proposed methodology, delivery approach, and timeline.",
+    "Team composition (roles/seniority) and engagement model.",
+    "Commercial proposal with assumptions and breakdown.",
+    "Risk assessment and mitigation plan."
+]
+proposal_guidelines_max_count = 5
+proposal_guidelines_min_count = 3
+required_skills_max_count = 7
+required_skills_min_count = 4
+role_responsibilities_max_count = 3
+role_responsibilities_min_count = 2
+role_responsibility_templates = [
+    "Own delivery responsibilities for role: {role} within {project_type}.",
+    "Collaborate with stakeholders and ensure quality for assigned components.",
+    "Contribute to documentation, reviews, and continuous improvement."
+]
+start_date_max_days = 90
+start_date_min_days = 14
+team_size_max = 12
+team_size_min = 5
+title_templates = [
+    "Request for Proposal (RFP): {project_type} for {client}",
+    "RFP: {project_type} initiative ({domain})",
+    "Request for Proposal: {project_type} - {domain}"
+]
+
+[llm.use_cases.json_to_markdown]
+deployment = "default"
+max_tokens = 2_000
+request_timeout_s = 120
+temperature = 0.8
+top_p = 0.95
+
+[paths]
+cv_markdown_dir = "data/generated/cv/markdown"
+cv_pdf_dir = "data/generated/cv/pdf"
+cv_struct_json_dir = "data/generated/cv/struct_json"
+rfp_struct_json_dir = "data/generated/rfp/struct_json"
