@@ -1,72 +1,21 @@
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 from typing import Any, Mapping
-from uuid import UUID
 
+from common import (
+    assert_between,
+    assert_in,
+    assert_json_serializable,
+    assert_true,
+    assert_uuid,
+    build_check_context,
+    load_settings_from_context,
+    print_fail,
+    print_ok,
+)
 from talentmatch.datasets import StructuredRfpGenerator
-from talentmatch.runtime import load_settings
-
-
-def print_ok(message: str) -> None:
-    print(f"✅ {message}")
-
-
-def print_fail(message: str) -> None:
-    print(f"❌ {message}")
-
-
-def assert_true(condition: bool, *, ok: str, fail: str) -> bool:
-    if condition:
-        print_ok(ok)
-        return True
-    print_fail(fail)
-    return False
-
-
-def assert_in(value: Any, allowed: list[Any], *, label: str) -> bool:
-    return assert_true(
-        value in allowed,
-        ok=f"{label} ok",
-        fail=f"{label} invalid: {value}",
-    )
-
-
-def assert_between(value: int, *, min_value: int, max_value: int, label: str) -> bool:
-    return assert_true(
-        min_value <= value <= max_value,
-        ok=f"{label} ok ({value})",
-        fail=f"{label} out of range: {value} not in [{min_value}, {max_value}]",
-    )
-
-
-def assert_uuid(text: str, *, label: str) -> bool:
-    try:
-        UUID(text)
-        print_ok(f"{label} ok")
-        return True
-    except Exception:
-        print_fail(f"{label} invalid: {text}")
-        return False
-
-
-def assert_json_serializable(value: Any, *, label: str) -> bool:
-    try:
-        json.dumps(value, ensure_ascii=False, sort_keys=True)
-        print_ok(f"{label} is JSON-serializable")
-        return True
-    except Exception as exc:
-        print_fail(f"{label} is not JSON-serializable: {exc}")
-        return False
-
-
-@dataclass(frozen=True)
-class CheckContext:
-    repo_root: Path
-    settings_path: Path
 
 
 def validate_skill_req(obj: Any, *, label: str, settings: Any) -> int:
@@ -301,25 +250,14 @@ def validate_rfp_shape(rfp: Mapping[str, Any], settings: Any) -> int:
     failures += 0 if assert_true(isinstance(rfp.get("contact_information"), dict), ok="contact_information is dict",
                                  fail="contact_information invalid") else 1
 
-    failures += 0 if assert_json_serializable(rfp, label="rfp_struct") else 1
+    failures += 0 if assert_json_serializable(rfp, label="rfp_struct", sort_keys=True) else 1
     return failures
 
 
 def run() -> int:
-    context = CheckContext(
-        repo_root=Path(__file__).resolve().parents[1],
-        settings_path=Path(__file__).resolve().parents[1] / "configs" / "settings.toml",
-    )
-
-    if not context.settings_path.exists():
-        print_fail(f'Settings TOML not found: "{context.settings_path}"')
-        return 1
-
-    try:
-        settings = load_settings(str(context.settings_path))
-        print_ok("runtime.load_settings() succeeded")
-    except Exception as exc:
-        print_fail(f"runtime.load_settings() failed: {exc}")
+    context = build_check_context(Path(__file__))
+    settings = load_settings_from_context(context)
+    if settings is None:
         return 1
 
     try:

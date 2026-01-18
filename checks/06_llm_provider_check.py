@@ -1,33 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from common import assert_true, build_check_context, load_settings_from_context, print_fail, print_ok
 from talentmatch.infra.llm import AzureChatOpenAIProvider
-from talentmatch.runtime import load_settings
-
-
-@dataclass(frozen=True)
-class CheckContext:
-    repo_root: Path
-    settings_path: Path
-
-
-def print_ok(message: str) -> None:
-    print(f"✅ {message}")
-
-
-def print_fail(message: str) -> None:
-    print(f"❌ {message}")
-
-
-def assert_true(condition: bool, *, ok: str, fail: str) -> bool:
-    if condition:
-        print_ok(ok)
-        return True
-    print_fail(fail)
-    return False
 
 
 def extract_text(response: Any) -> str:
@@ -43,20 +20,10 @@ def extract_text(response: Any) -> str:
 
 def run() -> int:
     """Public contract: validates LLM provider can create a chat model and run a minimal prompt."""
-    context = CheckContext(
-        repo_root=Path(__file__).resolve().parents[1],
-        settings_path=Path(__file__).resolve().parents[1] / "configs" / "settings.toml",
-    )
 
-    if not context.settings_path.exists():
-        print_fail(f'Settings TOML not found: "{context.settings_path}"')
-        return 1
-
-    try:
-        settings = load_settings(str(context.settings_path))
-        print_ok("runtime.load_settings() succeeded")
-    except Exception as exc:
-        print_fail(f"runtime.load_settings() failed: {exc}")
+    context = build_check_context(Path(__file__))
+    settings = load_settings_from_context(context)
+    if settings is None:
         return 1
 
     try:
@@ -74,7 +41,6 @@ def run() -> int:
         return 1
 
     prompt = "Ping. Reply with a single short word."
-    response = None
 
     try:
         response = model.invoke(prompt)

@@ -1,73 +1,20 @@
 from __future__ import annotations
 
-import json
-import re
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from talentmatch.datasets import StructuredCvGenerator
-from talentmatch.runtime import load_settings
-
-CHECK_OK = "✅"
-CHECK_FAIL = "❌"
-
-UUID_RE = re.compile(
-    r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-    re.IGNORECASE,
+from common import (
+    assert_between,
+    assert_in,
+    assert_json_serializable,
+    assert_true,
+    build_check_context,
+    is_uuid,
+    load_settings_from_context,
+    print_fail,
+    print_ok,
 )
-
-
-@dataclass(frozen=True)
-class CheckContext:
-    repo_root: Path
-    settings_path: Path
-
-
-def print_ok(message: str) -> None:
-    print(f"{CHECK_OK} {message}")
-
-
-def print_fail(message: str) -> None:
-    print(f"{CHECK_FAIL} {message}")
-
-
-def is_uuid(value: Any) -> bool:
-    return isinstance(value, str) and UUID_RE.match(value) is not None
-
-
-def assert_true(condition: bool, *, ok: str, fail: str) -> bool:
-    if condition:
-        print_ok(ok)
-        return True
-    print_fail(fail)
-    return False
-
-
-def assert_in(value: Any, allowed: list[Any], *, label: str) -> bool:
-    return assert_true(
-        value in allowed,
-        ok=f'{label} is valid: "{value}"',
-        fail=f'{label} invalid: "{value}", allowed={allowed}',
-    )
-
-
-def assert_between(value: int, *, min_value: int, max_value: int, label: str) -> bool:
-    return assert_true(
-        min_value <= value <= max_value,
-        ok=f"{label} within range: {value}",
-        fail=f"{label} out of range: {value}, expected [{min_value}, {max_value}]",
-    )
-
-
-def assert_json_serializable(value: Any, *, label: str) -> bool:
-    try:
-        json.dumps(value, ensure_ascii=False)
-        print_ok(f"{label} is JSON-serializable")
-        return True
-    except Exception as exc:
-        print_fail(f"{label} is not JSON-serializable: {exc}")
-        return False
+from talentmatch.datasets import StructuredCvGenerator
 
 
 def validate_cv_shape(cv: dict[str, Any], settings: Any) -> int:
@@ -257,20 +204,9 @@ def validate_cv_shape(cv: dict[str, Any], settings: Any) -> int:
 
 
 def run() -> int:
-    context = CheckContext(
-        repo_root=Path(__file__).resolve().parents[1],
-        settings_path=Path(__file__).resolve().parents[1] / "configs" / "settings.toml",
-    )
-
-    if not context.settings_path.exists():
-        print_fail(f'Settings TOML not found: "{context.settings_path}"')
-        return 1
-
-    try:
-        settings = load_settings(str(context.settings_path))
-        print_ok("runtime.load_settings() succeeded")
-    except Exception as exc:
-        print_fail(f"runtime.load_settings() failed: {exc}")
+    context = build_check_context(Path(__file__))
+    settings = load_settings_from_context(context)
+    if settings is None:
         return 1
 
     failures = 0

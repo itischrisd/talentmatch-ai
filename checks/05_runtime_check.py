@@ -7,10 +7,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from common import print_fail, print_ok
 from talentmatch.runtime import load_logging_config, load_prompts, load_settings
-
-CHECK_OK = "✅"
-CHECK_FAIL = "❌"
 
 
 @dataclass(frozen=True)
@@ -78,14 +76,6 @@ def format_value(value: Any) -> str:
     if isinstance(value, str):
         return value
     return repr(value)
-
-
-def print_ok(message: str) -> None:
-    print(f"{CHECK_OK} {message}")
-
-
-def print_fail(message: str) -> None:
-    print(f"{CHECK_FAIL} {message}")
 
 
 def validate_parameter(
