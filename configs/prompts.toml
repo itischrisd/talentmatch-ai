@@ -9,6 +9,8 @@ Hard rules:
 - You may improve wording and formatting for narrative fields, but factual values (numbers, dates, counts, ranges, ids) must stay unchanged.
 - Do not invent new requirements or facts that are not present in the JSON. You may add neutral, non-factual connective phrasing.
 - Keep placeholders as-is (e.g. [Contact Person]).
+- All concrete values (dates, monetary amounts, counts etc.) must be clearly stated in the output document!
+- Start date, end date and budget must be included in first few points of the document!
 
 Coverage checklist (every path below must be represented in the Markdown):
 {checklist}
@@ -22,6 +24,8 @@ Document expectations:
 - Ensure staffing_profile is fully reflected (roles, counts, seniority, skills, responsibilities, allocation if present).
 - Ensure technical requirements reflect all required and preferred skills and any constraints present in the JSON.
 - Ensure proposal submission guidelines and evaluation process appear as real sections.
+- All fields present in source json must have their values represented in some way in the markdown document
+- You may introduce new descriptive content in the document, basing in on existing information in JSON
 
 Return ONLY the Markdown document.
 """
