@@ -86,6 +86,7 @@ def run() -> int:
         "business_context",
         "objectives",
         "technical_requirements",
+        "experience_requirements",
         "deliverables",
         "milestones",
         "acceptance_criteria",

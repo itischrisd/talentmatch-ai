@@ -277,6 +277,12 @@ class RfpTextPolicy(BaseModel):
     role_responsibilities_max_count: int
     role_responsibility_templates: list[str]
 
+    experience_years_min: int
+    experience_years_max: int
+    experience_relevant_years_min: int
+    experience_relevant_years_max: int
+    experience_requirement_templates: list[str]
+
 
 class RfpCatalogPolicy(BaseModel):
     domains: list[str]

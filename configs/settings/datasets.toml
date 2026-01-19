@@ -541,6 +541,15 @@ title_templates = [
     "RFP: {project_type} initiative ({domain})",
     "Request for Proposal: {project_type} - {domain}"
 ]
+experience_years_min = 2
+experience_years_max = 12
+experience_relevant_years_min = 1
+experience_relevant_years_max = 10
+experience_requirement_templates = [
+    "Minimum {min_total_years}+ years of overall professional experience, including at least {min_relevant_years}+ years relevant to {domain} and {project_type}. Preferred seniority: {preferred_seniority}.",
+    "Vendors must propose team members with {min_total_years}+ years of professional experience and {min_relevant_years}+ years in similar {domain} initiatives. Expected seniority level: {preferred_seniority}.",
+    "Team members should demonstrate {min_total_years}+ years of experience, with {min_relevant_years}+ years in projects comparable to {project_type} within {domain}. Target seniority: {preferred_seniority}."
+]
 
 [datasets.assignments]
 schema_version = "1.0"

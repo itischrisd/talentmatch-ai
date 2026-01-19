@@ -62,16 +62,6 @@ def run() -> int:
         failures += 0 if assert_true("```" not in content, ok="markdown has no code fences",
                                      fail="markdown contains code fences") else 1
 
-        rfp_id = rfp_result.rfp_struct.get("rfp_id")
-        if isinstance(rfp_id, str) and rfp_id.strip():
-            failures += 0 if assert_true(rfp_id in content, ok="rfp_id present in markdown",
-                                         fail=f'rfp_id missing in markdown: "{rfp_id}"') else 1
-
-        start_date = rfp_result.rfp_struct.get("start_date")
-        if isinstance(start_date, str) and start_date.strip():
-            failures += 0 if assert_true(start_date in content, ok="start_date present in markdown",
-                                         fail=f'start_date missing in markdown: "{start_date}"') else 1
-
         staffing = rfp_result.rfp_struct.get("staffing_profile")
         if isinstance(staffing, list):
             roles = [

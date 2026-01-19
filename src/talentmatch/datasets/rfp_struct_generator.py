@@ -86,6 +86,12 @@ class StructuredRfpGenerator:
         objectives = self._generate_objectives(rfp_policy, domain=domain, project_type=project_type)
         tech_reqs = self._generate_technical_requirements(rfp_policy)
 
+        experience_requirements = self._generate_experience_requirements(
+            rfp_policy,
+            domain=domain,
+            project_type=project_type,
+        )
+
         staffing_profile = self._generate_staffing_profile(
             rfp_policy=rfp_policy,
             project_type=project_type,
@@ -132,6 +138,7 @@ class StructuredRfpGenerator:
             "business_context": business_context,
             "objectives": objectives,
             "technical_requirements": tech_reqs,
+            "experience_requirements": experience_requirements,
             "deliverables": deliverables,
             "milestones": milestones,
             "acceptance_criteria": acceptance_criteria,
@@ -387,6 +394,34 @@ class StructuredRfpGenerator:
     def _format_evaluation_process(self, rfp_policy: Any, *, client: str) -> str:
         template = self._choose(rfp_policy.text.evaluation_process_templates)
         return template.format(client=client)
+
+    def _generate_experience_requirements(self, rfp_policy: Any, *, domain: str, project_type: str) -> dict[str, Any]:
+        min_total = random.randint(
+            rfp_policy.text.experience_years_min,
+            rfp_policy.text.experience_years_max,
+        )
+
+        relevant_max = min(min_total, rfp_policy.text.experience_relevant_years_max)
+        relevant_min = min(rfp_policy.text.experience_relevant_years_min, relevant_max)
+        min_relevant = random.randint(relevant_min, relevant_max) if relevant_max > 0 else 0
+
+        preferred_seniority = self._choose_weighted_str(rfp_policy.staffing.seniority_weights)
+        template = self._choose(rfp_policy.text.experience_requirement_templates)
+
+        description = template.format(
+            min_total_years=min_total,
+            min_relevant_years=min_relevant,
+            preferred_seniority=preferred_seniority,
+            domain=domain,
+            project_type=project_type,
+        )
+
+        return {
+            "min_total_years": min_total,
+            "min_relevant_years": min_relevant,
+            "preferred_seniority": preferred_seniority,
+            "description": description,
+        }
 
     @staticmethod
     def _random_future_date(*, min_days: int, max_days: int) -> date:

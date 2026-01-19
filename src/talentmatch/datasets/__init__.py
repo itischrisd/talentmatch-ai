@@ -12,6 +12,7 @@ from .rfp_markdown_to_pdf import RfpMarkdownPdfStore, StoreRfpPdfResult
 from .rfp_struct_generator import StructuredRfpGenerator, GenerateStructuredRfpResult
 from .rfp_struct_to_json import RfpStructJsonStore, StoreRfpStructJsonResult
 from .rfp_struct_to_markdown import RfpStructMarkdownStore, StoreRfpStructMarkdownResult
+from .rfp_pipeline import RfpArtifactsPipeline
 
 __all__ = [
     "AssignmentPipeline",
@@ -25,6 +26,7 @@ __all__ = [
     "GenerateCvArtifactsResult",
     "GenerateStructuredCvResult",
     "GenerateStructuredRfpResult",
+    "RfpArtifactsPipeline",
     "RfpMarkdownPdfStore",
     "RfpStructJsonStore",
     "RfpStructMarkdownStore",
