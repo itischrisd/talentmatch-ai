@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from common import (
+from util.common import (
     assert_between,
     assert_in,
     assert_json_serializable,

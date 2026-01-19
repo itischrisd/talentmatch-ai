@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from common import assert_true, build_check_context, load_settings_from_context, print_fail, print_ok
+from util.common import assert_true, build_check_context, load_settings_from_context, print_fail, print_ok
 from talentmatch.infra.llm import AzureChatOpenAIProvider
 
 

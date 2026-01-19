@@ -86,6 +86,7 @@ class AssignmentStructGenerator:
                 "assignment_start_date": start_date.isoformat(),
                 "assignment_end_date": assignment_end_date.isoformat(),
                 "end_days_before_rfp_end": days_before_end,
+                "allocation_percent": self._pick_allocation_percent(),
                 "mandatory_requirements": self._requirements_snapshot(mandatory_requirements),
             }
             assignments.append(record)
@@ -161,6 +162,10 @@ class AssignmentStructGenerator:
                              int(self._policy.assignment_end_days_before_max))
         duration_days = (end_date - start_date).days
         return min(int(raw), max(1, duration_days - 1))
+
+    @staticmethod
+    def _pick_allocation_percent() -> int:
+        return int(random.choice((10, 20, 30, 40, 50, 60, 70, 80, 90, 100)))
 
     @staticmethod
     def _requirements_snapshot(mandatory_requirements: list[Mapping[str, Any]]) -> list[dict[str, Any]]:

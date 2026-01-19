@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from common import CHECK_FAIL, CHECK_OK, CHECK_WARN
+from util.common import CHECK_FAIL, CHECK_OK, CHECK_WARN
 
 
 @dataclass(frozen=True)

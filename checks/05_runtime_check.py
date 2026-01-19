@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from common import print_fail, print_ok
+from util.common import print_fail, print_ok
 from talentmatch.runtime import load_logging_config, load_prompts, load_settings
 from talentmatch.runtime.toml import read_settings_toml
 

@@ -10,7 +10,6 @@ Hard rules:
 - Do not invent new requirements or facts that are not present in the JSON. You may add neutral, non-factual connective phrasing.
 - Keep placeholders as-is (e.g. [Contact Person]).
 - All concrete values (dates, monetary amounts, counts etc.) must be clearly stated in the output document!
-- Start date, end date and budget must be included in first few points of the document!
 
 Coverage checklist (every path below must be represented in the Markdown):
 {checklist}
