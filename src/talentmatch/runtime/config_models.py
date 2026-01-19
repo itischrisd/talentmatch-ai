@@ -10,6 +10,7 @@ class PathsSettings(BaseModel):
     rfp_struct_json_dir: str
     rfp_markdown_dir: str
     rfp_pdf_dir: str
+    assignments_struct_json_dir: str
 
 
 class AzureOpenAISettings(BaseModel):
@@ -321,9 +322,42 @@ class RfpDatasetPolicy(BaseModel):
     staffing: RfpStaffingPolicy
 
 
+class AssignmentsErrorsPolicy(BaseModel):
+    count_must_be_positive: str
+    invalid_probability: str
+    invalid_end_days_range: str
+
+
+class AssignmentsDatasetPolicy(BaseModel):
+    schema_version: str
+    errors: AssignmentsErrorsPolicy
+    assignment_probability: float
+    assignment_end_days_before_min: int
+    assignment_end_days_before_max: int
+    month_to_days: int
+
+    @field_validator("assignment_probability")
+    @classmethod
+    def validate_assignment_probability(cls, value: float) -> float:
+        if not (0.0 <= value <= 1.0):
+            raise ValueError("assignment_probability must be within [0.0, 1.0]")
+        return value
+
+    @field_validator("assignment_end_days_before_max")
+    @classmethod
+    def validate_assignment_end_days_range(cls, value: int, info: Any) -> int:
+        min_value = info.data.get("assignment_end_days_before_min")
+        if min_value is None:
+            return value
+        if int(value) < int(min_value):
+            raise ValueError("assignment_end_days_before range is invalid")
+        return value
+
+
 class DatasetsSettings(BaseModel):
     cv: CvDatasetPolicy
     rfp: RfpDatasetPolicy
+    assignments: AssignmentsDatasetPolicy
 
 
 class Settings(BaseModel):

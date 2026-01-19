@@ -541,3 +541,15 @@ title_templates = [
     "RFP: {project_type} initiative ({domain})",
     "Request for Proposal: {project_type} - {domain}"
 ]
+
+[datasets.assignments]
+schema_version = "1.0"
+assignment_probability = 0.7
+assignment_end_days_before_min = 3
+assignment_end_days_before_max = 21
+month_to_days = 30
+
+[datasets.assignments.errors]
+count_must_be_positive = "count must be positive"
+invalid_probability = "assignment_probability must be within [0.0, 1.0]"
+invalid_end_days_range = "assignment_end_days_before range is invalid"
