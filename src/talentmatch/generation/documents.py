@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 import markdown
-from langchain_openai import ChatOpenAI, AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from weasyprint import CSS, HTML
 
 from talentmatch.config.prompts_models import Prompts
@@ -108,7 +108,7 @@ class DocumentService:
         HTML(string=html_content).write_pdf(str(pdf_path), stylesheets=[CSS(string=self._pdf_css)])
         return pdf_path
 
-    def _invoke_llm_markdown(self, llm: ChatOpenAI, prompt: str, *, empty_error: str) -> str:
+    def _invoke_llm_markdown(self, llm: AzureChatOpenAI, prompt: str, *, empty_error: str) -> str:
         response = llm.invoke(prompt)
         content = str(getattr(response, "content", ""))
         cleaned = self._strip_fenced_code_blocks(content).strip()
