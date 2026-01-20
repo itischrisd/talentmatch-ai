@@ -11,19 +11,23 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True, slots=True)
 class StorageResult:
-    """Represents the number of nodes and relationships written to the graph."""
+    """
+    Represents the number of nodes and relationships written to the graph
+    """
 
     nodes: int
     relationships: int
 
 
 class Neo4jGraphService:
-    """Provides Neo4j connection, schema setup, and basic maintenance operations."""
+    """
+    Provides Neo4j connection, schema setup, and basic maintenance operations
+    """
 
     def __init__(self, *, reset_on_start: bool) -> None:
-        """Create a Neo4j service.
-
-        :param reset_on_start: Whether to remove all data and custom schema before ingestion.
+        """
+        Create a Neo4j service
+        :param reset_on_start: Whether to remove all data and custom schema before ingestion
         """
 
         self._graph = Neo4jGraph()
@@ -36,15 +40,17 @@ class Neo4jGraphService:
 
     @property
     def graph(self) -> Neo4jGraph:
-        """Return the underlying LangChain graph client."""
+        """
+        Return the underlying LangChain graph client
+        """
 
         return self._graph
 
     def safe_query(self, cypher: str) -> list[dict[str, Any]]:
-        """Execute a Cypher query while converting failures into empty results.
-
-        :param cypher: Cypher query to execute.
-        :return: List of rows.
+        """
+        Execute a Cypher query while converting failures into empty results
+        :param cypher: Cypher query to execute
+        :return: List of rows
         """
 
         try:
@@ -55,7 +61,9 @@ class Neo4jGraphService:
             return []
 
     def reset_database(self) -> None:
-        """Delete all nodes and relationships, drop constraints and indexes."""
+        """
+        Delete all nodes and relationships, drop constraints and indexes
+        """
 
         logger.warning("Resetting Neo4j database")
         self._graph.query("MATCH (n) DETACH DELETE n")
@@ -71,7 +79,9 @@ class Neo4jGraphService:
                 self.safe_query(f"DROP INDEX `{name}` IF EXISTS")
 
     def ensure_indexes(self) -> None:
-        """Create indexes used by ingestion and common lookups."""
+        """
+        Create indexes used by ingestion and common lookups
+        """
 
         statements = (
             "CREATE INDEX person_id IF NOT EXISTS FOR (p:Person) ON (p.id)",
@@ -83,11 +93,11 @@ class Neo4jGraphService:
             self.safe_query(statement)
 
     def add_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
-        """Persist graph documents in Neo4j.
-
-        :param graph_documents: GraphDocument objects.
-        :return: Storage result.
-        :raises Exception: If Neo4j write fails.
+        """
+        Persist graph documents in Neo4j
+        :param graph_documents: GraphDocument objects
+        :return: Storage result
+        :raises Exception: If Neo4j write fails
         """
 
         self._graph.add_graph_documents(graph_documents, baseEntityLabel=True, include_source=True)

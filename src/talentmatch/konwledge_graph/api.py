@@ -26,11 +26,11 @@ async def ingest_programmer_cvs_async(
 ) -> IngestionSummary:
     """
     Ingest generated CV PDFs into Neo4j
-    :param cv_directory: Directory containing PDF CV files. Defaults to settings.paths.programmers_dir.
-    :param llm_use_case: LLM use-case name from settings.llm.use_cases.
-    :param reset_neo4j_on_start: Whether to clear Neo4j before ingestion.
-    :param concurrency: Maximum number of concurrent LLM conversions.
-    :param settings_toml_path: Optional path to settings TOML file.
+    :param cv_directory: Directory containing PDF CV files. Defaults to settings.paths.programmers_dir
+    :param llm_use_case: LLM use-case name from settings.llm.use_cases
+    :param reset_neo4j_on_start: Whether to clear Neo4j before ingestion
+    :param concurrency: Maximum number of concurrent LLM conversions
+    :param settings_toml_path: Optional path to settings TOML file
     :return: Ingestion summary.
     """
 

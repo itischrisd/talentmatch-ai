@@ -34,7 +34,7 @@ class AzureLlmProvider:
 
         client = AzureChatOpenAI(
             azure_endpoint=azure.endpoint,
-            api_key=azure.api_key.get_secret_value(),
+            api_key=azure.api_key,
             api_version=azure.api_version,
             azure_deployment=deployment,
             temperature=use_case_cfg.temperature,

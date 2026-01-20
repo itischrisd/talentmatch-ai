@@ -17,7 +17,9 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True, slots=True)
 class IngestionSummary:
-    """Aggregates ingestion results."""
+    """
+    Aggregates ingestion results
+    """
 
     discovered_pdfs: int
     processed_pdfs: int
@@ -28,7 +30,9 @@ class IngestionSummary:
 
 
 class CvPdfIngestor:
-    """Converts CV PDFs into a Neo4j knowledge graph using LLMGraphTransformer."""
+    """
+    Converts CV PDFs into a Neo4j knowledge graph using LLMGraphTransformer
+    """
 
     def __init__(
             self,
@@ -39,11 +43,10 @@ class CvPdfIngestor:
     ) -> None:
         """
         Create an ingestor
-
-        :param graph_service: Neo4j graph service.
-        :param transformer: Schema-constrained graph transformer.
-        :param concurrency: Maximum number of concurrent LLM conversions.
-        :raises ValueError: If concurrency is less than 1.
+        :param graph_service: Neo4j graph service
+        :param transformer: Schema-constrained graph transformer
+        :param concurrency: Maximum number of concurrent LLM conversions
+        :raises ValueError: If concurrency is less than 1
         """
 
         if concurrency < 1:
@@ -55,10 +58,10 @@ class CvPdfIngestor:
 
     @staticmethod
     def extract_pdf_text(pdf_path: Path) -> str:
-        """Extract text from a PDF.
-
-        :param pdf_path: Path to a PDF file.
-        :return: Extracted text, or an empty string on failure.
+        """
+        Extract text from a PDF
+        :param pdf_path: Path to a PDF file
+        :return: Extracted text, or an empty string on failure
         """
 
         try:
@@ -72,10 +75,10 @@ class CvPdfIngestor:
             return ""
 
     async def convert_pdf_to_graph_documents(self, pdf_path: Path) -> list[Any]:
-        """Convert a single PDF into graph documents.
-
-        :param pdf_path: Path to a PDF file.
-        :return: List of graph documents.
+        """
+        Convert a single PDF into graph documents
+        :param pdf_path: Path to a PDF file
+        :return: List of graph documents
         """
 
         logger.info("Processing %s", pdf_path.name)
@@ -104,19 +107,19 @@ class CvPdfIngestor:
             return []
 
     def store_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
-        """Store graph documents in Neo4j.
-
-        :param graph_documents: GraphDocument objects.
-        :return: Storage result.
+        """
+        Store graph documents in Neo4j
+        :param graph_documents: GraphDocument objects
+        :return: Storage result
         """
 
         return self._graph_service.add_graph_documents(graph_documents)
 
     async def ingest_directory(self, pdf_directory: Path) -> IngestionSummary:
-        """Process all PDFs in a directory.
-
-        :param pdf_directory: Directory containing PDF CV files.
-        :return: Ingestion summary.
+        """
+        Process all PDFs in a directory
+        :param pdf_directory: path containing PDF CV files
+        :return: Ingestion summary
         """
 
         directory = pdf_directory.expanduser()
