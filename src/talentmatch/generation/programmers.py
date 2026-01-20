@@ -9,14 +9,21 @@ from talentmatch.config.config_models import DatasetsSettings
 
 
 class ProgrammerGenerator:
-    """Generates programmer profiles."""
+    """
+    Generates programmer profiles
+    """
 
     def __init__(self, faker: Faker, datasets: DatasetsSettings) -> None:
         self._faker = faker
         self._datasets = datasets
 
     def generate(self, count: int) -> list[dict[str, Any]]:
-        """Generate programmer profile records."""
+        """
+        Generate programmer profile records
+        :param count: number of programmer profiles to generate
+        :return: list of programmer profile records
+        """
+
         profiles: list[dict[str, Any]] = []
         for idx in range(1, count + 1):
             profiles.append(

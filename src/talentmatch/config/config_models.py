@@ -6,11 +6,15 @@ from pydantic import BaseModel, Field, SecretStr, field_validator, model_validat
 
 
 class ConfigurationError(ValueError):
-    """Raised when configuration is missing or invalid."""
+    """
+    Raised when configuration is missing or invalid
+    """
 
 
 class IntRange(BaseModel):
-    """Closed integer range used by generators."""
+    """
+    Closed integer range used by generators
+    """
 
     min: int = Field(..., ge=0)
     max: int = Field(..., ge=0)
@@ -28,7 +32,9 @@ class IntRange(BaseModel):
 
 
 class PathsSettings(BaseModel):
-    """Output paths for generated artifacts."""
+    """
+    Output paths for generated artifacts
+    """
 
     programmers_dir: str
     rfps_dir: str
@@ -36,7 +42,9 @@ class PathsSettings(BaseModel):
 
 
 class GenerationSettings(BaseModel):
-    """Counts of generated items."""
+    """
+    Counts of generated items
+    """
 
     num_programmers: int = Field(..., gt=0)
     num_projects: int = Field(..., gt=0)
@@ -44,7 +52,9 @@ class GenerationSettings(BaseModel):
 
 
 class OpenAiSettings(BaseModel):
-    """OpenAI client settings (secrets provided via environment)."""
+    """
+    OpenAI client settings (secrets provided via environment)
+    """
 
     api_key: SecretStr
     base_url: str | None = None
@@ -52,7 +62,9 @@ class OpenAiSettings(BaseModel):
 
 
 class LlmUseCaseSettings(BaseModel):
-    """LLM parameters for a specific generation use-case."""
+    """
+    LLM parameters for a specific generation use-case
+    """
 
     model: str
     temperature: float = Field(..., ge=0.0, le=1.0)
@@ -62,20 +74,26 @@ class LlmUseCaseSettings(BaseModel):
 
 
 class LlmUseCasesSettings(BaseModel):
-    """LLM use-cases used by this generator."""
+    """
+    LLM use-cases used by this generator
+    """
 
     cv_markdown: LlmUseCaseSettings
     rfp_markdown: LlmUseCaseSettings
 
 
 class LlmSettings(BaseModel):
-    """LLM configuration root."""
+    """
+    LLM configuration root
+    """
 
     use_cases: LlmUseCasesSettings
 
 
 class SkillsDataset(BaseModel):
-    """Skill catalog and proficiency policy."""
+    """
+    Skill catalog and proficiency policy
+    """
 
     catalog: list[str]
     count: IntRange
@@ -94,7 +112,9 @@ class SkillsDataset(BaseModel):
 
 
 class ProgrammerDataset(BaseModel):
-    """Programmer-profile generation policy."""
+    """
+    Programmer-profile generation policy
+    """
 
     project_names: list[str]
     project_count: IntRange
@@ -111,7 +131,9 @@ class ProgrammerDataset(BaseModel):
 
 
 class ProjectStatusPolicy(BaseModel):
-    """Project status labels and sampling weights."""
+    """
+    Project status labels and sampling weights
+    """
 
     labels: list[str]
     weights: list[float]
@@ -126,7 +148,9 @@ class ProjectStatusPolicy(BaseModel):
 
 
 class ProjectsDataset(BaseModel):
-    """Project generation policy."""
+    """
+    Project generation policy
+    """
 
     project_types: list[str]
     clients: list[str]
@@ -162,7 +186,9 @@ class ProjectsDataset(BaseModel):
 
 
 class RfpRequirementDataset(BaseModel):
-    """RFP requirement catalog policy."""
+    """
+    RFP requirement catalog policy
+    """
 
     skills: list[str]
     preferred_certifications: list[str]
@@ -188,7 +214,9 @@ class RfpRequirementDataset(BaseModel):
 
 
 class RfpsDataset(BaseModel):
-    """RFP generation policy."""
+    """
+    RFP generation policy
+    """
 
     rfp_types: list[str]
     clients: list[str]
@@ -220,7 +248,9 @@ class RfpsDataset(BaseModel):
 
 
 class AssignmentsDataset(BaseModel):
-    """Assignment generation policy."""
+    """
+    Assignment generation policy
+    """
 
     assignment_probability: float
     assignment_end_days_before: IntRange
@@ -234,13 +264,17 @@ class AssignmentsDataset(BaseModel):
 
 
 class RenderingDataset(BaseModel):
-    """Rendering policy for PDF output."""
+    """
+    Rendering policy for PDF output
+    """
 
     pdf_css: str
 
 
 class DatasetsSettings(BaseModel):
-    """All dataset catalogs and generation policies."""
+    """
+    All dataset catalogs and generation policies
+    """
 
     skills: SkillsDataset
     programmers: ProgrammerDataset
@@ -251,7 +285,9 @@ class DatasetsSettings(BaseModel):
 
 
 class Settings(BaseModel):
-    """Application settings root."""
+    """
+    Application settings root
+    """
 
     paths: PathsSettings
     generation: GenerationSettings

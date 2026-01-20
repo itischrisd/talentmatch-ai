@@ -6,13 +6,23 @@ from typing import Any
 
 
 def read_toml(path: Path) -> dict[str, Any]:
-    """Read a TOML file into a dictionary."""
+    """
+    Read a TOML file into a dictionary
+    :param path: path to the TOML file
+    :return: dictionary with the TOML contents
+    """
+
     with path.open("rb") as file:
         return tomllib.load(file)
 
 
 def read_settings_toml(entry_path: Path) -> dict[str, Any]:
-    """Read a settings entry TOML and merge any included fragments."""
+    """
+    Read a settings entry TOML and merge any included fragments
+    :param entry_path: path to the main settings TOML file
+    :return: merged settings dictionary
+    """
+
     entry = read_toml(entry_path)
     merged: dict[str, Any] = {}
 

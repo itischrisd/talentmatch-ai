@@ -12,7 +12,9 @@ from .toml import read_settings_toml
 
 
 class EnvironmentSettings(BaseSettings):
-    """Environment-backed settings for secrets and service endpoints."""
+    """
+    Environment-backed settings for secrets and service endpoints
+    """
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
@@ -22,7 +24,11 @@ class EnvironmentSettings(BaseSettings):
 
 
 def resolve_repo_root() -> Path:
-    """Return repository root by locating the nearest 'configs' directory."""
+    """
+    Locate the repository root by finding the nearest 'configs' directory
+    :return: path to the repository root
+    """
+
     start = Path(__file__).resolve()
     for parent in (start.parent, *start.parents):
         if (parent / "configs").is_dir():
@@ -31,7 +37,13 @@ def resolve_repo_root() -> Path:
 
 
 def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) -> dict[str, Any]:
-    """Merge settings TOML with environment-provided secrets."""
+    """
+    Build the settings payload by merging TOML data with environment variables
+    :param toml_data: settings from TOML
+    :param env: settings from .env
+    :return: merged settings payload
+    """
+
     payload = dict(toml_data)
 
     payload["openai"] = {
@@ -46,7 +58,12 @@ def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) 
 
 @lru_cache(maxsize=1)
 def load_settings(settings_toml_path: str | None = None) -> Settings:
-    """Load settings from configs/settings.toml and environment variables."""
+    """
+    Load settings from configs/settings.toml and environment variables
+    :param settings_toml_path: optional path to settings TOML file
+    :return: Settings instance
+    """
+
     repo_root = resolve_repo_root()
     env_path = repo_root / ".env"
     env = EnvironmentSettings(_env_file=env_path if env_path.exists() else None)

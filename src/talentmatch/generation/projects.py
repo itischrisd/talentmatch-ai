@@ -9,14 +9,22 @@ from faker import Faker
 
 
 class ProjectGenerator:
-    """Generates projects and assigns programmers to them."""
+    """
+    Generates projects and assigns programmers to them
+    """
 
     def __init__(self, faker: Faker, datasets: DatasetsSettings) -> None:
         self._faker = faker
         self._datasets = datasets
 
     def generate(self, count: int, programmer_profiles: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        """Generate project records and optionally assign programmers."""
+        """
+        Generate project records and optionally assign programmers
+        :param count: number of projects to generate
+        :param programmer_profiles: list of programmer profiles for assignment
+        :return: list of generated project records
+        """
+
         projects_policy = self._datasets.projects
         skill_names = self._collect_skill_names(programmer_profiles)
 

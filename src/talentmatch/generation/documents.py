@@ -11,7 +11,9 @@ from talentmatch.config.prompts_models import Prompts
 
 
 class DocumentService:
-    """Renders CVs and RFPs using an LLM and converts Markdown to PDFs."""
+    """
+    Renders CVs and RFPs using an LLM and converts Markdown to PDFs
+    """
 
     def __init__(
             self,
@@ -29,7 +31,12 @@ class DocumentService:
         self._rfp_llm = rfp_llm
 
     def render_cv_markdown(self, profile: dict) -> str:
-        """Render CV Markdown using the configured template."""
+        """
+        Render CV Markdown using the configured template
+        :param profile: programmer profile data
+        :return: string of rendered CV in Markdown
+        """
+
         skills_text = ", ".join(f"{s.get('name')} ({s.get('proficiency')})" for s in profile.get("skills", []))
         projects_text = ", ".join(profile.get("projects", []))
         certs_text = ", ".join(profile.get("certifications", []))
@@ -47,7 +54,12 @@ class DocumentService:
         return self._invoke_llm_markdown(self._cv_llm, prompt, empty_error="LLM returned empty content for CV")
 
     def render_rfp_markdown(self, rfp: dict) -> str:
-        """Render RFP Markdown using the configured template."""
+        """
+        Render RFP Markdown using the configured template
+        :param rfp: RFP data
+        :return: string of rendered RFP in Markdown
+        """
+
         required_label = self._prompts.datasets.requirement_labels.required
         preferred_label = self._prompts.datasets.requirement_labels.preferred
 
@@ -81,7 +93,14 @@ class DocumentService:
         return self._invoke_llm_markdown(self._rfp_llm, prompt, empty_error="LLM returned empty content for RFP")
 
     def write_markdown_pdf(self, markdown_content: str, *, filename: str, output_dir: Path) -> Path:
-        """Convert Markdown to PDF and return the resulting file path."""
+        """
+        Convert Markdown to PDF and return the resulting file path
+        :param markdown_content: content in Markdown format
+        :param filename: name of the output PDF file (without extension)
+        :param output_dir: directory to write the PDF file to
+        :return: path to the resulting PDF file
+        """
+
         output_dir.mkdir(parents=True, exist_ok=True)
         html_content = markdown.markdown(markdown_content)
         pdf_path = output_dir / f"{filename}.pdf"

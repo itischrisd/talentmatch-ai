@@ -10,14 +10,21 @@ from talentmatch.config.config_models import DatasetsSettings
 
 
 class RfpGenerator:
-    """Generates RFP records."""
+    """
+    Generates RFP records
+    """
 
     def __init__(self, faker: Faker, datasets: DatasetsSettings) -> None:
         self._faker = faker
         self._datasets = datasets
 
     def generate(self, count: int) -> list[dict[str, Any]]:
-        """Generate RFP records."""
+        """
+        Generate RFP record
+        :param count: number of RFPs to generate
+        :return: list of generated RFP records
+        """
+
         policy = self._datasets.rfps
 
         rfps: list[dict[str, Any]] = []

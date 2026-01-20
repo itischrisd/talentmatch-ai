@@ -26,14 +26,21 @@ class _ResolvedAzureChatModelConfig:
 
 
 class AzureChatOpenAIProvider:
-    """Central factory for AzureChatOpenAI instances configured by runtime settings."""
+    """
+    Central factory for AzureChatOpenAI instances configured by runtime settings
+    """
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
         self._cache: dict[str, Any] = {}
 
     def get_chat_model(self, use_case: LlmUseCaseName) -> Any:
-        """Return a cached AzureChatOpenAI instance for the given use-case."""
+        """
+        Return a cached AzureChatOpenAI instance for the given use-case
+        :param use_case: the LLM use-case name
+        :return: AzureChatOpenAI instance
+        """
+
         if use_case in self._cache:
             return self._cache[use_case]
 

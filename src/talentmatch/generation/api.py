@@ -19,7 +19,13 @@ logger = logging.getLogger(__name__)
 
 
 def generate_dataset(*, settings_toml_path: str | None = None, prompts_toml_path: str | None = None) -> dict[str, Any]:
-    """Generate the complete dataset using counts and policies from TOML."""
+    """
+    Generate the complete dataset using counts and policies from TOML
+    :param settings_toml_path: path to settings TOML file
+    :param prompts_toml_path: path to prompts TOML file
+    :return: dictionary with generated dataset details
+    """
+
     settings = load_settings(settings_toml_path)
     prompts = load_prompts(prompts_toml_path)
 
@@ -93,7 +99,13 @@ def generate_dataset(*, settings_toml_path: str | None = None, prompts_toml_path
 def generate_single_rfp(
         *, settings_toml_path: str | None = None, prompts_toml_path: str | None = None
 ) -> dict[str, Any]:
-    """Generate a single RFP record along with Markdown and PDF output."""
+    """
+    Generate a single RFP record along with Markdown and PDF output
+    :param settings_toml_path: path to settings TOML file
+    :param prompts_toml_path: path to prompts TOML file
+    :return: dictionary with generated RFP details
+    """
+
     settings = load_settings(settings_toml_path)
     prompts = load_prompts(prompts_toml_path)
 

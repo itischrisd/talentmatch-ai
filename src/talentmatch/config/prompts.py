@@ -10,7 +10,12 @@ from .toml import read_toml
 
 @lru_cache(maxsize=1)
 def load_prompts(prompts_toml_path: str | None = None) -> Prompts:
-    """Load prompts from configs/prompts.toml."""
+    """
+    Load prompts from a TOML file
+    :param prompts_toml_path: optional path to the prompts TOML file
+    :return: Prompts instance
+    """
+
     repo_root = resolve_repo_root()
     default_prompts_path = repo_root / "configs" / "prompts.toml"
     prompts_path = Path(prompts_toml_path) if prompts_toml_path else default_prompts_path
