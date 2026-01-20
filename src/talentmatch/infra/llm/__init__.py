@@ -1,3 +1,5 @@
-from .azure_openai import AzureChatOpenAIProvider
+from .azure_openai import AzureLlmProvider
 
-__all__ = ["AzureChatOpenAIProvider"]
+__all__ = [
+    "AzureLlmProvider"
+]

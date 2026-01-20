@@ -42,3 +42,15 @@ Rules:
   Deliverables & Milestones, Timeline, Budget, Proposal Guidelines, Evaluation Criteria.
 - Include acceptance criteria and a proposal submission process.
 """
+
+[prompts.datasets]
+cv_markdown = """..."""
+rfp_markdown = """..."""
+
+[prompts.datasets.requirement_labels]
+required = "REQUIRED"
+preferred = "Preferred"
+
+[prompts.datasets.remote_work_labels]
+allowed = "Allowed"
+not_allowed = "Not allowed"
