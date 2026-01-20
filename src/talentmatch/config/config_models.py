@@ -69,18 +69,9 @@ class LlmUseCaseSettings(BaseModel):
 
     deployment: str = Field(validation_alias=AliasChoices("deployment", "model"))
     temperature: float = Field(..., ge=0.0, le=1.0)
-    max_tokens: int | None = Field(default=None, gt=0)
-    top_p: float | None = Field(default=None, ge=0.0, le=1.0)
-    request_timeout_s: int | None = Field(default=None, gt=0)
-
-
-class LlmUseCasesSettings(BaseModel):
-    """
-    LLM use-cases used by this generator
-    """
-
-    cv_markdown: LlmUseCaseSettings
-    rfp_markdown: LlmUseCaseSettings
+    max_tokens: int = Field(..., gt=0)
+    top_p: float = Field(..., ge=0.0, le=1.0)
+    request_timeout_s: int = Field(..., gt=0)
 
 
 class LlmSettings(BaseModel):

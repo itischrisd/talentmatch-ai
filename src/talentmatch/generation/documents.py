@@ -8,7 +8,6 @@ from langchain_openai import AzureChatOpenAI
 from weasyprint import CSS, HTML
 
 from talentmatch.config.prompts_models import Prompts
-from talentmatch.infra.llm import AzureLlmProvider
 
 
 class DocumentService:

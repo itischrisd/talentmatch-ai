@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any
 
 from faker import Faker
-from langchain_openai import AzureChatOpenAI
 
 from talentmatch.config import load_prompts, load_settings, Prompts, Settings
 from talentmatch.generation.documents import DocumentService
@@ -124,7 +123,8 @@ def generate_single_rfp(
 
 
 def _prepare_settings_and_llms(prompts_toml_path: str | None, settings_toml_path: str | None) -> tuple[
-    Settings, Prompts, Faker, AzureChatOpenAI, AzureChatOpenAI]:
+    Settings, Prompts, Faker, Any, Any]:
+
     settings = load_settings(settings_toml_path)
     prompts = load_prompts(prompts_toml_path)
 
