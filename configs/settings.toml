@@ -1,6 +1,7 @@
 [settings]
 includes = [
-    "settings/paths.toml",
-    "settings/llm.toml",
-    "settings/datasets.toml",
+  "settings/paths.toml",
+  "settings/generation.toml",
+  "settings/llm.toml",
+  "settings/datasets.toml",
 ]

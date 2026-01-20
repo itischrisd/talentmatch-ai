@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from util.common import assert_true, build_check_context, is_uuid, load_settings_from_context, print_fail, print_ok
-from talentmatch.datasets import RfpStructJsonStore, StructuredRfpGenerator
+from talentmatch.generation import RfpStructJsonStore, StructuredRfpGenerator
 
 
 def run() -> int:

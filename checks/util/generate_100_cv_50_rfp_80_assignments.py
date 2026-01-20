@@ -5,9 +5,9 @@ import sys
 from pathlib import Path
 
 from common import build_check_context, load_settings_from_context, print_fail, print_ok
-from talentmatch.datasets.assignment_pipeline import AssignmentPipeline
-from talentmatch.datasets.cv_pipeline import CvArtifactsPipeline
-from talentmatch.datasets.rfp_pipeline import RfpArtifactsPipeline
+from talentmatch.generation.assignment_pipeline import AssignmentPipeline
+from talentmatch.generation.cv_pipeline import CvArtifactsPipeline
+from talentmatch.generation.rfp_pipeline import RfpArtifactsPipeline
 
 
 def run() -> int:

@@ -14,7 +14,7 @@ from util.common import (
     print_fail,
     print_ok,
 )
-from talentmatch.datasets import StructuredCvGenerator
+from talentmatch.generation import StructuredCvGenerator
 
 
 def validate_cv_shape(cv: dict[str, Any], settings: Any) -> int:

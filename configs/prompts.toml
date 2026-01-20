@@ -1,57 +1,44 @@
 [prompts.datasets]
-rfp_json_to_markdown = """
-You are generating a professional RFP (Request for Proposal) document as Markdown.
+cv_markdown = """
+Create a professional CV in Markdown for the following programmer profile.
 
-Hard rules:
-- Output ONLY the final Markdown document. No preface, no explanations, no JSON, no code fences, no ``` markers.
-- You MUST include every single input field from the JSON in the document.
-- Do NOT omit any list items. If a list contains N objects, all N must be represented.
-- You may improve wording and formatting for narrative fields, but factual values (numbers, dates, counts, ranges, ids) must stay unchanged.
-- Do not invent new requirements or facts that are not present in the JSON. You may add neutral, non-factual connective phrasing.
-- Keep placeholders as-is (e.g. [Contact Person]).
-- All concrete values (dates, monetary amounts, counts etc.) must be clearly stated in the output document!
+Profile:
+Name: {name}
+Email: {email}
+Location: {location}
+Skills: {skills}
+Projects: {projects}
+Certifications: {certifications}
 
-Coverage checklist (every path below must be represented in the Markdown):
-{checklist}
-
-Input JSON:
-{payload}
-
-Document expectations:
-- Use a clear RFP structure with headers and subheaders.
-- Use tables where helpful (e.g. staffing profile, timeline/milestones, skills).
-- Ensure staffing_profile is fully reflected (roles, counts, seniority, skills, responsibilities, allocation if present).
-- Ensure technical requirements reflect all required and preferred skills and any constraints present in the JSON.
-- Ensure proposal submission guidelines and evaluation process appear as real sections.
-- All fields present in source json must have their values represented in some way in the markdown document
-- You may introduce new descriptive content in the document, basing in on existing information in JSON
-
-Return ONLY the Markdown document.
+Rules:
+- Output ONLY the CV in Markdown (no preface, no explanations, no code fences).
+- Use clear sections such as Summary, Experience, Skills, Projects, Education.
+- Keep contact details near the top.
+- Use the provided skill proficiency levels: {proficiency_levels}.
+- Use realistic dates, company names, and achievements with specific metrics where appropriate.
 """
-cv_json_to_markdown = """
-You are generating a professional CV / resume as Markdown.
 
-Hard rules:
-- Output ONLY the final Markdown document. No preface, no explanations, no JSON, no code fences, no ``` markers.
-- You MUST include every single input field from the JSON in the document.
-- Do NOT omit any list items. If a list contains N objects, all N must be represented.
-- You may improve wording and formatting for narrative fields, but factual values (numbers, dates, counts, ranges, ids, names, emails, links) must stay unchanged.
-- Do not invent facts that are not present in the JSON. You may add neutral, non-factual connective phrasing.
-- Keep placeholders as-is.
-- The document MUST start with a single H1 line (e.g. "# Full Name").
+rfp_markdown = """
+Create a professional RFP (Request for Proposal) document in Markdown with the details below.
 
-Coverage checklist (every path below must be represented in the Markdown):
-{checklist}
+Project:
+Title: {title}
+Client: {client}
+Project Type: {project_type}
+Description: {description}
+Duration: {duration_months} months
+Team Size: {team_size}
+Budget Range: {budget_range}
+Start Date: {start_date}
+Location: {location}
+Remote Work: {remote_work}
 
-Input JSON:
-{payload}
+Technical Requirements:
+{requirements}
 
-Document expectations:
-- Use clear sections and consistent formatting.
-- Prefer concise bullet points for responsibilities and highlights.
-- Preserve the structure and order of experience and projects as in the input.
-- Represent skills, certifications, education, experience, projects and summary as distinct sections.
-- Ensure contact details (email, location, links) are present near the top.
-
-Return ONLY the Markdown document.
+Rules:
+- Output ONLY the RFP in Markdown (no preface, no explanations, no code fences).
+- Use business-oriented sections such as Executive Summary, Project Overview, Technical Requirements,
+  Deliverables & Milestones, Timeline, Budget, Proposal Guidelines, Evaluation Criteria.
+- Include acceptance criteria and a proposal submission process.
 """

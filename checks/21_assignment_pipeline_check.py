@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from util.common import assert_true, build_check_context, load_settings_from_context, print_fail, print_ok
-from talentmatch.datasets import AssignmentPipeline, CvStructJsonStore, RfpStructJsonStore
+from talentmatch.generation import AssignmentPipeline, CvStructJsonStore, RfpStructJsonStore
 
 
 def run() -> int:

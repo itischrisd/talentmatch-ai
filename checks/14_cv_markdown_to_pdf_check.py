@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from util.common import assert_true, build_check_context, is_uuid, load_settings_from_context, print_fail, print_ok
-from talentmatch.datasets import CvMarkdownPdfStore
+from talentmatch.generation import CvMarkdownPdfStore
 
 
 def run() -> int:

@@ -15,7 +15,7 @@ from util.common import (
     print_fail,
     print_ok,
 )
-from talentmatch.datasets import StructuredRfpGenerator
+from talentmatch.generation import StructuredRfpGenerator
 
 
 def validate_skill_req(obj: Any, *, label: str, settings: Any) -> int:

@@ -1,4 +1,0 @@
-[logging]
-format = "%(asctime)s %(levelname)s %(name)s %(message)s"
-date_format = "%Y-%m-%dT%H:%M:%S%z"
-level_default = "INFO"

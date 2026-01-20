@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from talentmatch.runtime.config_models import Settings
+from talentmatch.config.config_models import Settings
 
 LlmUseCaseName = Literal[
     "dataset_generation",

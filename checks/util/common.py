@@ -95,7 +95,7 @@ def load_settings_from_context(context: CheckContext) -> Any | None:
         return None
 
     try:
-        from talentmatch.runtime import load_settings
+        from talentmatch.config import load_settings
 
         settings = load_settings(str(context.settings_path))
         print_ok("runtime.load_settings() succeeded")
