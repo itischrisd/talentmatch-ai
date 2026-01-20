@@ -1,21 +1,19 @@
-[datasets.skills]
-catalog = [
-    "Python", "JavaScript", "TypeScript", "Java", "C++", "Go", "Rust",
-    "React", "Vue.js", "Angular", "Node.js", "Django", "Flask", "FastAPI",
-    "PostgreSQL", "MongoDB", "Redis", "MySQL",
-    "AWS", "Docker", "Kubernetes", "Jenkins", "Git",
-    "Machine Learning", "Data Science", "DevOps", "Microservices"
-]
+[datasets.assignments]
+assignment_probability = 0.8
 
-[datasets.skills.count]
-min = 5
-max = 12
-
-datasets.skills.proficiency_levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
-datasets.skills.proficiency_weights = [10, 40, 35, 15]
-
+[datasets.assignments.assignment_end_days_before]
+max = 30
+min = 1
 
 [datasets.programmers]
+certifications = [
+    "AWS Certified Solutions Architect",
+    "Google Cloud Professional",
+    "Certified Kubernetes Administrator",
+    "Microsoft Azure Developer",
+    "Scrum Master Certification",
+    "Docker Certified Associate"
+]
 project_names = [
     "E-commerce Platform",
     "Data Analytics Dashboard",
@@ -28,25 +26,30 @@ project_names = [
     "Content Management System",
     "Payment Processing System"
 ]
-certifications = [
-    "AWS Certified Solutions Architect",
-    "Google Cloud Professional",
-    "Certified Kubernetes Administrator",
-    "Microsoft Azure Developer",
-    "Scrum Master Certification",
-    "Docker Certified Associate"
-]
-
-[datasets.programmers.project_count]
-min = 2
-max = 5
 
 [datasets.programmers.certification_count]
-min = 0
 max = 3
+min = 0
 
+[datasets.programmers.project_count]
+max = 5
+min = 2
 
 [datasets.projects]
+clients = [
+    "TechCorp",
+    "DataSystems Inc",
+    "CloudNative Solutions",
+    "FinTech Innovations",
+    "HealthTech Partners",
+    "RetailMax",
+    "LogisticsPro",
+    "EduTech Solutions",
+    "MediaStream",
+    "GreenEnergy Co",
+    "SmartCity Initiative",
+    "BioTech Labs"
+]
 project_types = [
     "E-commerce Platform",
     "Data Analytics Dashboard",
@@ -64,51 +67,65 @@ project_types = [
     "Inventory Management",
     "Customer Portal"
 ]
-clients = [
-    "TechCorp",
-    "DataSystems Inc",
-    "CloudNative Solutions",
-    "FinTech Innovations",
-    "HealthTech Partners",
-    "RetailMax",
-    "LogisticsPro",
-    "EduTech Solutions",
-    "MediaStream",
-    "GreenEnergy Co",
-    "SmartCity Initiative",
-    "BioTech Labs"
-]
+name_template = "{client} — {project_type}"
+description_template = "Delivery of {project_type} for {client}."
 
-[datasets.projects.start_date_offset_days]
-min = -730
-max = 180
+budget_has_value_probability = 0.5
+mandatory_probability = 0.5
 
-[datasets.projects.duration_months]
-min = 3
-max = 18
-
-[datasets.projects.team_size]
-min = 2
-max = 8
+completed_status = "completed"
+assignable_statuses = ["active", "planned", "on_hold"]
 
 [datasets.projects.budget_amount]
-min = 50000
-max = 500000
+max = 500_000
+min = 50_000
 
-datasets.projects.budget_has_value_probability = 0.5
+[datasets.projects.duration_months]
+max = 18
+min = 3
+
+[datasets.projects.requirements_count]
+max = 5
+min = 2
+
+[datasets.projects.start_date_offset_days]
+max = 180
+min = 0
 
 [datasets.projects.status]
 labels = ["completed", "active", "planned", "on_hold"]
 weights = [50, 30, 15, 5]
 
-[datasets.projects.requirements_count]
+[datasets.projects.team_size]
+max = 8
 min = 2
-max = 5
 
-datasets.projects.mandatory_probability = 0.5
-
+[datasets.rendering]
+pdf_css = """
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+h1 { color: #2c3e50; border-bottom: 2px solid #3498db; }
+h2 { color: #34495e; margin-top: 30px; }
+h3 { color: #7f8c8d; }
+strong { color: #2c3e50; }
+ul { margin-left: 20px; }
+"""
 
 [datasets.rfps]
+budget_ranges = ["$100K - $250K", "$250K - $500K", "$500K - $1M", "$1M - $2M"]
+clients = [
+    "Global Finance Corp",
+    "MedTech Industries",
+    "Retail Solutions Ltd",
+    "Manufacturing Plus",
+    "Education Network",
+    "Energy Systems Co"
+]
 rfp_types = [
     "Enterprise Web Application",
     "Mobile App Development",
@@ -120,31 +137,24 @@ rfp_types = [
     "DevOps Automation",
     "Security Enhancement"
 ]
-clients = [
-    "Global Finance Corp",
-    "MedTech Industries",
-    "Retail Solutions Ltd",
-    "Manufacturing Plus",
-    "Education Network",
-    "Energy Systems Co"
-]
-budget_ranges = ["$100K - $250K", "$250K - $500K", "$500K - $1M", "$1M - $2M"]
+title_template = "RFP: {project_type}"
+description_template = "Request for proposal for {project_type}."
 
-[datasets.rfps.start_date_offset_days]
-min = 30
-max = 180
+remote_allowed_probability = 0.67
 
 [datasets.rfps.duration_months]
-min = 6
 max = 24
-
-[datasets.rfps.team_size]
-min = 3
-max = 12
-
-datasets.rfps.remote_allowed_probability = 0.67
+min = 6
 
 [datasets.rfps.requirements]
+mandatory_probability = 0.67
+min_proficiency_levels = ["Intermediate", "Advanced", "Expert"]
+preferred_certifications = [
+    "AWS Certified Solutions Architect",
+    "Google Cloud Professional",
+    "Certified Kubernetes Administrator"
+]
+preferred_certifications_max_count = 2
 skills = [
     "Python",
     "JavaScript",
@@ -163,40 +173,52 @@ skills = [
     "DevOps",
     "Microservices"
 ]
-preferred_certifications = [
-    "AWS Certified Solutions Architect",
-    "Google Cloud Professional",
-    "Certified Kubernetes Administrator"
-]
-min_proficiency_levels = ["Intermediate", "Advanced", "Expert"]
-mandatory_probability = 0.67
-preferred_certifications_max_count = 2
 
 [datasets.rfps.requirements.requirement_count]
-min = 4
 max = 10
+min = 4
 
+[datasets.rfps.start_date_offset_days]
+max = 180
+min = 30
 
-[datasets.assignments]
-assignment_probability = 0.8
+[datasets.rfps.team_size]
+max = 12
+min = 3
 
-[datasets.assignments.assignment_end_days_before]
-min = 1
-max = 30
+[datasets.skills]
+catalog = [
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "Java",
+    "C++",
+    "Go",
+    "Rust",
+    "React",
+    "Vue.js",
+    "Angular",
+    "Node.js",
+    "Django",
+    "Flask",
+    "FastAPI",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "MySQL",
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "Jenkins",
+    "Git",
+    "Machine Learning",
+    "Data Science",
+    "DevOps",
+    "Microservices"
+]
+proficiency_levels = ["Beginner", "Intermediate", "Advanced", "Expert"]
+proficiency_weights = [10, 40, 35, 15]
 
-
-[datasets.rendering]
-pdf_css = """
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-}
-h1 { color: #2c3e50; border-bottom: 2px solid #3498db; }
-h2 { color: #34495e; margin-top: 30px; }
-h3 { color: #7f8c8d; }
-strong { color: #2c3e50; }
-ul { margin-left: 20px; }
-"""
+[datasets.skills.count]
+max = 12
+min = 5

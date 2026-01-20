@@ -67,7 +67,7 @@ class LlmUseCaseSettings(BaseModel):
     LLM parameters for a specific generation use-case
     """
 
-    deployment: str = Field(validation_alias=AliasChoices("deployment", "model"))
+    model: str
     temperature: float = Field(..., ge=0.0, le=1.0)
     max_tokens: int = Field(..., gt=0)
     top_p: float = Field(..., ge=0.0, le=1.0)

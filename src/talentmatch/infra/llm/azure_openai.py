@@ -30,7 +30,7 @@ class AzureLlmProvider:
         use_case_cfg = self._settings.llm.use_cases[use_case]
         azure = self._settings.azure_openai
 
-        deployment = azure.chat_deployment if use_case_cfg.deployment == "default" else use_case_cfg.deployment
+        deployment = azure.chat_deployment if use_case_cfg.model == "default" else use_case_cfg.model
 
         client = AzureChatOpenAI(
             azure_endpoint=azure.endpoint,

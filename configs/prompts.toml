@@ -43,10 +43,6 @@ Rules:
 - Include acceptance criteria and a proposal submission process.
 """
 
-[prompts.datasets]
-cv_markdown = """..."""
-rfp_markdown = """..."""
-
 [prompts.datasets.requirement_labels]
 required = "REQUIRED"
 preferred = "Preferred"

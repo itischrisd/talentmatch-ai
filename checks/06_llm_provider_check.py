@@ -3,8 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from talentmatch.infra.llm import AzureLlmProvider
 from util.common import assert_true, build_check_context, load_settings_from_context, print_fail, print_ok
-from talentmatch.infra.llm import AzureChatOpenAIProvider
 
 
 def extract_text(response: Any) -> str:
@@ -19,7 +19,10 @@ def extract_text(response: Any) -> str:
 
 
 def run() -> int:
-    """Public contract: validates LLM provider can create a chat model and run a minimal prompt."""
+    """
+    Public contract: validates AzureLlmProvider can create a chat model and return a pong-like response.
+    :return: process exit code (0 success, 1 failure)
+    """
 
     context = build_check_context(Path(__file__))
     settings = load_settings_from_context(context)
@@ -27,36 +30,39 @@ def run() -> int:
         return 1
 
     try:
-        provider = AzureChatOpenAIProvider(settings)
-        print_ok("AzureChatOpenAIProvider(settings) succeeded")
+        provider = AzureLlmProvider(settings)
+        print_ok("AzureLlmProvider(settings) succeeded")
     except Exception as exc:
-        print_fail(f"AzureChatOpenAIProvider(settings) failed: {exc}")
+        print_fail(f"AzureLlmProvider(settings) failed: {exc}")
         return 1
 
     try:
-        model = provider.get_chat_model("json_to_markdown")
-        print_ok('provider.get_chat_model("json_to_markdown") succeeded')
+        model = provider.chat("cv_markdown")
+        print_ok('provider.chat("cv_markdown") succeeded')
     except Exception as exc:
-        print_fail(f'provider.get_chat_model("json_to_markdown") failed: {exc}')
+        print_fail(f'provider.chat("cv_markdown") failed: {exc}')
         return 1
 
-    prompt = "Ping. Reply with a single short word."
+    prompt = "Ping. Reply with exactly: pong"
 
     try:
         response = model.invoke(prompt)
         print_ok("model.invoke(prompt) succeeded")
-    except Exception as first_exc:
-        try:
-            from langchain_core.messages import HumanMessage
-
-            response = model.invoke([HumanMessage(content=prompt)])
-            print_ok("model.invoke([HumanMessage]) succeeded")
-        except Exception as second_exc:
-            print_fail(f"model.invoke failed: {first_exc} | {second_exc}")
-            return 1
+    except Exception as exc:
+        print_fail(f"model.invoke(prompt) failed: {exc}")
+        return 1
 
     text = extract_text(response)
     ok = assert_true(bool(text), ok="model returned non-empty content", fail="model returned empty content")
+    if not ok:
+        return 1
+
+    normalized = text.strip().lower().strip(".! ")
+    ok = assert_true(
+        normalized.startswith("pong") or normalized == "pong",
+        ok='received "pong" response',
+        fail=f'unexpected response: "{text}"',
+    )
     if not ok:
         return 1
 

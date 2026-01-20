@@ -11,7 +11,7 @@ from typing import Any
 from util.common import CHECK_FAIL, CHECK_OK, CHECK_WARN
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class CheckOutcome:
     script_name: str
     status: str
@@ -20,13 +20,7 @@ class CheckOutcome:
 
 def discover_check_scripts(checks_dir: Path, *, current_file: Path) -> list[Path]:
     candidates = sorted(checks_dir.glob("*.py"), key=lambda p: p.name.lower())
-    return [
-        p
-        for p in candidates
-        if p.is_file()
-           and p.name != current_file.name
-           and not p.name.startswith("_")
-    ]
+    return [p for p in candidates if p.is_file() and p.name != current_file.name and not p.name.startswith("_")]
 
 
 def import_module_from_path(module_path: Path) -> Any:
@@ -68,13 +62,20 @@ def run_check_script(script_path: Path) -> CheckOutcome:
 
     if exit_code == 0:
         return CheckOutcome(script_name=script_path.name, status=CHECK_OK, exit_code=0)
-    return CheckOutcome(script_name=script_path.name, status=CHECK_FAIL,
-                        exit_code=int(exit_code) if isinstance(exit_code, int) else 1)
+
+    return CheckOutcome(
+        script_name=script_path.name,
+        status=CHECK_FAIL,
+        exit_code=int(exit_code) if isinstance(exit_code, int) else 1,
+    )
 
 
 def main() -> int:
     current_file = Path(__file__).resolve()
     checks_dir = current_file.parent
+
+    if str(checks_dir) not in sys.path:
+        sys.path.insert(0, str(checks_dir))
 
     scripts = discover_check_scripts(checks_dir, current_file=current_file)
     if not scripts:
@@ -83,8 +84,8 @@ def main() -> int:
 
     outcomes = [run_check_script(p) for p in scripts]
 
-    for o in outcomes:
-        print(f"{o.status} {o.script_name}")
+    for outcome in outcomes:
+        print(f"{outcome.status} {outcome.script_name}")
 
     failures = [o for o in outcomes if o.status == CHECK_FAIL]
     return 0 if not failures else 1
