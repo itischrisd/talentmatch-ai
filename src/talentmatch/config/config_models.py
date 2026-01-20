@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
+from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator, AliasChoices
 
 
 class ConfigurationError(ValueError):
@@ -51,14 +51,15 @@ class GenerationSettings(BaseModel):
     num_rfps: int = Field(..., gt=0)
 
 
-class OpenAiSettings(BaseModel):
+class AzureOpenAiSettings(BaseModel):
     """
-    OpenAI client settings (secrets provided via environment)
+    Azure OpenAI settings (secrets provided via environment)
     """
 
+    endpoint: str
     api_key: SecretStr
-    base_url: str | None = None
-    organization: str | None = None
+    api_version: str
+    chat_deployment: str
 
 
 class LlmUseCaseSettings(BaseModel):
@@ -66,7 +67,7 @@ class LlmUseCaseSettings(BaseModel):
     LLM parameters for a specific generation use-case
     """
 
-    model: str
+    deployment: str = Field(validation_alias=AliasChoices("deployment", "model"))
     temperature: float = Field(..., ge=0.0, le=1.0)
     max_tokens: int | None = Field(default=None, gt=0)
     top_p: float | None = Field(default=None, ge=0.0, le=1.0)
@@ -87,7 +88,8 @@ class LlmSettings(BaseModel):
     LLM configuration root
     """
 
-    use_cases: LlmUseCasesSettings
+    use_cases: dict[str, LlmUseCaseSettings]
+
 
 
 class SkillsDataset(BaseModel):
@@ -293,7 +295,7 @@ class Settings(BaseModel):
     generation: GenerationSettings
     llm: LlmSettings
     datasets: DatasetsSettings
-    openai: OpenAiSettings
+    azure_openai: AzureOpenAiSettings
 
     @classmethod
     def from_payload(cls, payload: dict[str, Any]) -> Settings:

@@ -4,10 +4,11 @@ import re
 from pathlib import Path
 
 import markdown
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from weasyprint import CSS, HTML
 
 from talentmatch.config.prompts_models import Prompts
+from talentmatch.infra.llm import AzureLlmProvider
 
 
 class DocumentService:
@@ -21,8 +22,8 @@ class DocumentService:
             prompts: Prompts,
             proficiency_levels: list[str],
             pdf_css: str,
-            cv_llm: ChatOpenAI,
-            rfp_llm: ChatOpenAI,
+            cv_llm: AzureChatOpenAI,
+            rfp_llm: AzureChatOpenAI,
     ) -> None:
         self._prompts = prompts
         self._proficiency_levels = proficiency_levels

@@ -5,15 +5,15 @@ from pathlib import Path
 from typing import Any
 
 from faker import Faker
-from langchain_openai import ChatOpenAI
+from langchain_openai import AzureChatOpenAI
 
-from talentmatch.config import load_prompts, load_settings
-from talentmatch.config.config_models import LlmUseCaseSettings, OpenAiSettings
+from talentmatch.config import load_prompts, load_settings, Prompts, Settings
 from talentmatch.generation.documents import DocumentService
 from talentmatch.generation.io import ensure_dirs, safe_filename, write_json
 from talentmatch.generation.programmers import ProgrammerGenerator
 from talentmatch.generation.projects import ProjectGenerator
 from talentmatch.generation.rfps import RfpGenerator
+from talentmatch.infra.llm import AzureLlmProvider
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +26,7 @@ def generate_dataset(*, settings_toml_path: str | None = None, prompts_toml_path
     :return: dictionary with generated dataset details
     """
 
-    settings = load_settings(settings_toml_path)
-    prompts = load_prompts(prompts_toml_path)
-
-    faker = Faker()
-    cv_llm = _build_llm(settings.llm.use_cases.cv_markdown, settings.openai)
-    rfp_llm = _build_llm(settings.llm.use_cases.rfp_markdown, settings.openai)
+    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms(prompts_toml_path, settings_toml_path)
 
     programmers_dir = Path(settings.paths.programmers_dir)
     projects_dir = Path(settings.paths.projects_dir)
@@ -106,12 +101,7 @@ def generate_single_rfp(
     :return: dictionary with generated RFP details
     """
 
-    settings = load_settings(settings_toml_path)
-    prompts = load_prompts(prompts_toml_path)
-
-    faker = Faker()
-    rfp_llm = _build_llm(settings.llm.use_cases.rfp_markdown, settings.openai)
-    cv_llm = _build_llm(settings.llm.use_cases.cv_markdown, settings.openai)
+    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms(prompts_toml_path, settings_toml_path)
 
     rfps_dir = Path(settings.paths.rfps_dir)
     ensure_dirs(rfps_dir)
@@ -133,19 +123,13 @@ def generate_single_rfp(
     return {"rfp": rfp, "markdown": markdown_content, "pdf_file": str(pdf_path)}
 
 
-def _build_llm(use_case: LlmUseCaseSettings, openai: OpenAiSettings) -> ChatOpenAI:
-    api_key = openai.api_key.get_secret_value()
-    kwargs: dict[str, Any] = {"model": use_case.model, "temperature": use_case.temperature, "api_key": api_key}
+def _prepare_settings_and_llms(prompts_toml_path: str | None, settings_toml_path: str | None) -> tuple[
+    Settings, Prompts, Faker, AzureChatOpenAI, AzureChatOpenAI]:
+    settings = load_settings(settings_toml_path)
+    prompts = load_prompts(prompts_toml_path)
 
-    if openai.base_url:
-        kwargs["base_url"] = openai.base_url
-    if openai.organization:
-        kwargs["organization"] = openai.organization
-    if use_case.max_tokens is not None:
-        kwargs["max_tokens"] = use_case.max_tokens
-    if use_case.top_p is not None:
-        kwargs["top_p"] = use_case.top_p
-    if use_case.request_timeout_s is not None:
-        kwargs["timeout"] = use_case.request_timeout_s
-
-    return ChatOpenAI(**kwargs)
+    faker = Faker()
+    llm_provider = AzureLlmProvider(settings)
+    cv_llm = llm_provider.chat("cv_markdown")
+    rfp_llm = llm_provider.chat("rfp_markdown")
+    return settings, prompts, faker, cv_llm, rfp_llm

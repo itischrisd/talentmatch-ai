@@ -1,0 +1,1287 @@
+***** plik __init__.py w lokalizacji __init__.py *****
+***** koniec pliku __init__.py *****
+
+***** plik __init__.py w lokalizacji config\__init__.py *****
+from __future__ import annotations
+
+from .config import load_settings, resolve_repo_root
+from .config_models import Settings
+from .prompts import load_prompts
+from .prompts_models import Prompts
+
+__all__ = [
+    "Settings",
+    "Prompts",
+    "load_settings",
+    "load_prompts",
+    "resolve_repo_root"
+]
+***** koniec pliku __init__.py *****
+
+***** plik config_models.py w lokalizacji config\config_models.py *****
+from __future__ import annotations
+
+from typing import Any
+
+from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
+
+
+class ConfigurationError(ValueError):
+    """
+    Raised when configuration is missing or invalid
+    """
+
+
+class IntRange(BaseModel):
+    """
+    Closed integer range used by generators
+    """
+
+    min: int = Field(..., ge=0)
+    max: int = Field(..., ge=0)
+
+    @model_validator(mode="after")
+    def validate_order(self) -> IntRange:
+        if self.max < self.min:
+            raise ConfigurationError("Range max must be >= min")
+        return self
+
+    def pick(self) -> int:
+        from random import randint
+
+        return randint(int(self.min), int(self.max))
+
+
+class PathsSettings(BaseModel):
+    """
+    Output paths for generated artifacts
+    """
+
+    programmers_dir: str
+    rfps_dir: str
+    projects_dir: str
+
+
+class GenerationSettings(BaseModel):
+    """
+    Counts of generated items
+    """
+
+    num_programmers: int = Field(..., gt=0)
+    num_projects: int = Field(..., gt=0)
+    num_rfps: int = Field(..., gt=0)
+
+
+class OpenAiSettings(BaseModel):
+    """
+    OpenAI client settings (secrets provided via environment)
+    """
+
+    api_key: SecretStr
+    base_url: str | None = None
+    organization: str | None = None
+
+
+class LlmUseCaseSettings(BaseModel):
+    """
+    LLM parameters for a specific generation use-case
+    """
+
+    model: str
+    temperature: float = Field(..., ge=0.0, le=1.0)
+    max_tokens: int | None = Field(default=None, gt=0)
+    top_p: float | None = Field(default=None, ge=0.0, le=1.0)
+    request_timeout_s: int | None = Field(default=None, gt=0)
+
+
+class LlmUseCasesSettings(BaseModel):
+    """
+    LLM use-cases used by this generator
+    """
+
+    cv_markdown: LlmUseCaseSettings
+    rfp_markdown: LlmUseCaseSettings
+
+
+class LlmSettings(BaseModel):
+    """
+    LLM configuration root
+    """
+
+    use_cases: LlmUseCasesSettings
+
+
+class SkillsDataset(BaseModel):
+    """
+    Skill catalog and proficiency policy
+    """
+
+    catalog: list[str]
+    count: IntRange
+    proficiency_levels: list[str]
+    proficiency_weights: list[float]
+
+    @model_validator(mode="after")
+    def validate_proficiency_policy(self) -> SkillsDataset:
+        if not self.catalog:
+            raise ConfigurationError("datasets.skills.catalog must not be empty")
+        if not self.proficiency_levels:
+            raise ConfigurationError("datasets.skills.proficiency_levels must not be empty")
+        if len(self.proficiency_levels) != len(self.proficiency_weights):
+            raise ConfigurationError("datasets.skills proficiency_levels and proficiency_weights must match in length")
+        return self
+
+
+class ProgrammerDataset(BaseModel):
+    """
+    Programmer-profile generation policy
+    """
+
+    project_names: list[str]
+    project_count: IntRange
+    certifications: list[str]
+    certification_count: IntRange
+
+    @model_validator(mode="after")
+    def validate_lists(self) -> ProgrammerDataset:
+        if not self.project_names:
+            raise ConfigurationError("datasets.programmers.project_names must not be empty")
+        if not self.certifications:
+            raise ConfigurationError("datasets.programmers.certifications must not be empty")
+        return self
+
+
+class ProjectStatusPolicy(BaseModel):
+    """
+    Project status labels and sampling weights
+    """
+
+    labels: list[str]
+    weights: list[float]
+
+    @model_validator(mode="after")
+    def validate_weights(self) -> ProjectStatusPolicy:
+        if not self.labels:
+            raise ConfigurationError("datasets.projects.status.labels must not be empty")
+        if len(self.labels) != len(self.weights):
+            raise ConfigurationError("datasets.projects.status labels and weights must match in length")
+        return self
+
+
+class ProjectsDataset(BaseModel):
+    """
+    Project generation policy
+    """
+
+    project_types: list[str]
+    clients: list[str]
+    name_template: str
+    description_template: str
+    start_date_offset_days: IntRange
+    duration_months: IntRange
+    team_size: IntRange
+    budget_amount: IntRange
+    budget_has_value_probability: float
+    status: ProjectStatusPolicy
+    completed_status: str
+    assignable_statuses: list[str]
+    requirements_count: IntRange
+    mandatory_probability: float
+
+    @field_validator("budget_has_value_probability", "mandatory_probability")
+    @classmethod
+    def validate_probability(cls, value: float) -> float:
+        if not (0.0 <= float(value) <= 1.0):
+            raise ConfigurationError("Probability must be within [0.0, 1.0]")
+        return float(value)
+
+    @model_validator(mode="after")
+    def validate_statuses(self) -> ProjectsDataset:
+        if self.completed_status not in self.status.labels:
+            raise ConfigurationError(
+                "datasets.projects.completed_status must be present in datasets.projects.status.labels")
+        unknown = [s for s in self.assignable_statuses if s not in self.status.labels]
+        if unknown:
+            raise ConfigurationError("datasets.projects.assignable_statuses must be a subset of status.labels")
+        return self
+
+
+class RfpRequirementDataset(BaseModel):
+    """
+    RFP requirement catalog policy
+    """
+
+    skills: list[str]
+    preferred_certifications: list[str]
+    requirement_count: IntRange
+    min_proficiency_levels: list[str]
+    mandatory_probability: float
+    preferred_certifications_max_count: int = Field(..., ge=0)
+
+    @field_validator("mandatory_probability")
+    @classmethod
+    def validate_probability(cls, value: float) -> float:
+        if not (0.0 <= float(value) <= 1.0):
+            raise ConfigurationError("Probability must be within [0.0, 1.0]")
+        return float(value)
+
+    @model_validator(mode="after")
+    def validate_lists(self) -> RfpRequirementDataset:
+        if not self.skills:
+            raise ConfigurationError("datasets.rfps.requirements.skills must not be empty")
+        if not self.min_proficiency_levels:
+            raise ConfigurationError("datasets.rfps.requirements.min_proficiency_levels must not be empty")
+        return self
+
+
+class RfpsDataset(BaseModel):
+    """
+    RFP generation policy
+    """
+
+    rfp_types: list[str]
+    clients: list[str]
+    budget_ranges: list[str]
+    title_template: str
+    description_template: str
+    start_date_offset_days: IntRange
+    duration_months: IntRange
+    team_size: IntRange
+    remote_allowed_probability: float
+    requirements: RfpRequirementDataset
+
+    @field_validator("remote_allowed_probability")
+    @classmethod
+    def validate_probability(cls, value: float) -> float:
+        if not (0.0 <= float(value) <= 1.0):
+            raise ConfigurationError("Probability must be within [0.0, 1.0]")
+        return float(value)
+
+    @model_validator(mode="after")
+    def validate_lists(self) -> RfpsDataset:
+        if not self.rfp_types:
+            raise ConfigurationError("datasets.rfps.rfp_types must not be empty")
+        if not self.clients:
+            raise ConfigurationError("datasets.rfps.clients must not be empty")
+        if not self.budget_ranges:
+            raise ConfigurationError("datasets.rfps.budget_ranges must not be empty")
+        return self
+
+
+class AssignmentsDataset(BaseModel):
+    """
+    Assignment generation policy
+    """
+
+    assignment_probability: float
+    assignment_end_days_before: IntRange
+
+    @field_validator("assignment_probability")
+    @classmethod
+    def validate_probability(cls, value: float) -> float:
+        if not (0.0 <= float(value) <= 1.0):
+            raise ConfigurationError("Probability must be within [0.0, 1.0]")
+        return float(value)
+
+
+class RenderingDataset(BaseModel):
+    """
+    Rendering policy for PDF output
+    """
+
+    pdf_css: str
+
+
+class DatasetsSettings(BaseModel):
+    """
+    All dataset catalogs and generation policies
+    """
+
+    skills: SkillsDataset
+    programmers: ProgrammerDataset
+    projects: ProjectsDataset
+    rfps: RfpsDataset
+    assignments: AssignmentsDataset
+    rendering: RenderingDataset
+
+
+class Settings(BaseModel):
+    """
+    Application settings root
+    """
+
+    paths: PathsSettings
+    generation: GenerationSettings
+    llm: LlmSettings
+    datasets: DatasetsSettings
+    openai: OpenAiSettings
+
+    @classmethod
+    def from_payload(cls, payload: dict[str, Any]) -> Settings:
+        return cls.model_validate(payload)
+***** koniec pliku config_models.py *****
+
+***** plik config.py w lokalizacji config\config.py *****
+from __future__ import annotations
+
+from functools import lru_cache
+from pathlib import Path
+from typing import Any
+
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from .config_models import Settings
+from .toml import read_settings_toml
+
+
+class EnvironmentSettings(BaseSettings):
+    """
+    Environment-backed settings for secrets and service endpoints
+    """
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    OPENAI_API_KEY: SecretStr
+    OPENAI_BASE_URL: str | None = None
+    OPENAI_ORGANIZATION: str | None = None
+
+
+def resolve_repo_root() -> Path:
+    """
+    Locate the repository root by finding the nearest 'configs' directory
+    :return: path to the repository root
+    """
+
+    start = Path(__file__).resolve()
+    for parent in (start.parent, *start.parents):
+        if (parent / "configs").is_dir():
+            return parent
+    return start.parent
+
+
+def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) -> dict[str, Any]:
+    """
+    Build the settings payload by merging TOML data with environment variables
+    :param toml_data: settings from TOML
+    :param env: settings from .env
+    :return: merged settings payload
+    """
+
+    payload = dict(toml_data)
+
+    payload["openai"] = {
+        **payload.get("openai", {}),
+        "api_key": env.OPENAI_API_KEY,
+        "base_url": env.OPENAI_BASE_URL,
+        "organization": env.OPENAI_ORGANIZATION,
+    }
+
+    return payload
+
+
+@lru_cache(maxsize=1)
+def load_settings(settings_toml_path: str | None = None) -> Settings:
+    """
+    Load settings from configs/settings.toml and environment variables
+    :param settings_toml_path: optional path to settings TOML file
+    :return: Settings instance
+    """
+
+    repo_root = resolve_repo_root()
+    env_path = repo_root / ".env"
+    env = EnvironmentSettings(_env_file=env_path if env_path.exists() else None)
+
+    default_settings_path = repo_root / "configs" / "settings.toml"
+    settings_path = Path(settings_toml_path) if settings_toml_path else default_settings_path
+
+    if not settings_path.exists():
+        raise FileNotFoundError(f"Settings file not found: {settings_path}")
+
+    toml_data = read_settings_toml(settings_path)
+    payload = build_settings_payload(toml_data, env)
+    return Settings.from_payload(payload)
+***** koniec pliku config.py *****
+
+***** plik prompts_models.py w lokalizacji config\prompts_models.py *****
+from __future__ import annotations
+
+from pydantic import BaseModel
+
+
+class RequirementLabels(BaseModel):
+    """
+    Labels for requirements in RFPs
+    """
+
+    required: str
+    preferred: str
+
+
+class RemoteWorkLabels(BaseModel):
+    """
+    Labels for remote work policies in RFPs
+    """
+
+    allowed: str
+    not_allowed: str
+
+
+class DatasetPrompts(BaseModel):
+    """
+    Prompts templates for dataset generation
+    """
+
+    cv_markdown: str
+    rfp_markdown: str
+    requirement_labels: RequirementLabels
+    remote_work_labels: RemoteWorkLabels
+
+
+class Prompts(BaseModel):
+    """
+    Prompts root model
+    """
+
+    datasets: DatasetPrompts
+***** koniec pliku prompts_models.py *****
+
+***** plik prompts.py w lokalizacji config\prompts.py *****
+from __future__ import annotations
+
+from functools import lru_cache
+from pathlib import Path
+
+from .config import resolve_repo_root
+from .prompts_models import Prompts
+from .toml import read_toml
+
+
+@lru_cache(maxsize=1)
+def load_prompts(prompts_toml_path: str | None = None) -> Prompts:
+    """
+    Load prompts from a TOML file
+    :param prompts_toml_path: optional path to the prompts TOML file
+    :return: Prompts instance
+    """
+
+    repo_root = resolve_repo_root()
+    default_prompts_path = repo_root / "configs" / "prompts.toml"
+    prompts_path = Path(prompts_toml_path) if prompts_toml_path else default_prompts_path
+
+    if not prompts_path.exists():
+        raise FileNotFoundError(f"Prompts file not found: {prompts_path}")
+
+    toml_data = read_toml(prompts_path)
+    prompt_root = toml_data.get("prompts", {})
+    return Prompts.model_validate(prompt_root)
+***** koniec pliku prompts.py *****
+
+***** plik toml.py w lokalizacji config\toml.py *****
+from __future__ import annotations
+
+import tomllib
+from pathlib import Path
+from typing import Any
+
+
+def read_toml(path: Path) -> dict[str, Any]:
+    """
+    Read a TOML file into a dictionary
+    :param path: path to the TOML file
+    :return: dictionary with the TOML contents
+    """
+
+    with path.open("rb") as file:
+        return tomllib.load(file)
+
+
+def read_settings_toml(entry_path: Path) -> dict[str, Any]:
+    """
+    Read a settings entry TOML and merge any included fragments
+    :param entry_path: path to the main settings TOML file
+    :return: merged settings dictionary
+    """
+
+    entry = read_toml(entry_path)
+    merged: dict[str, Any] = {}
+
+    for include in _extract_includes(entry):
+        fragment_path = (entry_path.parent / include).resolve()
+        merged = _deep_merge(merged, read_toml(fragment_path))
+
+    merged = _deep_merge(merged, _drop_settings_metadata(entry))
+    return merged
+
+
+def _extract_includes(entry: dict[str, Any]) -> list[str]:
+    settings_meta = entry.get("settings")
+    includes: list[str] = []
+    if isinstance(settings_meta, dict):
+        raw_includes = settings_meta.get("includes", [])
+        if isinstance(raw_includes, list):
+            includes.extend([str(item) for item in raw_includes])
+    return includes
+
+
+def _drop_settings_metadata(entry: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in entry.items() if key != "settings"}
+
+
+def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    merged: dict[str, Any] = dict(base)
+    for key, override_value in override.items():
+        base_value = merged.get(key)
+        if isinstance(base_value, dict) and isinstance(override_value, dict):
+            merged[key] = _deep_merge(base_value, override_value)
+        else:
+            merged[key] = override_value
+    return merged
+***** koniec pliku toml.py *****
+
+***** plik __init__.py w lokalizacji generation\__init__.py *****
+from __future__ import annotations
+
+from .api import generate_dataset, generate_single_rfp
+
+__all__ = [
+    "generate_dataset",
+    "generate_single_rfp"
+]
+***** koniec pliku __init__.py *****
+
+***** plik api.py w lokalizacji generation\api.py *****
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import Any
+
+from faker import Faker
+from langchain_openai import ChatOpenAI
+
+from talentmatch.config import load_prompts, load_settings
+from talentmatch.config.config_models import LlmUseCaseSettings, OpenAiSettings
+from talentmatch.generation.documents import DocumentService
+from talentmatch.generation.io import ensure_dirs, safe_filename, write_json
+from talentmatch.generation.programmers import ProgrammerGenerator
+from talentmatch.generation.projects import ProjectGenerator
+from talentmatch.generation.rfps import RfpGenerator
+
+logger = logging.getLogger(__name__)
+
+
+def generate_dataset(*, settings_toml_path: str | None = None, prompts_toml_path: str | None = None) -> dict[str, Any]:
+    """
+    Generate the complete dataset using counts and policies from TOML
+    :param settings_toml_path: path to settings TOML file
+    :param prompts_toml_path: path to prompts TOML file
+    :return: dictionary with generated dataset details
+    """
+
+    settings = load_settings(settings_toml_path)
+    prompts = load_prompts(prompts_toml_path)
+
+    faker = Faker()
+    cv_llm = _build_llm(settings.llm.use_cases.cv_markdown, settings.openai)
+    rfp_llm = _build_llm(settings.llm.use_cases.rfp_markdown, settings.openai)
+
+    programmers_dir = Path(settings.paths.programmers_dir)
+    projects_dir = Path(settings.paths.projects_dir)
+    rfps_dir = Path(settings.paths.rfps_dir)
+
+    ensure_dirs(programmers_dir, projects_dir, rfps_dir)
+
+    documents = DocumentService(
+        prompts=prompts,
+        proficiency_levels=settings.datasets.skills.proficiency_levels,
+        pdf_css=settings.datasets.rendering.pdf_css,
+        cv_llm=cv_llm,
+        rfp_llm=rfp_llm,
+    )
+
+    programmer_generator = ProgrammerGenerator(faker, settings.datasets)
+    project_generator = ProjectGenerator(faker, settings.datasets)
+    rfp_generator = RfpGenerator(faker, settings.datasets)
+
+    logger.info("Generating %s programmer profiles", settings.generation.num_programmers)
+    profiles = programmer_generator.generate(settings.generation.num_programmers)
+
+    cv_files: list[str] = []
+    for idx, profile in enumerate(profiles, start=1):
+        logger.info("Generating CV %s/%s: %s", idx, settings.generation.num_programmers, profile["name"])
+        markdown_content = documents.render_cv_markdown(profile)
+        filename = safe_filename(f"cv_{profile['id']:03d}_{profile['name']}")
+        pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=programmers_dir)
+        cv_files.append(str(pdf_path))
+
+    logger.info("Generating %s projects", settings.generation.num_projects)
+    projects = project_generator.generate(settings.generation.num_projects, profiles)
+
+    logger.info("Generating %s RFPs", settings.generation.num_rfps)
+    rfps = rfp_generator.generate(settings.generation.num_rfps)
+
+    rfp_files: list[str] = []
+    for idx, rfp in enumerate(rfps, start=1):
+        logger.info("Generating RFP PDF %s/%s: %s", idx, settings.generation.num_rfps, rfp["title"])
+        markdown_content = documents.render_rfp_markdown(rfp)
+        filename = safe_filename(f"rfp_{rfp['id']}_{rfp['title']}")
+        pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=rfps_dir)
+        rfp_files.append(str(pdf_path))
+
+    profiles_path = programmers_dir / "programmer_profiles.json"
+    projects_path = projects_dir / "projects.json"
+    rfps_path = rfps_dir / "rfps.json"
+
+    write_json(profiles_path, profiles)
+    write_json(projects_path, projects)
+    write_json(rfps_path, rfps)
+
+    return {
+        "profiles": profiles,
+        "projects": projects,
+        "rfps": rfps,
+        "cv_files": cv_files,
+        "rfp_files": rfp_files,
+        "profiles_file": str(profiles_path),
+        "projects_file": str(projects_path),
+        "rfps_file": str(rfps_path),
+    }
+
+
+def generate_single_rfp(
+        *, settings_toml_path: str | None = None, prompts_toml_path: str | None = None
+) -> dict[str, Any]:
+    """
+    Generate a single RFP record along with Markdown and PDF output
+    :param settings_toml_path: path to settings TOML file
+    :param prompts_toml_path: path to prompts TOML file
+    :return: dictionary with generated RFP details
+    """
+
+    settings = load_settings(settings_toml_path)
+    prompts = load_prompts(prompts_toml_path)
+
+    faker = Faker()
+    rfp_llm = _build_llm(settings.llm.use_cases.rfp_markdown, settings.openai)
+    cv_llm = _build_llm(settings.llm.use_cases.cv_markdown, settings.openai)
+
+    rfps_dir = Path(settings.paths.rfps_dir)
+    ensure_dirs(rfps_dir)
+
+    documents = DocumentService(
+        prompts=prompts,
+        proficiency_levels=settings.datasets.skills.proficiency_levels,
+        pdf_css=settings.datasets.rendering.pdf_css,
+        cv_llm=cv_llm,
+        rfp_llm=rfp_llm,
+    )
+
+    generator = RfpGenerator(faker, settings.datasets)
+    rfp = generator.generate(1)[0]
+    markdown_content = documents.render_rfp_markdown(rfp)
+    filename = safe_filename(f"rfp_{rfp['id']}_{rfp['title']}")
+    pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=rfps_dir)
+
+    return {"rfp": rfp, "markdown": markdown_content, "pdf_file": str(pdf_path)}
+
+
+def _build_llm(use_case: LlmUseCaseSettings, openai: OpenAiSettings) -> ChatOpenAI:
+    api_key = openai.api_key.get_secret_value()
+    kwargs: dict[str, Any] = {"model": use_case.model, "temperature": use_case.temperature, "api_key": api_key}
+
+    if openai.base_url:
+        kwargs["base_url"] = openai.base_url
+    if openai.organization:
+        kwargs["organization"] = openai.organization
+    if use_case.max_tokens is not None:
+        kwargs["max_tokens"] = use_case.max_tokens
+    if use_case.top_p is not None:
+        kwargs["top_p"] = use_case.top_p
+    if use_case.request_timeout_s is not None:
+        kwargs["timeout"] = use_case.request_timeout_s
+
+    return ChatOpenAI(**kwargs)
+***** koniec pliku api.py *****
+
+***** plik documents.py w lokalizacji generation\documents.py *****
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+import markdown
+from langchain_openai import ChatOpenAI
+from weasyprint import CSS, HTML
+
+from talentmatch.config.prompts_models import Prompts
+
+
+class DocumentService:
+    """
+    Renders CVs and RFPs using an LLM and converts Markdown to PDFs
+    """
+
+    def __init__(
+            self,
+            *,
+            prompts: Prompts,
+            proficiency_levels: list[str],
+            pdf_css: str,
+            cv_llm: ChatOpenAI,
+            rfp_llm: ChatOpenAI,
+    ) -> None:
+        self._prompts = prompts
+        self._proficiency_levels = proficiency_levels
+        self._pdf_css = pdf_css
+        self._cv_llm = cv_llm
+        self._rfp_llm = rfp_llm
+
+    def render_cv_markdown(self, profile: dict) -> str:
+        """
+        Render CV Markdown using the configured template
+        :param profile: programmer profile data
+        :return: string of rendered CV in Markdown
+        """
+
+        skills_text = ", ".join(f"{s.get('name')} ({s.get('proficiency')})" for s in profile.get("skills", []))
+        projects_text = ", ".join(profile.get("projects", []))
+        certs_text = ", ".join(profile.get("certifications", []))
+
+        template = self._prompts.datasets.cv_markdown
+        prompt = template.format(
+            name=profile.get("name", ""),
+            email=profile.get("email", ""),
+            location=profile.get("location", ""),
+            skills=skills_text,
+            projects=projects_text,
+            certifications=certs_text,
+            proficiency_levels=", ".join(self._proficiency_levels),
+        )
+        return self._invoke_llm_markdown(self._cv_llm, prompt, empty_error="LLM returned empty content for CV")
+
+    def render_rfp_markdown(self, rfp: dict) -> str:
+        """
+        Render RFP Markdown using the configured template
+        :param rfp: RFP data
+        :return: string of rendered RFP in Markdown
+        """
+
+        required_label = self._prompts.datasets.requirement_labels.required
+        preferred_label = self._prompts.datasets.requirement_labels.preferred
+
+        lines: list[str] = []
+        for req in rfp.get("requirements", []):
+            label = required_label if req.get("is_mandatory") else preferred_label
+            certs = req.get("preferred_certifications") or []
+            cert_text = f" (Preferred certifications: {', '.join(certs)})" if certs else ""
+            lines.append(f"- {label}: {req.get('skill_name')} - {req.get('min_proficiency')} level{cert_text}")
+
+        remote = (
+            self._prompts.datasets.remote_work_labels.allowed
+            if rfp.get("remote_allowed")
+            else self._prompts.datasets.remote_work_labels.not_allowed
+        )
+
+        template = self._prompts.datasets.rfp_markdown
+        prompt = template.format(
+            title=rfp.get("title", ""),
+            client=rfp.get("client", ""),
+            project_type=rfp.get("project_type", ""),
+            description=rfp.get("description", ""),
+            duration_months=rfp.get("duration_months", ""),
+            team_size=rfp.get("team_size", ""),
+            budget_range=rfp.get("budget_range", ""),
+            start_date=rfp.get("start_date", ""),
+            location=rfp.get("location", ""),
+            remote_work=remote,
+            requirements="\n".join(lines),
+        )
+        return self._invoke_llm_markdown(self._rfp_llm, prompt, empty_error="LLM returned empty content for RFP")
+
+    def write_markdown_pdf(self, markdown_content: str, *, filename: str, output_dir: Path) -> Path:
+        """
+        Convert Markdown to PDF and return the resulting file path
+        :param markdown_content: content in Markdown format
+        :param filename: name of the output PDF file (without extension)
+        :param output_dir: directory to write the PDF file to
+        :return: path to the resulting PDF file
+        """
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        html_content = markdown.markdown(markdown_content)
+        pdf_path = output_dir / f"{filename}.pdf"
+        HTML(string=html_content).write_pdf(str(pdf_path), stylesheets=[CSS(string=self._pdf_css)])
+        return pdf_path
+
+    def _invoke_llm_markdown(self, llm: ChatOpenAI, prompt: str, *, empty_error: str) -> str:
+        response = llm.invoke(prompt)
+        content = str(getattr(response, "content", ""))
+        cleaned = self._strip_fenced_code_blocks(content).strip()
+        if not cleaned:
+            raise ValueError(empty_error)
+        return cleaned
+
+    @staticmethod
+    def _strip_fenced_code_blocks(text: str) -> str:
+        stripped = text.strip()
+        if stripped.startswith("```"):
+            stripped = re.sub(r"^```[a-zA-Z0-9_-]*\n?", "", stripped)
+            stripped = re.sub(r"\n?```$", "", stripped)
+        return stripped.replace("```markdown", "").replace("```", "")
+***** koniec pliku documents.py *****
+
+***** plik io.py w lokalizacji generation\io.py *****
+from __future__ import annotations
+
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+
+def ensure_dirs(*dirs: Path) -> None:
+    """
+    Ensure directories exist
+    :param dirs: directories to check/create
+    """
+
+    for directory in dirs:
+        directory.mkdir(parents=True, exist_ok=True)
+
+
+def write_json(path: Path, payload: Any) -> None:
+    """
+    Write payload as pretty JSON
+    :param path: path to write the JSON file
+    :param payload: data to write
+    """
+
+    path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+
+
+def safe_filename(text: str) -> str:
+    """
+    Create a filesystem-friendly filename
+    :param text: input filename text
+    :return: sanitized filename
+    """
+
+    normalized = text.replace(" ", "_").replace("/", "_").replace("\\", "_")
+    normalized = re.sub(r"[^\w.-]+", "", normalized, flags=re.UNICODE)
+    return normalized.strip("._") or "document"
+***** koniec pliku io.py *****
+
+***** plik programmers.py w lokalizacji generation\programmers.py *****
+from __future__ import annotations
+
+import random
+from typing import Any
+
+from faker import Faker
+
+from talentmatch.config.config_models import DatasetsSettings
+
+
+class ProgrammerGenerator:
+    """
+    Generates programmer profiles
+    """
+
+    def __init__(self, faker: Faker, datasets: DatasetsSettings) -> None:
+        self._faker = faker
+        self._datasets = datasets
+
+    def generate(self, count: int) -> list[dict[str, Any]]:
+        """
+        Generate programmer profile records
+        :param count: number of programmer profiles to generate
+        :return: list of programmer profile records
+        """
+
+        profiles: list[dict[str, Any]] = []
+        for idx in range(1, count + 1):
+            profiles.append(
+                {
+                    "id": idx,
+                    "name": self._faker.name(),
+                    "email": self._faker.email(),
+                    "location": self._faker.city(),
+                    "skills": self._generate_skills(),
+                    "projects": self._generate_project_names(),
+                    "certifications": self._generate_certifications(),
+                }
+            )
+        return profiles
+
+    def _generate_skills(self) -> list[dict[str, str]]:
+        skills = self._datasets.skills
+        chosen = random.sample(skills.catalog, min(skills.count.pick(), len(skills.catalog)))
+
+        result: list[dict[str, str]] = []
+        for name in chosen:
+            proficiency = random.choices(skills.proficiency_levels, weights=skills.proficiency_weights, k=1)[0]
+            result.append({"name": name, "proficiency": proficiency})
+        return result
+
+    def _generate_project_names(self) -> list[str]:
+        policy = self._datasets.programmers
+        return random.sample(policy.project_names, min(policy.project_count.pick(), len(policy.project_names)))
+
+    def _generate_certifications(self) -> list[str]:
+        policy = self._datasets.programmers
+        count = min(policy.certification_count.pick(), len(policy.certifications))
+        return random.sample(policy.certifications, count)
+***** koniec pliku programmers.py *****
+
+***** plik projects.py w lokalizacji generation\projects.py *****
+from __future__ import annotations
+
+import random
+from datetime import date, timedelta
+from typing import Any
+
+from talentmatch.config.config_models import DatasetsSettings
+from faker import Faker
+
+
+class ProjectGenerator:
+    """
+    Generates projects and assigns programmers to them
+    """
+
+    def __init__(self, faker: Faker, datasets: DatasetsSettings) -> None:
+        self._faker = faker
+        self._datasets = datasets
+
+    def generate(self, count: int, programmer_profiles: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """
+        Generate project records and optionally assign programmers
+        :param count: number of projects to generate
+        :param programmer_profiles: list of programmer profiles for assignment
+        :return: list of generated project records
+        """
+
+        projects_policy = self._datasets.projects
+        skill_names = self._collect_skill_names(programmer_profiles)
+
+        projects: list[dict[str, Any]] = []
+        for idx in range(1, count + 1):
+            start = self._date_from_today_offset(projects_policy.start_date_offset_days.pick())
+            duration_months = projects_policy.duration_months.pick()
+            status = random.choices(projects_policy.status.labels, weights=projects_policy.status.weights, k=1)[0]
+            end = self._project_end_date(status, start, duration_months)
+
+            project_type = random.choice(projects_policy.project_types)
+            client = random.choice(projects_policy.clients)
+
+            projects.append(
+                {
+                    "id": f"PRJ-{idx:03d}",
+                    "name": projects_policy.name_template.format(project_type=project_type, client=client),
+                    "client": client,
+                    "description": projects_policy.description_template.format(project_type=project_type,
+                                                                               client=client),
+                    "start_date": start.isoformat(),
+                    "end_date": end.isoformat() if end else None,
+                    "estimated_duration_months": duration_months,
+                    "budget": self._maybe_budget(),
+                    "status": status,
+                    "team_size": projects_policy.team_size.pick(),
+                    "requirements": self._generate_requirements(skill_names),
+                    "assigned_programmers": [],
+                }
+            )
+
+        return self._assign_programmers(projects, programmer_profiles)
+
+    def _maybe_budget(self) -> int | None:
+        policy = self._datasets.projects
+        if random.random() >= float(policy.budget_has_value_probability):
+            return None
+        return policy.budget_amount.pick()
+
+    def _generate_requirements(self, skill_names: list[str]) -> list[dict[str, Any]]:
+        policy = self._datasets.projects
+        skills_policy = self._datasets.skills
+
+        count = min(policy.requirements_count.pick(), len(skill_names))
+        chosen = random.sample(skill_names, count)
+
+        requirements: list[dict[str, Any]] = []
+        for skill_name in chosen:
+            requirements.append(
+                {
+                    "skill_name": skill_name,
+                    "min_proficiency": random.choice(skills_policy.proficiency_levels),
+                    "is_mandatory": random.random() < float(policy.mandatory_probability),
+                }
+            )
+        return requirements
+
+    def _assign_programmers(
+            self, projects: list[dict[str, Any]], programmer_profiles: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
+        assignments_policy = self._datasets.assignments
+        projects_policy = self._datasets.projects
+
+        assignments_by_programmer: dict[int, list[tuple[date, date]]] = {int(p["id"]): [] for p in programmer_profiles}
+
+        assignable = [p for p in projects if p.get("status") in set(projects_policy.assignable_statuses)]
+        for project in assignable:
+            if random.random() > float(assignments_policy.assignment_probability):
+                continue
+
+            eligible = self._eligible_programmers(project, programmer_profiles, assignments_by_programmer)
+            if not eligible:
+                continue
+
+            team_size = int(project.get("team_size", 0))
+            selection = random.sample(eligible, min(team_size, len(eligible)))
+
+            for programmer in selection:
+                start = date.fromisoformat(project["start_date"])
+                end = self._compute_assignment_end(project)
+
+                project["assigned_programmers"].append(
+                    {
+                        "programmer_name": programmer["name"],
+                        "programmer_id": programmer["id"],
+                        "assignment_start_date": start.isoformat(),
+                        "assignment_end_date": end.isoformat(),
+                    }
+                )
+                assignments_by_programmer[int(programmer["id"])].append((start, end))
+
+        return projects
+
+    def _eligible_programmers(
+            self,
+            project: dict[str, Any],
+            programmer_profiles: list[dict[str, Any]],
+            assignments_by_programmer: dict[int, list[tuple[date, date]]],
+    ) -> list[dict[str, Any]]:
+        mandatory = [r for r in project.get("requirements", []) if r.get("is_mandatory")]
+        project_start = date.fromisoformat(project["start_date"])
+        project_end = self._project_effective_end(project)
+
+        eligible: list[dict[str, Any]] = []
+        for programmer in programmer_profiles:
+            programmer_id = int(programmer["id"])
+            if not self._meets_mandatory_requirements(programmer, mandatory):
+                continue
+            if self._has_overlap(assignments_by_programmer[programmer_id], project_start, project_end):
+                continue
+            eligible.append(programmer)
+
+        return eligible
+
+    def _meets_mandatory_requirements(self, programmer: dict[str, Any], mandatory: list[dict[str, Any]]) -> bool:
+        if not mandatory:
+            return True
+
+        levels = self._datasets.skills.proficiency_levels
+        prof_rank = {name: i for i, name in enumerate(levels, start=1)}
+        programmer_skills = {s.get("name"): s.get("proficiency") for s in programmer.get("skills", [])}
+
+        for req in mandatory:
+            skill = req.get("skill_name")
+            min_prof = req.get("min_proficiency")
+            actual = programmer_skills.get(skill)
+            if actual is None:
+                return False
+            if prof_rank.get(str(actual), 0) < prof_rank.get(str(min_prof), 0):
+                return False
+
+        return True
+
+    def _compute_assignment_end(self, project: dict[str, Any]) -> date:
+        policy = self._datasets.assignments
+        start = date.fromisoformat(project["start_date"])
+        end = self._project_effective_end(project)
+
+        buffer_days = policy.assignment_end_days_before.pick()
+        adjusted = end - timedelta(days=int(buffer_days))
+        if adjusted <= start:
+            return start + timedelta(days=1)
+        return adjusted
+
+    @staticmethod
+    def _project_effective_end(project: dict[str, Any]) -> date:
+        end_raw = project.get("end_date")
+        if isinstance(end_raw, str) and end_raw:
+            return date.fromisoformat(end_raw)
+
+        start = date.fromisoformat(project["start_date"])
+        duration_months = int(project.get("estimated_duration_months", 1))
+        return start + timedelta(days=max(duration_months, 1) * 30)
+
+    @staticmethod
+    def _has_overlap(intervals: list[tuple[date, date]], start: date, end: date) -> bool:
+        for a_start, a_end in intervals:
+            if max(a_start, start) <= min(a_end, end):
+                return True
+        return False
+
+    def _project_end_date(self, status: str, start: date, duration_months: int) -> date | None:
+        policy = self._datasets.projects
+        if status == policy.completed_status:
+            return start + timedelta(days=int(duration_months) * 30)
+        return None
+
+    def _collect_skill_names(self, programmer_profiles: list[dict[str, Any]]) -> list[str]:
+        names: set[str] = set()
+        for profile in programmer_profiles:
+            for skill in profile.get("skills", []):
+                skill_name = skill.get("name")
+                if isinstance(skill_name, str) and skill_name:
+                    names.add(skill_name)
+
+        return sorted(names) if names else list(self._datasets.skills.catalog)
+
+    @staticmethod
+    def _date_from_today_offset(offset_days: int) -> date:
+        return date.today() + timedelta(days=int(offset_days))
+***** koniec pliku projects.py *****
+
+***** plik rfps.py w lokalizacji generation\rfps.py *****
+from __future__ import annotations
+
+import random
+from datetime import date, timedelta
+from typing import Any
+
+from faker import Faker
+
+from talentmatch.config.config_models import DatasetsSettings
+
+
+class RfpGenerator:
+    """
+    Generates RFP records
+    """
+
+    def __init__(self, faker: Faker, datasets: DatasetsSettings) -> None:
+        self._faker = faker
+        self._datasets = datasets
+
+    def generate(self, count: int) -> list[dict[str, Any]]:
+        """
+        Generate RFP record
+        :param count: number of RFPs to generate
+        :return: list of generated RFP records
+        """
+
+        policy = self._datasets.rfps
+
+        rfps: list[dict[str, Any]] = []
+        for idx in range(1, count + 1):
+            start = self._date_from_today_offset(policy.start_date_offset_days.pick())
+            project_type = random.choice(policy.rfp_types)
+
+            rfps.append(
+                {
+                    "id": f"RFP-{idx:03d}",
+                    "title": policy.title_template.format(project_type=project_type),
+                    "client": random.choice(policy.clients),
+                    "description": policy.description_template.format(project_type=project_type),
+                    "project_type": project_type,
+                    "duration_months": policy.duration_months.pick(),
+                    "team_size": policy.team_size.pick(),
+                    "budget_range": random.choice(policy.budget_ranges),
+                    "start_date": start.isoformat(),
+                    "requirements": self._generate_requirements(),
+                    "location": self._faker.city(),
+                    "remote_allowed": random.random() < float(policy.remote_allowed_probability),
+                }
+            )
+
+        return rfps
+
+    def _generate_requirements(self) -> list[dict[str, Any]]:
+        policy = self._datasets.rfps.requirements
+        count = min(policy.requirement_count.pick(), len(policy.skills))
+        chosen = random.sample(policy.skills, count)
+
+        requirements: list[dict[str, Any]] = []
+        for skill_name in chosen:
+            preferred_count = min(int(policy.preferred_certifications_max_count), len(policy.preferred_certifications))
+            preferred = random.sample(policy.preferred_certifications, random.randint(0, preferred_count))
+
+            requirements.append(
+                {
+                    "skill_name": skill_name,
+                    "min_proficiency": random.choice(policy.min_proficiency_levels),
+                    "is_mandatory": random.random() < float(policy.mandatory_probability),
+                    "preferred_certifications": preferred,
+                }
+            )
+
+        return requirements
+
+    @staticmethod
+    def _date_from_today_offset(offset_days: int) -> date:
+        return date.today() + timedelta(days=int(offset_days))
+***** koniec pliku rfps.py *****
+
+***** plik __init__.py w lokalizacji infra\__init__.py *****
+***** koniec pliku __init__.py *****
+
+***** plik __init__.py w lokalizacji infra\llm\__init__.py *****
+from .azure_openai import AzureLlmProvider
+
+__all__ = [
+    "AzureLlmProvider"
+]
+***** koniec pliku __init__.py *****
+
+***** plik azure_openai.py w lokalizacji infra\llm\azure_openai.py *****
+from __future__ import annotations
+
+from typing import Any
+
+from langchain_openai import AzureChatOpenAI
+
+from talentmatch.config.config_models import Settings
+
+
+class AzureLlmProvider:
+    """
+    Creates and caches AzureChatOpenAI clients configured by runtime settings
+    """
+
+    def __init__(self, settings: Settings) -> None:
+        self._settings = settings
+        self._cache: dict[str, AzureChatOpenAI] = {}
+
+    def chat(self, use_case: str) -> AzureChatOpenAI:
+        """
+        Create or retrieve a cached AzureChatOpenAI client for the specified use-case
+        :param use_case: the use-case name as defined in settings.llm.use_cases
+        :return: AzureChatOpenAI client
+        """
+
+        cached = self._cache.get(use_case)
+        if cached is not None:
+            return cached
+
+        use_case_cfg = self._settings.llm.use_cases[use_case]
+        azure = self._settings.azure_openai
+
+        deployment = azure.chat_deployment if use_case_cfg.deployment == "default" else use_case_cfg.deployment
+
+        client = AzureChatOpenAI(
+            azure_endpoint=azure.endpoint,
+            api_key=azure.api_key.get_secret_value(),
+            api_version=azure.api_version,
+            azure_deployment=deployment,
+            temperature=use_case_cfg.temperature,
+            max_tokens=use_case_cfg.max_tokens,
+            top_p=use_case_cfg.top_p,
+            timeout=float(use_case_cfg.request_timeout_s),
+        )
+
+        self._cache[use_case] = client
+        return client
+***** koniec pliku azure_openai.py *****
+

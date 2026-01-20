@@ -18,9 +18,10 @@ class EnvironmentSettings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    OPENAI_API_KEY: SecretStr
-    OPENAI_BASE_URL: str | None = None
-    OPENAI_ORGANIZATION: str | None = None
+    AZURE_OPENAI_ENDPOINT: str
+    AZURE_OPENAI_API_KEY: SecretStr
+    AZURE_OPENAI_API_VERSION: str
+    AZURE_OPENAI_CHAT_DEPLOYMENT: str
 
 
 def resolve_repo_root() -> Path:
@@ -46,11 +47,12 @@ def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) 
 
     payload = dict(toml_data)
 
-    payload["openai"] = {
-        **payload.get("openai", {}),
-        "api_key": env.OPENAI_API_KEY,
-        "base_url": env.OPENAI_BASE_URL,
-        "organization": env.OPENAI_ORGANIZATION,
+    payload["azure_openai"] = {
+        **payload.get("azure_openai", {}),
+        "endpoint": env.AZURE_OPENAI_ENDPOINT,
+        "api_key": env.AZURE_OPENAI_API_KEY,
+        "api_version": env.AZURE_OPENAI_API_VERSION,
+        "chat_deployment": env.AZURE_OPENAI_CHAT_DEPLOYMENT,
     }
 
     return payload
