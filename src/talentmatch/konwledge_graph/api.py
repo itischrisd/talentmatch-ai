@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 async def ingest_programmer_cvs_async(
         *,
         cv_directory: str | Path | None = None,
-        llm_use_case: str,
-        reset_neo4j_on_start: bool,
-        concurrency: int,
+        llm_use_case: str = "graph_transformer",
+        reset_neo4j_on_start: bool = False,
+        concurrency: int = 2,
         settings_toml_path: str | None = None,
 ) -> IngestionSummary:
     """
@@ -31,11 +31,10 @@ async def ingest_programmer_cvs_async(
     :param reset_neo4j_on_start: Whether to clear Neo4j before ingestion
     :param concurrency: Maximum number of concurrent LLM conversions
     :param settings_toml_path: Optional path to settings TOML file
-    :return: Ingestion summary.
+    :return: Ingestion summary
     """
 
     settings = load_settings(settings_toml_path)
-
     directory = Path(cv_directory) if cv_directory is not None else Path(settings.paths.programmers_dir)
 
     llm_provider = AzureLlmProvider(settings)
@@ -72,8 +71,8 @@ async def ingest_programmer_cvs_async(
 def ingest_programmer_cvs(
         *,
         cv_directory: str | Path | None = None,
-        llm_use_case: str = "cv_markdown",
-        reset_neo4j_on_start: bool = True,
+        llm_use_case: str = "graph_transformer",
+        reset_neo4j_on_start: bool = False,
         concurrency: int = 2,
         settings_toml_path: str | None = None,
 ) -> dict[str, Any]:
