@@ -82,7 +82,6 @@ class LlmSettings(BaseModel):
     use_cases: dict[str, LlmUseCaseSettings]
 
 
-
 class SkillsDataset(BaseModel):
     """
     Skill catalog and proficiency policy

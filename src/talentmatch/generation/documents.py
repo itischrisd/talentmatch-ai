@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import Any, Protocol
 
 import markdown
-from langchain_openai import AzureChatOpenAI
 from weasyprint import CSS, HTML
 
 from talentmatch.config.prompts_models import Prompts
+
+
+class _Invokable(Protocol):
+    def invoke(self, prompt: str) -> Any: ...
 
 
 class DocumentService:
@@ -21,8 +25,8 @@ class DocumentService:
             prompts: Prompts,
             proficiency_levels: list[str],
             pdf_css: str,
-            cv_llm: AzureChatOpenAI,
-            rfp_llm: AzureChatOpenAI,
+            cv_llm: _Invokable,
+            rfp_llm: _Invokable
     ) -> None:
         self._prompts = prompts
         self._proficiency_levels = proficiency_levels
@@ -107,7 +111,7 @@ class DocumentService:
         HTML(string=html_content).write_pdf(str(pdf_path), stylesheets=[CSS(string=self._pdf_css)])
         return pdf_path
 
-    def _invoke_llm_markdown(self, llm: AzureChatOpenAI, prompt: str, *, empty_error: str) -> str:
+    def _invoke_llm_markdown(self, llm: _Invokable, prompt: str, *, empty_error: str) -> str:
         response = llm.invoke(prompt)
         content = str(getattr(response, "content", ""))
         cleaned = self._strip_fenced_code_blocks(content).strip()
