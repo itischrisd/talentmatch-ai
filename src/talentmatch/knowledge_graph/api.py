@@ -16,32 +16,16 @@ from .ontology import ALLOWED_NODES, ALLOWED_RELATIONSHIPS, NODE_PROPERTIES
 logger = logging.getLogger(__name__)
 
 
-async def ingest_programmer_cvs_async(
-    *,
-    cv_directory: str | Path | None = None,
-    llm_use_case: str = "graph_transformer",
-    reset_neo4j_on_start: bool = False,
-    concurrency: int = 2,
-    settings_toml_path: str | None = None,
-) -> IngestionSummary:
+async def ingest_programmer_cvs_async() -> IngestionSummary:
     """
-    Ingest generated CV PDFs into Neo4j
-    :param cv_directory: Directory containing PDF CV files. Defaults to settings.paths.programmers_dir
-    :param llm_use_case: LLM use-case name from settings.llm.use_cases
-    :param reset_neo4j_on_start: Whether to clear Neo4j before ingestion
-    :param concurrency: Maximum number of concurrent LLM conversions
-    :param settings_toml_path: Optional path to settings TOML file
-    :return: Ingestion summary
+    Ingest generated CV PDFs into Neo4j using the configured transformer and connection settings
+    :return: ingestion summary
     """
 
-    settings = load_settings(settings_toml_path)
-    directory = Path(cv_directory) if cv_directory is not None else Path(settings.paths.programmers_dir)
-
+    settings = load_settings()
+    directory = Path(settings.paths.programmers_dir)
     llm_provider = AzureLlmProvider(settings)
-    try:
-        llm = llm_provider.chat(llm_use_case)
-    except KeyError as exc:
-        raise ValueError(f"Unknown llm_use_case: {llm_use_case}") from exc
+    llm = llm_provider.chat(settings.knowledge_graph.llm_use_case)
 
     transformer = LLMGraphTransformer(
         llm=llm,
@@ -51,50 +35,22 @@ async def ingest_programmer_cvs_async(
         strict_mode=True,
     )
 
-    graph_service = Neo4jGraphService(settings=settings, reset_on_start=reset_neo4j_on_start)
-    ingestor = CvPdfIngestor(graph_service=graph_service, transformer=transformer, concurrency=concurrency)
-    summary = await ingestor.ingest_directory(directory)
-
-    logger.info(
-        "Ingestion summary: discovered=%d processed=%d failed=%d stored_docs=%d nodes=%d relationships=%d",
-        summary.discovered_pdfs,
-        summary.processed_pdfs,
-        summary.failed_pdfs,
-        summary.stored_graph_documents,
-        summary.stored_nodes,
-        summary.stored_relationships,
+    graph_service = Neo4jGraphService(neo4j=settings.neo4j)
+    ingestor = CvPdfIngestor(
+        graph_service=graph_service,
+        transformer=transformer,
+        concurrency=settings.knowledge_graph.concurrency,
     )
+    return await ingestor.ingest_directory(directory)
 
-    return summary
 
-
-def ingest_programmer_cvs(
-    *,
-    cv_directory: str | Path | None = None,
-    llm_use_case: str = "graph_transformer",
-    reset_neo4j_on_start: bool = False,
-    concurrency: int = 2,
-    settings_toml_path: str | None = None,
-) -> dict[str, Any]:
+def ingest_programmer_cvs() -> dict[str, Any]:
     """
-    Ingest generated CV PDFs into Neo4j
-    :param cv_directory: Directory containing PDF CV files. Defaults to settings.paths.programmers_dir
-    :param llm_use_case: LLM use-case name from settings.llm.use_cases
-    :param reset_neo4j_on_start: Whether to clear Neo4j before ingestion
-    :param concurrency: Maximum number of concurrent LLM conversions
-    :param settings_toml_path: Optional path to settings TOML file
-    :return: Dictionary with ingestion summary
+    Synchronous wrapper for ingest_programmer_cvs_async
+    :return: ingestion summary as a plain dict
     """
 
-    summary = asyncio.run(
-        ingest_programmer_cvs_async(
-            cv_directory=cv_directory,
-            llm_use_case=llm_use_case,
-            reset_neo4j_on_start=reset_neo4j_on_start,
-            concurrency=concurrency,
-            settings_toml_path=settings_toml_path,
-        )
-    )
+    summary = asyncio.run(ingest_programmer_cvs_async())
 
     return {
         "discovered_pdfs": summary.discovered_pdfs,

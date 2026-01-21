@@ -17,15 +17,13 @@ from talentmatch.infra.llm import AzureLlmProvider
 logger = logging.getLogger(__name__)
 
 
-def generate_dataset(*, settings_toml_path: str | None = None, prompts_toml_path: str | None = None) -> dict[str, Any]:
+def generate_dataset() -> dict[str, Any]:
     """
     Generate the complete dataset using counts and policies from TOML
-    :param settings_toml_path: path to settings TOML file
-    :param prompts_toml_path: path to prompts TOML file
     :return: dictionary with generated dataset details
     """
 
-    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms(prompts_toml_path, settings_toml_path)
+    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms()
 
     programmers_dir = Path(settings.paths.programmers_dir)
     projects_dir = Path(settings.paths.projects_dir)
@@ -90,17 +88,13 @@ def generate_dataset(*, settings_toml_path: str | None = None, prompts_toml_path
     }
 
 
-def generate_single_rfp(
-        *, settings_toml_path: str | None = None, prompts_toml_path: str | None = None
-) -> dict[str, Any]:
+def generate_single_rfp() -> dict[str, Any]:
     """
     Generate a single RFP record along with Markdown and PDF output
-    :param settings_toml_path: path to settings TOML file
-    :param prompts_toml_path: path to prompts TOML file
     :return: dictionary with generated RFP details
     """
 
-    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms(prompts_toml_path, settings_toml_path)
+    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms()
 
     rfps_dir = Path(settings.paths.rfps_dir)
     ensure_dirs(rfps_dir)
@@ -122,11 +116,9 @@ def generate_single_rfp(
     return {"rfp": rfp, "markdown": markdown_content, "pdf_file": str(pdf_path)}
 
 
-def _prepare_settings_and_llms(prompts_toml_path: str | None, settings_toml_path: str | None) -> tuple[
-    Settings, Prompts, Faker, Any, Any]:
-
-    settings = load_settings(settings_toml_path)
-    prompts = load_prompts(prompts_toml_path)
+def _prepare_settings_and_llms() -> tuple[Settings, Prompts, Faker, Any, Any]:
+    settings = load_settings()
+    prompts = load_prompts()
 
     faker = Faker()
     llm_provider = AzureLlmProvider(settings)

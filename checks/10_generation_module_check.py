@@ -70,10 +70,7 @@ def run() -> int:
         return 1
 
     try:
-        single = generate_single_rfp(
-            settings_toml_path=str(settings_path),
-            prompts_toml_path=str(context.prompts_path),
-        )
+        single = generate_single_rfp()
         print_ok("generate_single_rfp() succeeded")
         print("Located single RFP PDF at:", single.get("pdf_file", ""))
     except Exception as exc:
@@ -95,10 +92,7 @@ def run() -> int:
                                      fail="single_rfp pdf empty") else 1
 
     try:
-        dataset = generate_dataset(
-            settings_toml_path=str(settings_path),
-            prompts_toml_path=str(context.prompts_path),
-        )
+        dataset = generate_dataset()
         print_ok("generate_dataset() succeeded")
     except Exception as exc:
         print_fail(f"generate_dataset() failed: {exc}")

@@ -1,116 +1,108 @@
 [
   {
     "id": 1,
-    "name": "Kevin Wood",
-    "email": "hquinn@example.net",
-    "location": "Trevorville",
+    "name": "Mr. Randy Castaneda",
+    "email": "gamblejacob@example.com",
+    "location": "Walterstown",
     "skills": [
+      {
+        "name": "Docker",
+        "proficiency": "Expert"
+      },
       {
         "name": "Data Science",
         "proficiency": "Advanced"
       },
       {
-        "name": "C++",
-        "proficiency": "Expert"
+        "name": "Microservices",
+        "proficiency": "Beginner"
       },
       {
-        "name": "PostgreSQL",
+        "name": "AWS",
         "proficiency": "Intermediate"
       },
       {
-        "name": "JavaScript",
-        "proficiency": "Advanced"
+        "name": "Machine Learning",
+        "proficiency": "Expert"
       },
       {
-        "name": "Jenkins",
-        "proficiency": "Advanced"
-      },
-      {
-        "name": "Kubernetes",
-        "proficiency": "Beginner"
+        "name": "Django",
+        "proficiency": "Expert"
       },
       {
         "name": "Python",
         "proficiency": "Advanced"
-      },
-      {
-        "name": "Machine Learning",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "Rust",
-        "proficiency": "Advanced"
-      },
-      {
-        "name": "DevOps",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "Docker",
-        "proficiency": "Expert"
-      },
-      {
-        "name": "Flask",
-        "proficiency": "Advanced"
       }
     ],
     "projects": [
-      "Web Application",
+      "Content Management System",
       "Data Analytics Dashboard",
-      "Real-time Chat System"
+      "Payment Processing System"
     ],
     "certifications": [
-      "Scrum Master Certification",
-      "Docker Certified Associate",
+      "Certified Kubernetes Administrator",
       "Google Cloud Professional"
     ]
   },
   {
     "id": 2,
-    "name": "Scott Turner",
-    "email": "cherylmathis@example.org",
-    "location": "South Kenneth",
+    "name": "Ronald Barrett",
+    "email": "shermanjohn@example.org",
+    "location": "Myersport",
     "skills": [
       {
         "name": "Redis",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "Kubernetes",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "Angular",
-        "proficiency": "Beginner"
-      },
-      {
-        "name": "MySQL",
-        "proficiency": "Beginner"
-      },
-      {
-        "name": "Rust",
         "proficiency": "Advanced"
       },
       {
-        "name": "React",
-        "proficiency": "Expert"
+        "name": "Microservices",
+        "proficiency": "Intermediate"
       },
       {
-        "name": "JavaScript",
+        "name": "Git",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
         "proficiency": "Intermediate"
       },
       {
         "name": "Docker",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "C++",
         "proficiency": "Advanced"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
       }
     ],
     "projects": [
+      "Data Analytics Dashboard",
+      "Web Application",
       "Payment Processing System",
-      "E-commerce Platform",
       "Content Management System"
     ],
     "certifications": [
-      "Google Cloud Professional"
+      "AWS Certified Solutions Architect"
     ]
   }
 ]

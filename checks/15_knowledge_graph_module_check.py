@@ -101,10 +101,7 @@ def run() -> int:
 
     if not pdfs:
         try:
-            payload = generate_dataset(
-                settings_toml_path=str(context.settings_path),
-                prompts_toml_path=str(context.prompts_path),
-            )
+            payload = generate_dataset()
             print_ok("generate_dataset() succeeded")
             assert_json_serializable(payload, label="generate_dataset payload")
         except Exception as exc:
@@ -130,13 +127,7 @@ def run() -> int:
     try:
         from talentmatch.knowledge_graph import ingest_programmer_cvs
 
-        result = ingest_programmer_cvs(
-            cv_directory=cv_dir,
-            llm_use_case="graph_transformer",
-            reset_neo4j_on_start=False,
-            concurrency=1,
-            settings_toml_path=str(context.settings_path),
-        )
+        result = ingest_programmer_cvs()
         print_ok("ingest_programmer_cvs() succeeded")
     except Exception as exc:
         print_fail(f"ingest_programmer_cvs() failed: {exc}")

@@ -4,8 +4,9 @@ import random
 from datetime import date, timedelta
 from typing import Any
 
-from talentmatch.config.config_models import DatasetsSettings
 from faker import Faker
+
+from talentmatch.config.config_models import DatasetsSettings
 
 
 class ProjectGenerator:

@@ -67,10 +67,19 @@ class Neo4jSettings(BaseModel):
     Neo4j connection settings (secrets provided via environment)
     """
 
-    uri: str = "bolt://localhost:7687"
-    username: str = "neo4j"
-    password: SecretStr | None = None
-    database: str = "neo4j"
+    uri: str
+    username: str
+    password: SecretStr
+    database: str
+
+
+class KnowledgeGraphSettings(BaseModel):
+    """
+    Knowledge graph module settings
+    """
+
+    llm_use_case: str
+    concurrency: int = Field(..., gt=0)
 
 
 class LlmUseCaseSettings(BaseModel):
@@ -297,7 +306,8 @@ class Settings(BaseModel):
     llm: LlmSettings
     datasets: DatasetsSettings
     azure_openai: AzureOpenAiSettings
-    neo4j: Neo4jSettings | None = None
+    neo4j: Neo4jSettings
+    knowledge_graph: KnowledgeGraphSettings
 
     @classmethod
     def from_payload(cls, payload: dict[str, Any]) -> Settings:

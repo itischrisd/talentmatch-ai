@@ -124,7 +124,7 @@ def load_settings_from_context(context: CheckContext) -> Any | None:
     try:
         from talentmatch.config import load_settings
 
-        settings = load_settings(str(context.settings_path))
+        settings = load_settings()
         print_ok("config.load_settings() succeeded")
         return settings
     except Exception as exc:
@@ -146,7 +146,7 @@ def load_prompts_from_context(context: CheckContext) -> Any | None:
     try:
         from talentmatch.config import load_prompts
 
-        prompts = load_prompts(str(context.prompts_path))
+        prompts = load_prompts()
         print_ok("config.load_prompts() succeeded")
         return prompts
     except Exception as exc:

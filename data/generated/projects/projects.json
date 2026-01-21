@@ -1,39 +1,34 @@
 [
   {
     "id": "PRJ-001",
-    "name": "FinTech Innovations \u2014 Payment Processing System",
-    "client": "FinTech Innovations",
-    "description": "Delivery of Payment Processing System for FinTech Innovations.",
-    "start_date": "2026-02-10",
-    "end_date": "2026-10-08",
-    "estimated_duration_months": 8,
-    "budget": 240097,
+    "name": "RetailMax \u2014 Content Management System",
+    "client": "RetailMax",
+    "description": "Delivery of Content Management System for RetailMax.",
+    "start_date": "2026-02-20",
+    "end_date": "2026-09-18",
+    "estimated_duration_months": 7,
+    "budget": null,
     "status": "completed",
     "team_size": 5,
     "requirements": [
       {
-        "skill_name": "Rust",
-        "min_proficiency": "Intermediate",
-        "is_mandatory": true
-      },
-      {
-        "skill_name": "Machine Learning",
-        "min_proficiency": "Advanced",
-        "is_mandatory": true
-      },
-      {
-        "skill_name": "Redis",
-        "min_proficiency": "Advanced",
-        "is_mandatory": true
-      },
-      {
-        "skill_name": "JavaScript",
-        "min_proficiency": "Intermediate",
+        "skill_name": "AWS",
+        "min_proficiency": "Beginner",
         "is_mandatory": false
       },
       {
-        "skill_name": "DevOps",
-        "min_proficiency": "Advanced",
+        "skill_name": "Redis",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Data Science",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "C++",
+        "min_proficiency": "Beginner",
         "is_mandatory": true
       }
     ],
@@ -41,39 +36,24 @@
   },
   {
     "id": "PRJ-002",
-    "name": "MediaStream \u2014 E-commerce Platform",
-    "client": "MediaStream",
-    "description": "Delivery of E-commerce Platform for MediaStream.",
-    "start_date": "2026-04-20",
-    "end_date": "2027-04-15",
+    "name": "HealthTech Partners \u2014 Real-time Chat System",
+    "client": "HealthTech Partners",
+    "description": "Delivery of Real-time Chat System for HealthTech Partners.",
+    "start_date": "2026-03-31",
+    "end_date": "2027-03-26",
     "estimated_duration_months": 12,
-    "budget": null,
+    "budget": 88657,
     "status": "completed",
-    "team_size": 4,
+    "team_size": 3,
     "requirements": [
       {
-        "skill_name": "Angular",
-        "min_proficiency": "Advanced",
-        "is_mandatory": true
-      },
-      {
-        "skill_name": "Redis",
+        "skill_name": "Python",
         "min_proficiency": "Intermediate",
-        "is_mandatory": true
-      },
-      {
-        "skill_name": "Jenkins",
-        "min_proficiency": "Expert",
         "is_mandatory": false
       },
       {
-        "skill_name": "Machine Learning",
-        "min_proficiency": "Expert",
-        "is_mandatory": false
-      },
-      {
-        "skill_name": "Data Science",
-        "min_proficiency": "Intermediate",
+        "skill_name": "C++",
+        "min_proficiency": "Beginner",
         "is_mandatory": true
       }
     ],

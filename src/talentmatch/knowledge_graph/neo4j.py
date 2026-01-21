@@ -6,7 +6,7 @@ from typing import Any
 
 from langchain_neo4j import Neo4jGraph
 
-from talentmatch.config import Settings
+from talentmatch.config.config_models import Neo4jSettings
 
 logger = logging.getLogger(__name__)
 
@@ -26,32 +26,19 @@ class Neo4jGraphService:
     Provides Neo4j connection, schema setup, and basic maintenance operations
     """
 
-    def __init__(self, *, settings: Settings, reset_on_start: bool) -> None:
+    def __init__(self, *, neo4j: Neo4jSettings) -> None:
         """
         Create a Neo4j service
-        :param settings: application settings holding Neo4j connection config
-        :param reset_on_start: Whether to remove all data and custom schema before ingestion
-        :raises RuntimeError: If Neo4j settings are missing or incomplete
+        :param neo4j: Neo4j connection settings
         """
 
-        cfg = settings.neo4j
-        if cfg is None:
-            raise RuntimeError("Neo4j settings are missing (settings.neo4j is None)")
-
-        if cfg.password is None:
-            raise RuntimeError("NEO4J_PASSWORD is missing in .env")
-
         self._graph = Neo4jGraph(
-            url=str(cfg.uri),
-            username=str(cfg.username),
-            password=cfg.password.get_secret_value(),
-            database=str(cfg.database),
+            url=str(neo4j.uri),
+            username=str(neo4j.username),
+            password=neo4j.password.get_secret_value(),
+            database=str(neo4j.database),
         )
         logger.info("Connected to Neo4j")
-
-        if reset_on_start:
-            self._reset_database()
-
         self._ensure_indexes()
 
     def _safe_query(self, cypher: str) -> list[dict[str, Any]]:
