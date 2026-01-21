@@ -30,7 +30,12 @@ class Neo4jGraphService:
         :param reset_on_start: Whether to remove all data and custom schema before ingestion
         """
 
-        self._graph = Neo4jGraph()
+        self._graph = Neo4jGraph(
+            url="bolt://localhost:7687",
+            username="neo4j",
+            password="Password123!",
+            database="neo4j"
+        )
         logger.info("Connected to Neo4j")
 
         if reset_on_start:
@@ -86,8 +91,7 @@ class Neo4jGraphService:
         statements = (
             "CREATE INDEX person_id IF NOT EXISTS FOR (p:Person) ON (p.id)",
             "CREATE INDEX company_id IF NOT EXISTS FOR (c:Company) ON (c.id)",
-            "CREATE INDEX skill_id IF NOT EXISTS FOR (s:Skill) ON (s.id)",
-            "CREATE INDEX base_entity_id IF NOT EXISTS FOR (e:__Entity__) ON (e.id)",
+            "CREATE INDEX skill_id IF NOT EXISTS FOR (s:Skill) ON (s.id)"
         )
         for statement in statements:
             self.safe_query(statement)

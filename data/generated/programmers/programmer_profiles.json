@@ -1,0 +1,100 @@
+[
+  {
+    "id": 1,
+    "name": "Deborah Brown",
+    "email": "hutchinsonjuan@example.com",
+    "location": "Susanborough",
+    "skills": [
+      {
+        "name": "Flask",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Content Management System"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Christina Holt",
+    "email": "kmercado@example.net",
+    "location": "Clarkhaven",
+    "skills": [
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "API Gateway",
+      "Data Analytics Dashboard",
+      "Real-time Chat System"
+    ],
+    "certifications": []
+  }
+]

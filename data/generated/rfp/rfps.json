@@ -1,0 +1,109 @@
+[
+  {
+    "id": "RFP-001",
+    "title": "RFP: Machine Learning Implementation",
+    "client": "Energy Systems Co",
+    "description": "Request for proposal for Machine Learning Implementation.",
+    "project_type": "Machine Learning Implementation",
+    "duration_months": 10,
+    "team_size": 4,
+    "budget_range": "$250K - $500K",
+    "start_date": "2026-07-13",
+    "requirements": [
+      {
+        "skill_name": "Docker",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "React",
+        "min_proficiency": "Expert",
+        "is_mandatory": false,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "PostgreSQL",
+        "min_proficiency": "Expert",
+        "is_mandatory": false,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "Kubernetes",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true,
+        "preferred_certifications": [
+          "Certified Kubernetes Administrator",
+          "AWS Certified Solutions Architect"
+        ]
+      }
+    ],
+    "location": "South Alexa",
+    "remote_allowed": false
+  },
+  {
+    "id": "RFP-002",
+    "title": "RFP: DevOps Automation",
+    "client": "Global Finance Corp",
+    "description": "Request for proposal for DevOps Automation.",
+    "project_type": "DevOps Automation",
+    "duration_months": 19,
+    "team_size": 8,
+    "budget_range": "$100K - $250K",
+    "start_date": "2026-02-24",
+    "requirements": [
+      {
+        "skill_name": "JavaScript",
+        "min_proficiency": "Expert",
+        "is_mandatory": true,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "Machine Learning",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true,
+        "preferred_certifications": [
+          "AWS Certified Solutions Architect",
+          "Google Cloud Professional"
+        ]
+      },
+      {
+        "skill_name": "React",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true,
+        "preferred_certifications": [
+          "Google Cloud Professional",
+          "Certified Kubernetes Administrator"
+        ]
+      },
+      {
+        "skill_name": "Angular",
+        "min_proficiency": "Expert",
+        "is_mandatory": false,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "Kubernetes",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "PostgreSQL",
+        "min_proficiency": "Expert",
+        "is_mandatory": true,
+        "preferred_certifications": []
+      },
+      {
+        "skill_name": "Docker",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false,
+        "preferred_certifications": [
+          "Certified Kubernetes Administrator"
+        ]
+      }
+    ],
+    "location": "North Brittanyland",
+    "remote_allowed": true
+  }
+]
