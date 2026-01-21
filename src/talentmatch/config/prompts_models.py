@@ -34,13 +34,17 @@ class DatasetPrompts(BaseModel):
 
 class AgentsPrompts(BaseModel):
     """
-    Prompt templates for LangChain agents.
-    These must be valid ReAct prompts for create_react_agent and include:
-    {tools}, {tool_names}, {input}, {agent_scratchpad}
+    Prompt templates for the supervisor system and its worker agents.
+
+    Notes:
+    - For langgraph.prebuilt.create_react_agent these are treated as system prompts.
+    - Keep them short, role-specific, and tool-usage oriented.
     """
 
     generation_react: str
     kg_react: str
+    supervisor: str
+
 
 
 class Prompts(BaseModel):
