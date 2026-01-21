@@ -4,6 +4,7 @@ import tomllib
 from pathlib import Path
 from typing import Any
 
+import talentmatch.config
 from talentmatch.generation import generate_dataset, generate_single_rfp
 from util.common import assert_true, build_check_context, print_fail, print_ok
 
@@ -54,7 +55,7 @@ def run() -> int:
         print_fail(f'Settings TOML not found: "{context.settings_path}"')
         return 1
 
-    settings_path = context.repo_root / "configs" / "settings.toml"
+    context.repo_root / "configs" / "settings.toml"
 
     try:
         import talentmatch.generation as generation_module
@@ -107,16 +108,21 @@ def run() -> int:
     cv_files = dataset.get("cv_files", [])
     rfp_files = dataset.get("rfp_files", [])
 
-    failures += 0 if assert_true(len(profiles) == 2, ok="dataset generated 2 profile",
-                                 fail=f"expected 2 profile, got {len(profiles)}") else 1
-    failures += 0 if assert_true(len(projects) == 2, ok="dataset generated 2 project",
-                                 fail=f"expected 2 project, got {len(projects)}") else 1
-    failures += 0 if assert_true(len(rfps) == 2, ok="dataset generated 2 rfp",
-                                 fail=f"expected 2 rfp, got {len(rfps)}") else 1
-    failures += 0 if assert_true(len(cv_files) == 2, ok="dataset produced 2 cv pdf path",
-                                 fail=f"expected 2 cv pdf path, got {len(cv_files)}") else 1
-    failures += 0 if assert_true(len(rfp_files) == 2, ok="dataset produced 2 rfp pdf path",
-                                 fail=f"expected 2 rfp pdf path, got {len(rfp_files)}") else 1
+    settings = talentmatch.config.load_settings()
+    num_rfps = settings.generation.num_rfps
+    num_profiles = settings.generation.num_programmers
+    num_projects = settings.generation.num_projects
+
+    failures += 0 if assert_true(len(profiles) == num_profiles, ok=f"dataset generated {num_profiles} profile",
+                                 fail=f"expected {num_profiles} profile, got {len(profiles)}") else 1
+    failures += 0 if assert_true(len(projects) == num_projects, ok=f"dataset generated {num_projects} project",
+                                 fail=f"expected {num_projects} project, got {len(projects)}") else 1
+    failures += 0 if assert_true(len(rfps) == num_rfps, ok=f"dataset generated {num_rfps} rfp",
+                                 fail=f"expected {num_rfps} rfp, got {len(rfps)}") else 1
+    failures += 0 if assert_true(len(cv_files) == num_profiles, ok=f"dataset produced {num_profiles} cv pdf path",
+                                 fail=f"expected {num_profiles} cv pdf path, got {len(cv_files)}") else 1
+    failures += 0 if assert_true(len(rfp_files) == num_rfps, ok=f"dataset produced {num_rfps} rfp pdf path",
+                                 fail=f"expected {num_rfps} rfp pdf path, got {len(rfp_files)}") else 1
 
     for label, path_str in [("profiles_file", dataset.get("profiles_file")),
                             ("projects_file", dataset.get("projects_file")),

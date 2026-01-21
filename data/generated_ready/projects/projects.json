@@ -1,0 +1,851 @@
+[
+  {
+    "id": "PRJ-001",
+    "name": "FinTech Innovations \u2014 Real-time Chat System",
+    "client": "FinTech Innovations",
+    "description": "Delivery of Real-time Chat System for FinTech Innovations.",
+    "start_date": "2025-05-11",
+    "end_date": null,
+    "estimated_duration_months": 7,
+    "budget": null,
+    "status": "active",
+    "team_size": 2,
+    "requirements": [
+      {
+        "skill_name": "Redis",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Java",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "Anthony Johnson",
+        "programmer_id": 40,
+        "assignment_start_date": "2025-05-11",
+        "assignment_end_date": "2025-12-02"
+      },
+      {
+        "programmer_name": "Barbara Johnson",
+        "programmer_id": 45,
+        "assignment_start_date": "2025-05-11",
+        "assignment_end_date": "2025-12-06"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-002",
+    "name": "HealthTech Partners \u2014 Data Analytics Dashboard",
+    "client": "HealthTech Partners",
+    "description": "Delivery of Data Analytics Dashboard for HealthTech Partners.",
+    "start_date": "2025-06-03",
+    "end_date": null,
+    "estimated_duration_months": 8,
+    "budget": null,
+    "status": "active",
+    "team_size": 8,
+    "requirements": [
+      {
+        "skill_name": "Git",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Angular",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "Kimberly Frost",
+        "programmer_id": 28,
+        "assignment_start_date": "2025-06-03",
+        "assignment_end_date": "2026-01-15"
+      },
+      {
+        "programmer_name": "Rebecca Young",
+        "programmer_id": 15,
+        "assignment_start_date": "2025-06-03",
+        "assignment_end_date": "2026-01-18"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-003",
+    "name": "TechCorp \u2014 Inventory Management",
+    "client": "TechCorp",
+    "description": "Delivery of Inventory Management for TechCorp.",
+    "start_date": "2024-08-10",
+    "end_date": "2025-02-06",
+    "estimated_duration_months": 6,
+    "budget": 266250,
+    "status": "completed",
+    "team_size": 3,
+    "requirements": [
+      {
+        "skill_name": "React",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "MongoDB",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Python",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "AWS",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-004",
+    "name": "BioTech Labs \u2014 Customer Portal",
+    "client": "BioTech Labs",
+    "description": "Delivery of Customer Portal for BioTech Labs.",
+    "start_date": "2024-12-21",
+    "end_date": "2026-04-15",
+    "estimated_duration_months": 16,
+    "budget": null,
+    "status": "completed",
+    "team_size": 6,
+    "requirements": [
+      {
+        "skill_name": "Redis",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Django",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-005",
+    "name": "CloudNative Solutions \u2014 Cloud Migration",
+    "client": "CloudNative Solutions",
+    "description": "Delivery of Cloud Migration for CloudNative Solutions.",
+    "start_date": "2026-03-28",
+    "end_date": "2027-06-21",
+    "estimated_duration_months": 15,
+    "budget": 352065,
+    "status": "completed",
+    "team_size": 2,
+    "requirements": [
+      {
+        "skill_name": "DevOps",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "FastAPI",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Microservices",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Flask",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Data Science",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-006",
+    "name": "HealthTech Partners \u2014 Security Audit System",
+    "client": "HealthTech Partners",
+    "description": "Delivery of Security Audit System for HealthTech Partners.",
+    "start_date": "2025-05-06",
+    "end_date": "2026-01-01",
+    "estimated_duration_months": 8,
+    "budget": null,
+    "status": "completed",
+    "team_size": 6,
+    "requirements": [
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Docker",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "React",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "JavaScript",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Angular",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-007",
+    "name": "TechCorp \u2014 Payment Processing System",
+    "client": "TechCorp",
+    "description": "Delivery of Payment Processing System for TechCorp.",
+    "start_date": "2024-10-28",
+    "end_date": "2025-01-26",
+    "estimated_duration_months": 3,
+    "budget": 383827,
+    "status": "completed",
+    "team_size": 3,
+    "requirements": [
+      {
+        "skill_name": "Git",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "FastAPI",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-008",
+    "name": "TechCorp \u2014 API Gateway Implementation",
+    "client": "TechCorp",
+    "description": "Delivery of API Gateway Implementation for TechCorp.",
+    "start_date": "2024-11-23",
+    "end_date": null,
+    "estimated_duration_months": 9,
+    "budget": null,
+    "status": "active",
+    "team_size": 6,
+    "requirements": [
+      {
+        "skill_name": "Git",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Rust",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "C++",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "React",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "Michael Owen",
+        "programmer_id": 3,
+        "assignment_start_date": "2024-11-23",
+        "assignment_end_date": "2025-08-08"
+      },
+      {
+        "programmer_name": "Edwin Moses",
+        "programmer_id": 1,
+        "assignment_start_date": "2024-11-23",
+        "assignment_end_date": "2025-07-26"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-009",
+    "name": "BioTech Labs \u2014 E-commerce Platform",
+    "client": "BioTech Labs",
+    "description": "Delivery of E-commerce Platform for BioTech Labs.",
+    "start_date": "2024-07-31",
+    "end_date": null,
+    "estimated_duration_months": 13,
+    "budget": null,
+    "status": "active",
+    "team_size": 8,
+    "requirements": [
+      {
+        "skill_name": "MySQL",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Jenkins",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "AWS",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "Christina Booker",
+        "programmer_id": 13,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-08-13"
+      },
+      {
+        "programmer_name": "Steven Miller",
+        "programmer_id": 18,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-08-08"
+      },
+      {
+        "programmer_name": "Noah Espinoza",
+        "programmer_id": 44,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-08-21"
+      },
+      {
+        "programmer_name": "Michael Smith",
+        "programmer_id": 41,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-07-31"
+      },
+      {
+        "programmer_name": "Tonya Turner",
+        "programmer_id": 29,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-08-16"
+      },
+      {
+        "programmer_name": "Melinda Wade",
+        "programmer_id": 19,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-07-27"
+      },
+      {
+        "programmer_name": "Kevin Carr",
+        "programmer_id": 30,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-08-21"
+      },
+      {
+        "programmer_name": "Thomas Walker",
+        "programmer_id": 20,
+        "assignment_start_date": "2024-07-31",
+        "assignment_end_date": "2025-08-10"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-010",
+    "name": "MediaStream \u2014 Web Application",
+    "client": "MediaStream",
+    "description": "Delivery of Web Application for MediaStream.",
+    "start_date": "2025-02-08",
+    "end_date": "2025-11-05",
+    "estimated_duration_months": 9,
+    "budget": null,
+    "status": "completed",
+    "team_size": 6,
+    "requirements": [
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "MongoDB",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "AWS",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "MySQL",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "JavaScript",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-011",
+    "name": "DataSystems Inc \u2014 E-commerce Platform",
+    "client": "DataSystems Inc",
+    "description": "Delivery of E-commerce Platform for DataSystems Inc.",
+    "start_date": "2024-05-02",
+    "end_date": "2024-11-28",
+    "estimated_duration_months": 7,
+    "budget": 164891,
+    "status": "completed",
+    "team_size": 7,
+    "requirements": [
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Data Science",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Microservices",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-012",
+    "name": "MediaStream \u2014 Web Application",
+    "client": "MediaStream",
+    "description": "Delivery of Web Application for MediaStream.",
+    "start_date": "2025-12-24",
+    "end_date": null,
+    "estimated_duration_months": 8,
+    "budget": null,
+    "status": "active",
+    "team_size": 2,
+    "requirements": [
+      {
+        "skill_name": "FastAPI",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "DevOps",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "Kristen Patton",
+        "programmer_id": 24,
+        "assignment_start_date": "2025-12-24",
+        "assignment_end_date": "2026-07-26"
+      },
+      {
+        "programmer_name": "Michael Wright",
+        "programmer_id": 17,
+        "assignment_start_date": "2025-12-24",
+        "assignment_end_date": "2026-08-08"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-013",
+    "name": "HealthTech Partners \u2014 Data Analytics Dashboard",
+    "client": "HealthTech Partners",
+    "description": "Delivery of Data Analytics Dashboard for HealthTech Partners.",
+    "start_date": "2025-07-27",
+    "end_date": null,
+    "estimated_duration_months": 4,
+    "budget": 253296,
+    "status": "on_hold",
+    "team_size": 2,
+    "requirements": [
+      {
+        "skill_name": "Kubernetes",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "DevOps",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "PostgreSQL",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Python",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Django",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-014",
+    "name": "TechCorp \u2014 Real-time Chat System",
+    "client": "TechCorp",
+    "description": "Delivery of Real-time Chat System for TechCorp.",
+    "start_date": "2024-04-15",
+    "end_date": "2025-08-08",
+    "estimated_duration_months": 16,
+    "budget": null,
+    "status": "completed",
+    "team_size": 3,
+    "requirements": [
+      {
+        "skill_name": "PostgreSQL",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Angular",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Kubernetes",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "DevOps",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Docker",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-015",
+    "name": "FinTech Innovations \u2014 Inventory Management",
+    "client": "FinTech Innovations",
+    "description": "Delivery of Inventory Management for FinTech Innovations.",
+    "start_date": "2025-03-21",
+    "end_date": null,
+    "estimated_duration_months": 4,
+    "budget": null,
+    "status": "active",
+    "team_size": 6,
+    "requirements": [
+      {
+        "skill_name": "Java",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Go",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Rust",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Redis",
+        "min_proficiency": "Beginner",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "John Nelson",
+        "programmer_id": 48,
+        "assignment_start_date": "2025-03-21",
+        "assignment_end_date": "2025-07-03"
+      },
+      {
+        "programmer_name": "Kevin Delacruz",
+        "programmer_id": 46,
+        "assignment_start_date": "2025-03-21",
+        "assignment_end_date": "2025-06-24"
+      },
+      {
+        "programmer_name": "Timothy Byrd",
+        "programmer_id": 8,
+        "assignment_start_date": "2025-03-21",
+        "assignment_end_date": "2025-07-16"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-016",
+    "name": "RetailMax \u2014 Real-time Chat System",
+    "client": "RetailMax",
+    "description": "Delivery of Real-time Chat System for RetailMax.",
+    "start_date": "2025-01-16",
+    "end_date": null,
+    "estimated_duration_months": 8,
+    "budget": 203106,
+    "status": "active",
+    "team_size": 8,
+    "requirements": [
+      {
+        "skill_name": "Python",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Microservices",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Docker",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Django",
+        "min_proficiency": "Beginner",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": [
+      {
+        "programmer_name": "Jacob Acosta",
+        "programmer_id": 37,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-28"
+      },
+      {
+        "programmer_name": "Marvin Long",
+        "programmer_id": 4,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-22"
+      },
+      {
+        "programmer_name": "Melody Bailey",
+        "programmer_id": 42,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-09-05"
+      },
+      {
+        "programmer_name": "Thomas Morse",
+        "programmer_id": 36,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-21"
+      },
+      {
+        "programmer_name": "Tyler Hill",
+        "programmer_id": 22,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-16"
+      },
+      {
+        "programmer_name": "Norma Patrick",
+        "programmer_id": 27,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-28"
+      },
+      {
+        "programmer_name": "Brooke Booker",
+        "programmer_id": 38,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-17"
+      },
+      {
+        "programmer_name": "Janice Santos",
+        "programmer_id": 10,
+        "assignment_start_date": "2025-01-16",
+        "assignment_end_date": "2025-08-20"
+      }
+    ]
+  },
+  {
+    "id": "PRJ-017",
+    "name": "BioTech Labs \u2014 Data Analytics Dashboard",
+    "client": "BioTech Labs",
+    "description": "Delivery of Data Analytics Dashboard for BioTech Labs.",
+    "start_date": "2024-02-08",
+    "end_date": null,
+    "estimated_duration_months": 4,
+    "budget": null,
+    "status": "active",
+    "team_size": 8,
+    "requirements": [
+      {
+        "skill_name": "Data Science",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Rust",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "C++",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-018",
+    "name": "DataSystems Inc \u2014 Cloud Migration",
+    "client": "DataSystems Inc",
+    "description": "Delivery of Cloud Migration for DataSystems Inc.",
+    "start_date": "2025-04-23",
+    "end_date": null,
+    "estimated_duration_months": 14,
+    "budget": 177104,
+    "status": "active",
+    "team_size": 2,
+    "requirements": [
+      {
+        "skill_name": "Kubernetes",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "FastAPI",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Go",
+        "min_proficiency": "Expert",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Machine Learning",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-019",
+    "name": "SmartCity Initiative \u2014 Inventory Management",
+    "client": "SmartCity Initiative",
+    "description": "Delivery of Inventory Management for SmartCity Initiative.",
+    "start_date": "2026-06-01",
+    "end_date": "2027-10-24",
+    "estimated_duration_months": 17,
+    "budget": 223166,
+    "status": "completed",
+    "team_size": 7,
+    "requirements": [
+      {
+        "skill_name": "TypeScript",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Flask",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Redis",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Docker",
+        "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "Node.js",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      }
+    ],
+    "assigned_programmers": []
+  },
+  {
+    "id": "PRJ-020",
+    "name": "DataSystems Inc \u2014 Customer Portal",
+    "client": "DataSystems Inc",
+    "description": "Delivery of Customer Portal for DataSystems Inc.",
+    "start_date": "2024-05-27",
+    "end_date": "2025-05-22",
+    "estimated_duration_months": 12,
+    "budget": null,
+    "status": "completed",
+    "team_size": 3,
+    "requirements": [
+      {
+        "skill_name": "DevOps",
+        "min_proficiency": "Advanced",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "FastAPI",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "C++",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
+      }
+    ],
+    "assigned_programmers": []
+  }
+]

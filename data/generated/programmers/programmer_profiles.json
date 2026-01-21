@@ -1,12 +1,936 @@
 [
   {
     "id": 1,
-    "name": "Mr. Randy Castaneda",
-    "email": "gamblejacob@example.com",
-    "location": "Walterstown",
+    "name": "Joseph Mendez",
+    "email": "uwiley@example.org",
+    "location": "New Kennethstad",
+    "skills": [
+      {
+        "name": "Git",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Microservices Architecture",
+      "Data Analytics Dashboard",
+      "Payment Processing System",
+      "API Gateway"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Jennifer Holmes",
+    "email": "harperlindsey@example.com",
+    "location": "Lake Tinaborough",
+    "skills": [
+      {
+        "name": "Git",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "E-commerce Platform"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Certified Kubernetes Administrator"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Rebecca Wilkinson",
+    "email": "seth44@example.com",
+    "location": "Clarkville",
+    "skills": [
+      {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Mobile App",
+      "E-commerce Platform",
+      "Real-time Chat System",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 4,
+    "name": "Kristi Peterson",
+    "email": "perrymelissa@example.com",
+    "location": "Craigshire",
+    "skills": [
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Mobile App"
+    ],
+    "certifications": [
+      "Google Cloud Professional",
+      "Certified Kubernetes Administrator",
+      "Microsoft Azure Developer"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Justin Green",
+    "email": "kimberly71@example.net",
+    "location": "East Peterbury",
+    "skills": [
+      {
+        "name": "Data Science",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "React",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Payment Processing System",
+      "Mobile App"
+    ],
+    "certifications": [
+      "Google Cloud Professional",
+      "Scrum Master Certification",
+      "Microsoft Azure Developer"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Paul Soto",
+    "email": "vroberson@example.com",
+    "location": "East Daniellemouth",
+    "skills": [
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Mobile App"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Kevin Oconnor",
+    "email": "reidjenna@example.net",
+    "location": "New Shannon",
+    "skills": [
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "Web Application"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 8,
+    "name": "Shannon Hernandez",
+    "email": "leon77@example.org",
+    "location": "Jasonshire",
+    "skills": [
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Real-time Chat System"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Docker Certified Associate",
+      "Scrum Master Certification"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Susan Johnson",
+    "email": "spencerchris@example.net",
+    "location": "Stephanieton",
+    "skills": [
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Real-time Chat System",
+      "Content Management System"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 10,
+    "name": "Robert Martinez",
+    "email": "sfischer@example.org",
+    "location": "Davenportfurt",
+    "skills": [
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "React",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Payment Processing System",
+      "Content Management System"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 11,
+    "name": "Carolyn Landry",
+    "email": "mcdanielolivia@example.net",
+    "location": "West Alexandra",
+    "skills": [
+      {
+        "name": "DevOps",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "Microservices Architecture"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 12,
+    "name": "Kayla Jimenez",
+    "email": "richard63@example.com",
+    "location": "West Joseph",
+    "skills": [
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Machine Learning Pipeline"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Google Cloud Professional",
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Jessica Burton",
+    "email": "peckevelyn@example.org",
+    "location": "Williamberg",
+    "skills": [
+      {
+        "name": "Data Science",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Mobile App",
+      "Machine Learning Pipeline",
+      "E-commerce Platform",
+      "API Gateway"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 14,
+    "name": "Jeremiah Dudley",
+    "email": "robertmcdonald@example.net",
+    "location": "South Ryanberg",
     "skills": [
       {
         "name": "Docker",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Payment Processing System",
+      "Content Management System",
+      "Real-time Chat System",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Scrum Master Certification",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Tracy Moreno",
+    "email": "tbrown@example.org",
+    "location": "West Amanda",
+    "skills": [
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Web Application"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Annette Pierce",
+    "email": "belltammy@example.org",
+    "location": "Robbinsmouth",
+    "skills": [
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Payment Processing System",
+      "API Gateway",
+      "Data Analytics Dashboard",
+      "Microservices Architecture",
+      "Web Application"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 17,
+    "name": "John Buck",
+    "email": "carnold@example.net",
+    "location": "Port Paulburgh",
+    "skills": [
+      {
+        "name": "Node.js",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Data Analytics Dashboard",
+      "Mobile App"
+    ],
+    "certifications": [
+      "Scrum Master Certification",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Mr. Richard Thompson",
+    "email": "davidgraves@example.com",
+    "location": "Harriston",
+    "skills": [
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Payment Processing System",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": [
+      "Docker Certified Associate",
+      "Google Cloud Professional",
+      "Certified Kubernetes Administrator"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Christine Sanchez",
+    "email": "melissa75@example.org",
+    "location": "West Juanburgh",
+    "skills": [
+      {
+        "name": "Rust",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
         "proficiency": "Expert"
       },
       {
@@ -14,19 +938,585 @@
         "proficiency": "Advanced"
       },
       {
-        "name": "Microservices",
-        "proficiency": "Beginner"
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
       },
       {
         "name": "AWS",
         "proficiency": "Intermediate"
       },
       {
-        "name": "Machine Learning",
+        "name": "Angular",
         "proficiency": "Expert"
       },
       {
         "name": "Django",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Data Analytics Dashboard",
+      "Machine Learning Pipeline"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "AWS Certified Solutions Architect",
+      "Microsoft Azure Developer"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Kayla Frank",
+    "email": "dstewart@example.net",
+    "location": "West Natalie",
+    "skills": [
+      {
+        "name": "TypeScript",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Mobile App",
+      "Content Management System",
+      "E-commerce Platform",
+      "Web Application"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Scrum Master Certification",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Michael Thomas",
+    "email": "xvelazquez@example.net",
+    "location": "Ruthborough",
+    "skills": [
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Data Analytics Dashboard",
+      "Mobile App",
+      "E-commerce Platform",
+      "Web Application"
+    ],
+    "certifications": [
+      "Docker Certified Associate",
+      "Scrum Master Certification",
+      "Microsoft Azure Developer"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Joshua Munoz",
+    "email": "sean46@example.com",
+    "location": "Smithbury",
+    "skills": [
+      {
+        "name": "FastAPI",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "API Gateway",
+      "Payment Processing System",
+      "Microservices Architecture",
+      "Mobile App"
+    ],
+    "certifications": [
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Alexander Walker",
+    "email": "adamschristopher@example.com",
+    "location": "West Jameschester",
+    "skills": [
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Mobile App",
+      "Payment Processing System",
+      "Data Analytics Dashboard",
+      "Content Management System"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Google Cloud Professional",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Joshua Patterson",
+    "email": "hendersoncharles@example.net",
+    "location": "Lake Catherinefort",
+    "skills": [
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Payment Processing System",
+      "Machine Learning Pipeline"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Scrum Master Certification"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Anna Wang",
+    "email": "kperez@example.org",
+    "location": "New Coryview",
+    "skills": [
+      {
+        "name": "MongoDB",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Real-time Chat System",
+      "Web Application",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 26,
+    "name": "Jessica Jones",
+    "email": "kristenramirez@example.com",
+    "location": "Osbornhaven",
+    "skills": [
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "API Gateway",
+      "Web Application"
+    ],
+    "certifications": [
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "Tammy Johnson",
+    "email": "wgarcia@example.com",
+    "location": "West Susan",
+    "skills": [
+      {
+        "name": "MongoDB",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "React",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "E-commerce Platform",
+      "Mobile App",
+      "Microservices Architecture"
+    ],
+    "certifications": [
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Christopher Smith",
+    "email": "hallerin@example.net",
+    "location": "East Lauraport",
+    "skills": [
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "Web Application",
+      "Microservices Architecture"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Microsoft Azure Developer",
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Gabriel Clarke",
+    "email": "williamsjennifer@example.com",
+    "location": "Mcgeechester",
+    "skills": [
+      {
+        "name": "MongoDB",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "DevOps",
         "proficiency": "Expert"
       },
       {
@@ -35,9 +1525,86 @@
       }
     ],
     "projects": [
-      "Content Management System",
       "Data Analytics Dashboard",
-      "Payment Processing System"
+      "Content Management System",
+      "API Gateway"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 30,
+    "name": "Caleb Gomez",
+    "email": "alexisrodriguez@example.org",
+    "location": "New Joseph",
+    "skills": [
+      {
+        "name": "AWS",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "E-commerce Platform",
+      "Content Management System",
+      "Real-time Chat System",
+      "Web Application",
+      "API Gateway"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 31,
+    "name": "William Contreras",
+    "email": "pedrostevens@example.org",
+    "location": "South Williamville",
+    "skills": [
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "Machine Learning Pipeline",
+      "Microservices Architecture",
+      "Content Management System"
     ],
     "certifications": [
       "Certified Kubernetes Administrator",
@@ -45,15 +1612,102 @@
     ]
   },
   {
-    "id": 2,
-    "name": "Ronald Barrett",
-    "email": "shermanjohn@example.org",
-    "location": "Myersport",
+    "id": 32,
+    "name": "Sue Hobbs",
+    "email": "bentonjessica@example.net",
+    "location": "Burchberg",
     "skills": [
       {
-        "name": "Redis",
+        "name": "Jenkins",
         "proficiency": "Advanced"
       },
+      {
+        "name": "MySQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "React",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "E-commerce Platform",
+      "API Gateway",
+      "Data Analytics Dashboard",
+      "Microservices Architecture"
+    ],
+    "certifications": [
+      "Scrum Master Certification",
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 33,
+    "name": "Erik Pena",
+    "email": "cookgabriel@example.net",
+    "location": "Tamaraberg",
+    "skills": [
+      {
+        "name": "MongoDB",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Payment Processing System",
+      "E-commerce Platform",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer",
+      "Scrum Master Certification"
+    ]
+  },
+  {
+    "id": 34,
+    "name": "Nathan Oneill",
+    "email": "garciarobert@example.org",
+    "location": "Fieldsside",
+    "skills": [
       {
         "name": "Microservices",
         "proficiency": "Intermediate"
@@ -63,27 +1717,538 @@
         "proficiency": "Advanced"
       },
       {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
         "name": "Jenkins",
         "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "Payment Processing System",
+      "Content Management System",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Microsoft Azure Developer",
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 35,
+    "name": "Brenda Thomas",
+    "email": "mary75@example.com",
+    "location": "Conwayside",
+    "skills": [
+      {
+        "name": "Flask",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Content Management System",
+      "Machine Learning Pipeline"
+    ],
+    "certifications": [
+      "Scrum Master Certification"
+    ]
+  },
+  {
+    "id": 36,
+    "name": "Thomas Smith",
+    "email": "jonesbrian@example.net",
+    "location": "New Sara",
+    "skills": [
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "React",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Web Application",
+      "Data Analytics Dashboard",
+      "Content Management System",
+      "Real-time Chat System"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer",
+      "Scrum Master Certification",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 37,
+    "name": "Anne Hunt",
+    "email": "tatemelanie@example.com",
+    "location": "East Holly",
+    "skills": [
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
       },
       {
         "name": "MongoDB",
         "proficiency": "Intermediate"
       },
       {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Expert"
+      },
+      {
         "name": "Django",
         "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Mobile App"
+    ],
+    "certifications": [
+      "Scrum Master Certification",
+      "AWS Certified Solutions Architect",
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 38,
+    "name": "Mr. Michael Armstrong",
+    "email": "nelsonalexis@example.com",
+    "location": "Boydmouth",
+    "skills": [
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "E-commerce Platform",
+      "Real-time Chat System",
+      "Microservices Architecture"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 39,
+    "name": "Crystal Johns",
+    "email": "josephbrian@example.com",
+    "location": "Villarrealland",
+    "skills": [
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Microservices Architecture",
+      "Web Application",
+      "Payment Processing System"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 40,
+    "name": "Ryan Washington",
+    "email": "alexiswhitney@example.net",
+    "location": "New Elizabeth",
+    "skills": [
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "React",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Content Management System"
+    ],
+    "certifications": [
+      "Scrum Master Certification"
+    ]
+  },
+  {
+    "id": 41,
+    "name": "Ricardo Smith",
+    "email": "mariabryant@example.com",
+    "location": "Port Shannon",
+    "skills": [
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Beginner"
+      }
+    ],
+    "projects": [
+      "Payment Processing System",
+      "Mobile App"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer",
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 42,
+    "name": "Jeffrey Pruitt",
+    "email": "wburgess@example.org",
+    "location": "North Michael",
+    "skills": [
+      {
+        "name": "MongoDB",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Machine Learning Pipeline",
+      "Real-time Chat System",
+      "Content Management System",
+      "Payment Processing System"
+    ],
+    "certifications": [
+      "Docker Certified Associate",
+      "Certified Kubernetes Administrator"
+    ]
+  },
+  {
+    "id": 43,
+    "name": "Tina Wong",
+    "email": "ian08@example.com",
+    "location": "Melissastad",
+    "skills": [
+      {
+        "name": "FastAPI",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Expert"
       },
       {
         "name": "Docker",
         "proficiency": "Intermediate"
       },
       {
-        "name": "C++",
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Web Application",
+      "Content Management System",
+      "E-commerce Platform",
+      "Data Analytics Dashboard"
+    ],
+    "certifications": [
+      "Google Cloud Professional",
+      "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 44,
+    "name": "Destiny Jones",
+    "email": "kennethboyer@example.net",
+    "location": "South Michael",
+    "skills": [
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "API Gateway",
+      "Content Management System",
+      "Real-time Chat System",
+      "Web Application"
+    ],
+    "certifications": []
+  },
+  {
+    "id": 45,
+    "name": "Kyle Wilson",
+    "email": "mary98@example.com",
+    "location": "Johnsonfurt",
+    "skills": [
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Web Application",
+      "Data Analytics Dashboard",
+      "Content Management System",
+      "Microservices Architecture"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Docker Certified Associate"
+    ]
+  },
+  {
+    "id": 46,
+    "name": "Jennifer Lane",
+    "email": "rguzman@example.org",
+    "location": "New Daniel",
+    "skills": [
+      {
+        "name": "TypeScript",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Java",
         "proficiency": "Advanced"
       },
       {
         "name": "Data Science",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "React",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "MongoDB",
         "proficiency": "Advanced"
       },
       {
@@ -91,18 +2256,237 @@
         "proficiency": "Advanced"
       },
       {
-        "name": "Go",
+        "name": "AWS",
         "proficiency": "Intermediate"
       }
     ],
     "projects": [
+      "Mobile App",
+      "E-commerce Platform",
       "Data Analytics Dashboard",
+      "Content Management System",
+      "Machine Learning Pipeline"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator"
+    ]
+  },
+  {
+    "id": 47,
+    "name": "Daniel Roy",
+    "email": "mackenzieshaffer@example.com",
+    "location": "Diazland",
+    "skills": [
+      {
+        "name": "C++",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Expert"
+      }
+    ],
+    "projects": [
       "Web Application",
-      "Payment Processing System",
-      "Content Management System"
+      "Data Analytics Dashboard",
+      "Real-time Chat System"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer",
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 48,
+    "name": "Nicholas Chan",
+    "email": "hbrown@example.com",
+    "location": "Watkinsbury",
+    "skills": [
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "Mobile App",
+      "Content Management System",
+      "Real-time Chat System",
+      "Machine Learning Pipeline"
     ],
     "certifications": [
       "AWS Certified Solutions Architect"
+    ]
+  },
+  {
+    "id": 49,
+    "name": "Michelle Morrison",
+    "email": "pburns@example.net",
+    "location": "Lake Alicia",
+    "skills": [
+      {
+        "name": "Microservices",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "TypeScript",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Redis",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Machine Learning",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Payment Processing System"
+    ],
+    "certifications": [
+      "Docker Certified Associate",
+      "Microsoft Azure Developer",
+      "Scrum Master Certification"
+    ]
+  },
+  {
+    "id": 50,
+    "name": "Rachel Rogers",
+    "email": "amber37@example.com",
+    "location": "Port Dannystad",
+    "skills": [
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Node.js",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "FastAPI",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Real-time Chat System",
+      "Web Application"
+    ],
+    "certifications": [
+      "Microsoft Azure Developer"
     ]
   }
 ]
