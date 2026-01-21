@@ -1,28 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any
-
-from .generation_tools import GenerationTools
-from .knowledge_graph_tools import KnowledgeGraphTools
-
-ToolCallable = Callable[..., Any]
+from .generation_tools import generate_single_rfp
+from .knowledge_graph_tools import ingest_programmer_cvs
 
 __all__ = [
-    "GenerationTools",
-    "KnowledgeGraphTools",
-    "ToolCallable",
-    "all_tools",
+    "generate_single_rfp",
+    "ingest_programmer_cvs"
 ]
-
-
-def all_tools() -> tuple[ToolCallable, ...]:
-    """
-    Return all tool callables exposed by this package.
-
-    :return: Tuple of callables compatible with LangChain/LangGraph tool binding.
-    """
-    return (
-        *GenerationTools.toolset(),
-        *KnowledgeGraphTools.toolset(),
-    )

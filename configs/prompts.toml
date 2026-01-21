@@ -50,3 +50,50 @@ preferred = "Preferred"
 [prompts.datasets.remote_work_labels]
 allowed = "Allowed"
 not_allowed = "Not allowed"
+
+[prompts.agents]
+generation_react = """
+You are the TalentMatch generation agent.
+
+You have access to the following tools:
+{tools}
+
+Use the following format:
+
+Question: {input}
+Thought: think step-by-step about what to do
+Action: one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (repeat Thought/Action/Action Input/Observation as needed)
+Thought: I now know the final answer
+Final: provide a concise final answer to the user
+
+Begin.
+
+Question: {input}
+{agent_scratchpad}
+"""
+
+kg_react = """
+You are the TalentMatch knowledge graph agent.
+
+You have access to the following tools:
+{tools}
+
+Use the following format:
+
+Question: {input}
+Thought: think step-by-step about what to do
+Action: one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (repeat Thought/Action/Action Input/Observation as needed)
+Thought: I now know the final answer
+Final: provide a concise final answer to the user
+
+Begin.
+
+Question: {input}
+{agent_scratchpad}
+"""

@@ -1,55 +1,34 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Callable
 from typing import Any
+
+from langchain_core.tools import tool
 
 logger = logging.getLogger(__name__)
 
-ToolCallable = Callable[..., Any]
 
-__all__ = [
-    "GenerationTools",
-]
-
-
-class GenerationTools:
+@tool
+def generate_dataset() -> dict[str, Any]:
     """
-    Toolset exposing public operations from the generation module.
+    Generate the complete dataset based on configured policies and counts.
+
+    :return: Dictionary with generated dataset details.
     """
+    from talentmatch.generation import generate_dataset as _generate_dataset
 
-    @staticmethod
-    def toolset() -> tuple[ToolCallable, ...]:
-        """
-        Return the tool callables exposed by this toolset.
+    logger.info("Tool call: generation.generate_dataset")
+    return _generate_dataset()
 
-        :return: Tuple of tool callables.
-        """
-        return (
-            GenerationTools.generate_dataset,
-            GenerationTools.generate_single_rfp,
-        )
 
-    @staticmethod
-    def generate_dataset() -> dict[str, Any]:
-        """
-        Generate the complete dataset based on configured policies and counts.
+@tool
+def generate_single_rfp() -> dict[str, Any]:
+    """
+    Generate a single RFP record along with Markdown and PDF output.
 
-        :return: Dictionary with generated dataset details.
-        """
-        from talentmatch.generation import generate_dataset as _generate_dataset
+    :return: Dictionary with generated RFP details.
+    """
+    from talentmatch.generation import generate_single_rfp as _generate_single_rfp
 
-        logger.info("Tool call: generation.generate_dataset")
-        return _generate_dataset()
-
-    @staticmethod
-    def generate_single_rfp() -> dict[str, Any]:
-        """
-        Generate a single RFP record along with Markdown and PDF output.
-
-        :return: Dictionary with generated RFP details.
-        """
-        from talentmatch.generation import generate_single_rfp as _generate_single_rfp
-
-        logger.info("Tool call: generation.generate_single_rfp")
-        return _generate_single_rfp()
+    logger.info("Tool call: generation.generate_single_rfp")
+    return _generate_single_rfp()
