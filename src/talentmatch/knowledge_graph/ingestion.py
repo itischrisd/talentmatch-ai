@@ -57,15 +57,9 @@ class CvPdfIngestor:
         self._concurrency = concurrency
 
     @staticmethod
-    def extract_pdf_text(pdf_path: Path) -> str:
-        """
-        Extract text from a PDF
-        :param pdf_path: Path to a PDF file
-        :return: Extracted text, or an empty string on failure
-        """
-
+    def _extract_pdf_text(pdf_path: Path) -> str:
         try:
-            elements = partition_pdf(filename=str(pdf_path))
+            elements = partition_pdf(filename=str(pdf_path), languages=["eng"])
             fragments = (getattr(element, "text", None) or str(element) for element in elements)
             text = "\n\n".join(fragment for fragment in fragments if fragment)
             logger.debug("Extracted %d characters from %s", len(text), pdf_path.name)
@@ -74,15 +68,9 @@ class CvPdfIngestor:
             logger.exception("PDF extraction failed for %s", pdf_path)
             return ""
 
-    async def convert_pdf_to_graph_documents(self, pdf_path: Path) -> list[Any]:
-        """
-        Convert a single PDF into graph documents
-        :param pdf_path: Path to a PDF file
-        :return: List of graph documents
-        """
-
+    async def _convert_pdf_to_graph_documents(self, pdf_path: Path) -> list[Any]:
         logger.info("Processing %s", pdf_path.name)
-        text = self.extract_pdf_text(pdf_path)
+        text = self._extract_pdf_text(pdf_path)
         if not text.strip():
             logger.warning("No text extracted from %s", pdf_path.name)
             return []
@@ -106,12 +94,7 @@ class CvPdfIngestor:
             logger.exception("LLM graph conversion failed for %s", pdf_path.name)
             return []
 
-    def store_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
-        """
-        Store graph documents in Neo4j
-        :param graph_documents: GraphDocument objects
-        :return: Storage result
-        """
+    def _store_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
 
         return self._graph_service.add_graph_documents(graph_documents)
 
@@ -133,7 +116,7 @@ class CvPdfIngestor:
 
         async def convert_with_limit(path: Path) -> tuple[Path, list[Any]]:
             async with semaphore:
-                return path, await self.convert_pdf_to_graph_documents(path)
+                return path, await self._convert_pdf_to_graph_documents(path)
 
         tasks = [asyncio.create_task(convert_with_limit(path)) for path in pdf_paths]
         results = await asyncio.gather(*tasks)
@@ -151,7 +134,7 @@ class CvPdfIngestor:
 
             processed += 1
             stored_docs += len(documents)
-            storage = self.store_graph_documents(documents)
+            storage = self._store_graph_documents(documents)
             stored_nodes += storage.nodes
             stored_relationships += storage.relationships
 

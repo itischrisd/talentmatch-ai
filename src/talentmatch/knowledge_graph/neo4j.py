@@ -6,6 +6,8 @@ from typing import Any
 
 from langchain_neo4j import Neo4jGraph
 
+from talentmatch.config import Settings
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,40 +26,35 @@ class Neo4jGraphService:
     Provides Neo4j connection, schema setup, and basic maintenance operations
     """
 
-    def __init__(self, *, reset_on_start: bool) -> None:
+    def __init__(self, *, settings: Settings, reset_on_start: bool) -> None:
         """
         Create a Neo4j service
+        :param settings: application settings holding Neo4j connection config
         :param reset_on_start: Whether to remove all data and custom schema before ingestion
+        :raises RuntimeError: If Neo4j settings are missing or incomplete
         """
 
+        cfg = settings.neo4j
+        if cfg is None:
+            raise RuntimeError("Neo4j settings are missing (settings.neo4j is None)")
+
+        if cfg.password is None:
+            raise RuntimeError("NEO4J_PASSWORD is missing in .env")
+
         self._graph = Neo4jGraph(
-            url="bolt://localhost:7687",
-            username="neo4j",
-            password="Password123!",
-            database="neo4j"
+            url=str(cfg.uri),
+            username=str(cfg.username),
+            password=cfg.password.get_secret_value(),
+            database=str(cfg.database),
         )
         logger.info("Connected to Neo4j")
 
         if reset_on_start:
-            self.reset_database()
+            self._reset_database()
 
-        self.ensure_indexes()
+        self._ensure_indexes()
 
-    @property
-    def graph(self) -> Neo4jGraph:
-        """
-        Return the underlying LangChain graph client
-        """
-
-        return self._graph
-
-    def safe_query(self, cypher: str) -> list[dict[str, Any]]:
-        """
-        Execute a Cypher query while converting failures into empty results
-        :param cypher: Cypher query to execute
-        :return: List of rows
-        """
-
+    def _safe_query(self, cypher: str) -> list[dict[str, Any]]:
         try:
             result = self._graph.query(cypher)
             return list(result) if result else []
@@ -65,36 +62,28 @@ class Neo4jGraphService:
             logger.exception("Neo4j query failed")
             return []
 
-    def reset_database(self) -> None:
-        """
-        Delete all nodes and relationships, drop constraints and indexes
-        """
-
+    def _reset_database(self) -> None:
         logger.warning("Resetting Neo4j database")
         self._graph.query("MATCH (n) DETACH DELETE n")
 
-        for row in self.safe_query("SHOW CONSTRAINTS"):
+        for row in self._safe_query("SHOW CONSTRAINTS"):
             name = str(row.get("name", "")).strip()
             if name:
-                self.safe_query(f"DROP CONSTRAINT `{name}` IF EXISTS")
+                self._safe_query(f"DROP CONSTRAINT `{name}` IF EXISTS")
 
-        for row in self.safe_query("SHOW INDEXES"):
+        for row in self._safe_query("SHOW INDEXES"):
             name = str(row.get("name", "")).strip()
             if name and not name.startswith("__"):
-                self.safe_query(f"DROP INDEX `{name}` IF EXISTS")
+                self._safe_query(f"DROP INDEX `{name}` IF EXISTS")
 
-    def ensure_indexes(self) -> None:
-        """
-        Create indexes used by ingestion and common lookups
-        """
-
+    def _ensure_indexes(self) -> None:
         statements = (
             "CREATE INDEX person_id IF NOT EXISTS FOR (p:Person) ON (p.id)",
             "CREATE INDEX company_id IF NOT EXISTS FOR (c:Company) ON (c.id)",
-            "CREATE INDEX skill_id IF NOT EXISTS FOR (s:Skill) ON (s.id)"
+            "CREATE INDEX skill_id IF NOT EXISTS FOR (s:Skill) ON (s.id)",
         )
         for statement in statements:
-            self.safe_query(statement)
+            self._safe_query(statement)
 
     def add_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
         """

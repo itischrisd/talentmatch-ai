@@ -133,7 +133,7 @@ def run() -> int:
         result = ingest_programmer_cvs(
             cv_directory=cv_dir,
             llm_use_case="graph_transformer",
-            reset_neo4j_on_start=True,
+            reset_neo4j_on_start=False,
             concurrency=1,
             settings_toml_path=str(context.settings_path),
         )

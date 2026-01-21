@@ -23,6 +23,11 @@ class EnvironmentSettings(BaseSettings):
     AZURE_OPENAI_API_VERSION: str
     AZURE_OPENAI_CHAT_DEPLOYMENT: str
 
+    NEO4J_URI: str | None = None
+    NEO4J_USERNAME: str | None = None
+    NEO4J_PASSWORD: SecretStr | None = None
+    NEO4J_DATABASE: str | None = None
+
 
 def resolve_repo_root() -> Path:
     """
@@ -54,6 +59,20 @@ def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) 
         "api_version": env.AZURE_OPENAI_API_VERSION,
         "chat_deployment": env.AZURE_OPENAI_CHAT_DEPLOYMENT,
     }
+
+    neo4j_present = any(
+        value is not None and str(value).strip()
+        for value in (env.NEO4J_URI, env.NEO4J_USERNAME, env.NEO4J_PASSWORD, env.NEO4J_DATABASE)
+    )
+    if neo4j_present or "neo4j" in payload:
+        current = payload.get("neo4j", {})
+        payload["neo4j"] = {
+            **current,
+            "uri": env.NEO4J_URI or current.get("uri", "bolt://localhost:7687"),
+            "username": env.NEO4J_USERNAME or current.get("username", "neo4j"),
+            "password": env.NEO4J_PASSWORD if env.NEO4J_PASSWORD is not None else current.get("password"),
+            "database": env.NEO4J_DATABASE or current.get("database", "neo4j"),
+        }
 
     return payload
 

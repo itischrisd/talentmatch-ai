@@ -1,18 +1,76 @@
 [
   {
     "id": 1,
-    "name": "Deborah Brown",
-    "email": "hutchinsonjuan@example.com",
-    "location": "Susanborough",
+    "name": "Kevin Wood",
+    "email": "hquinn@example.net",
+    "location": "Trevorville",
     "skills": [
       {
-        "name": "Flask",
+        "name": "Data Science",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "C++",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Kubernetes",
         "proficiency": "Beginner"
       },
       {
-        "name": "TypeScript",
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Machine Learning",
         "proficiency": "Intermediate"
       },
+      {
+        "name": "Rust",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "DevOps",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Flask",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "Web Application",
+      "Data Analytics Dashboard",
+      "Real-time Chat System"
+    ],
+    "certifications": [
+      "Scrum Master Certification",
+      "Docker Certified Associate",
+      "Google Cloud Professional"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Scott Turner",
+    "email": "cherylmathis@example.org",
+    "location": "South Kenneth",
+    "skills": [
       {
         "name": "Redis",
         "proficiency": "Intermediate"
@@ -22,79 +80,37 @@
         "proficiency": "Intermediate"
       },
       {
-        "name": "Java",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "Docker",
-        "proficiency": "Advanced"
-      },
-      {
-        "name": "FastAPI",
-        "proficiency": "Advanced"
-      },
-      {
-        "name": "PostgreSQL",
-        "proficiency": "Expert"
+        "name": "Angular",
+        "proficiency": "Beginner"
       },
       {
         "name": "MySQL",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Rust",
         "proficiency": "Advanced"
       },
       {
-        "name": "Go",
-        "proficiency": "Advanced"
-      },
-      {
-        "name": "Machine Learning",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "DevOps",
-        "proficiency": "Beginner"
-      }
-    ],
-    "projects": [
-      "Web Application",
-      "Content Management System"
-    ],
-    "certifications": [
-      "Microsoft Azure Developer"
-    ]
-  },
-  {
-    "id": 2,
-    "name": "Christina Holt",
-    "email": "kmercado@example.net",
-    "location": "Clarkhaven",
-    "skills": [
-      {
-        "name": "Python",
-        "proficiency": "Intermediate"
-      },
-      {
-        "name": "Flask",
-        "proficiency": "Beginner"
+        "name": "React",
+        "proficiency": "Expert"
       },
       {
         "name": "JavaScript",
         "proficiency": "Intermediate"
       },
       {
-        "name": "Node.js",
+        "name": "Docker",
         "proficiency": "Advanced"
-      },
-      {
-        "name": "Go",
-        "proficiency": "Expert"
       }
     ],
     "projects": [
-      "Machine Learning Pipeline",
-      "API Gateway",
-      "Data Analytics Dashboard",
-      "Real-time Chat System"
+      "Payment Processing System",
+      "E-commerce Platform",
+      "Content Management System"
     ],
-    "certifications": []
+    "certifications": [
+      "Google Cloud Professional"
+    ]
   }
 ]

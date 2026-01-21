@@ -62,6 +62,17 @@ class AzureOpenAiSettings(BaseModel):
     chat_deployment: str
 
 
+class Neo4jSettings(BaseModel):
+    """
+    Neo4j connection settings (secrets provided via environment)
+    """
+
+    uri: str = "bolt://localhost:7687"
+    username: str = "neo4j"
+    password: SecretStr | None = None
+    database: str = "neo4j"
+
+
 class LlmUseCaseSettings(BaseModel):
     """
     LLM parameters for a specific generation use-case
@@ -286,6 +297,7 @@ class Settings(BaseModel):
     llm: LlmSettings
     datasets: DatasetsSettings
     azure_openai: AzureOpenAiSettings
+    neo4j: Neo4jSettings | None = None
 
     @classmethod
     def from_payload(cls, payload: dict[str, Any]) -> Settings:

@@ -1,39 +1,39 @@
 [
   {
     "id": "PRJ-001",
-    "name": "BioTech Labs \u2014 Real-time Chat System",
-    "client": "BioTech Labs",
-    "description": "Delivery of Real-time Chat System for BioTech Labs.",
-    "start_date": "2026-05-05",
-    "end_date": "2027-08-28",
-    "estimated_duration_months": 16,
-    "budget": null,
+    "name": "FinTech Innovations \u2014 Payment Processing System",
+    "client": "FinTech Innovations",
+    "description": "Delivery of Payment Processing System for FinTech Innovations.",
+    "start_date": "2026-02-10",
+    "end_date": "2026-10-08",
+    "estimated_duration_months": 8,
+    "budget": 240097,
     "status": "completed",
-    "team_size": 7,
+    "team_size": 5,
     "requirements": [
       {
-        "skill_name": "FastAPI",
-        "min_proficiency": "Expert",
-        "is_mandatory": false
-      },
-      {
-        "skill_name": "Flask",
-        "min_proficiency": "Intermediate",
-        "is_mandatory": false
-      },
-      {
-        "skill_name": "Java",
+        "skill_name": "Rust",
         "min_proficiency": "Intermediate",
         "is_mandatory": true
       },
       {
-        "skill_name": "TypeScript",
+        "skill_name": "Machine Learning",
         "min_proficiency": "Advanced",
         "is_mandatory": true
       },
       {
-        "skill_name": "Node.js",
+        "skill_name": "Redis",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "JavaScript",
         "min_proficiency": "Intermediate",
+        "is_mandatory": false
+      },
+      {
+        "skill_name": "DevOps",
+        "min_proficiency": "Advanced",
         "is_mandatory": true
       }
     ],
@@ -41,33 +41,38 @@
   },
   {
     "id": "PRJ-002",
-    "name": "LogisticsPro \u2014 Security Audit System",
-    "client": "LogisticsPro",
-    "description": "Delivery of Security Audit System for LogisticsPro.",
-    "start_date": "2026-06-27",
-    "end_date": "2027-10-20",
-    "estimated_duration_months": 16,
-    "budget": 480906,
+    "name": "MediaStream \u2014 E-commerce Platform",
+    "client": "MediaStream",
+    "description": "Delivery of E-commerce Platform for MediaStream.",
+    "start_date": "2026-04-20",
+    "end_date": "2027-04-15",
+    "estimated_duration_months": 12,
+    "budget": null,
     "status": "completed",
-    "team_size": 6,
+    "team_size": 4,
     "requirements": [
       {
-        "skill_name": "TypeScript",
+        "skill_name": "Angular",
+        "min_proficiency": "Advanced",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Redis",
         "min_proficiency": "Intermediate",
+        "is_mandatory": true
+      },
+      {
+        "skill_name": "Jenkins",
+        "min_proficiency": "Expert",
         "is_mandatory": false
       },
       {
-        "skill_name": "Python",
-        "min_proficiency": "Advanced",
-        "is_mandatory": true
+        "skill_name": "Machine Learning",
+        "min_proficiency": "Expert",
+        "is_mandatory": false
       },
       {
-        "skill_name": "Flask",
-        "min_proficiency": "Advanced",
-        "is_mandatory": true
-      },
-      {
-        "skill_name": "JavaScript",
+        "skill_name": "Data Science",
         "min_proficiency": "Intermediate",
         "is_mandatory": true
       }

@@ -17,12 +17,12 @@ logger = logging.getLogger(__name__)
 
 
 async def ingest_programmer_cvs_async(
-        *,
-        cv_directory: str | Path | None = None,
-        llm_use_case: str = "graph_transformer",
-        reset_neo4j_on_start: bool = False,
-        concurrency: int = 2,
-        settings_toml_path: str | None = None,
+    *,
+    cv_directory: str | Path | None = None,
+    llm_use_case: str = "graph_transformer",
+    reset_neo4j_on_start: bool = False,
+    concurrency: int = 2,
+    settings_toml_path: str | None = None,
 ) -> IngestionSummary:
     """
     Ingest generated CV PDFs into Neo4j
@@ -51,7 +51,7 @@ async def ingest_programmer_cvs_async(
         strict_mode=True,
     )
 
-    graph_service = Neo4jGraphService(reset_on_start=reset_neo4j_on_start)
+    graph_service = Neo4jGraphService(settings=settings, reset_on_start=reset_neo4j_on_start)
     ingestor = CvPdfIngestor(graph_service=graph_service, transformer=transformer, concurrency=concurrency)
     summary = await ingestor.ingest_directory(directory)
 
@@ -69,12 +69,12 @@ async def ingest_programmer_cvs_async(
 
 
 def ingest_programmer_cvs(
-        *,
-        cv_directory: str | Path | None = None,
-        llm_use_case: str = "graph_transformer",
-        reset_neo4j_on_start: bool = False,
-        concurrency: int = 2,
-        settings_toml_path: str | None = None,
+    *,
+    cv_directory: str | Path | None = None,
+    llm_use_case: str = "graph_transformer",
+    reset_neo4j_on_start: bool = False,
+    concurrency: int = 2,
+    settings_toml_path: str | None = None,
 ) -> dict[str, Any]:
     """
     Ingest generated CV PDFs into Neo4j
