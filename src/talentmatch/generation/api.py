@@ -113,7 +113,7 @@ def generate_single_rfp() -> dict[str, Any]:
     filename = safe_filename(f"rfp_{rfp['id']}_{rfp['title']}")
     pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=rfps_dir)
 
-    return {"rfp": rfp, "markdown": markdown_content, "pdf_file": str(pdf_path)}
+    return {"rfp": rfp, "pdf_file": str(pdf_path)}
 
 
 def _prepare_settings_and_llms() -> tuple[Settings, Prompts, Faker, Any, Any]:

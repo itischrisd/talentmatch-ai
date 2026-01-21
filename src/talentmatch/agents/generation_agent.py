@@ -5,7 +5,7 @@ from typing import Any
 from langgraph.prebuilt import create_react_agent
 
 from talentmatch.infra.llm import AzureLlmProvider
-from talentmatch.tools.generation_tools import generate_dataset, generate_single_rfp
+from talentmatch.tools.generation_tools import generate_single_rfp
 
 
 def create_generation_agent(
@@ -33,7 +33,7 @@ def create_generation_agent(
 
     return create_react_agent(
         model=llm,
-        tools=[generate_dataset, generate_single_rfp],
+        tools=[generate_single_rfp],
         name=name,
         prompt=prompt_text,
     )
