@@ -16,8 +16,8 @@ class IntRange(BaseModel):
     Closed integer range used by generators
     """
 
-    min: int = Field(..., ge=0)
-    max: int = Field(..., ge=0)
+    min: int
+    max: int
 
     @model_validator(mode="after")
     def validate_order(self) -> IntRange:

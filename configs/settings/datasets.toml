@@ -90,7 +90,7 @@ min = 2
 
 [datasets.projects.start_date_offset_days]
 max = 180
-min = 0
+min = -730
 
 [datasets.projects.status]
 labels = ["completed", "active", "planned", "on_hold"]
