@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import shutil
+from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -11,23 +12,26 @@ from langchain_experimental.graph_transformers import LLMGraphTransformer
 
 from talentmatch.config import load_settings
 from talentmatch.infra.llm import AzureLlmProvider
-from .ingestion import CvPdfIngestor, IngestionSummary
+from .ingestion import IngestionSummary, PdfIngestor
 from .neo4j import Neo4jGraphService
 from .ontology import ALLOWED_NODES, ALLOWED_RELATIONSHIPS, NODE_PROPERTIES
 
 logger = logging.getLogger(__name__)
 
 
-async def ingest_programmer_cvs_async() -> IngestionSummary:
+async def _ingest_pdf_files_async() -> dict[str, Any]:
     """
-    Ingest generated CV PDFs into Neo4j using the configured transformer and connection settings.
-    After ingestion, move successfully ingested PDFs into:
+    Ingest generated PDFs into Neo4j (CVs + RFPs) using the configured transformer and connection settings.
+
+    After ingestion, move successfully ingested PDFs (from both directories) into:
       {paths.archive_dir}/ingested_<timestamp>/
-    :return: ingestion summary
+
+    :return: dict with per-type and total ingestion summaries
     """
 
     settings = load_settings()
-    directory = Path(settings.paths.programmers_dir)
+    cvs_dir = Path(settings.paths.programmers_dir)
+    rfps_dir = Path(settings.paths.rfps_dir)
     archive_root = Path(settings.paths.archive_dir)
 
     llm_provider = AzureLlmProvider(settings)
@@ -42,32 +46,50 @@ async def ingest_programmer_cvs_async() -> IngestionSummary:
     )
 
     graph_service = Neo4jGraphService(neo4j=settings.neo4j)
-    ingestor = CvPdfIngestor(
+
+    cv_ingestor = PdfIngestor(
         graph_service=graph_service,
         transformer=transformer,
         concurrency=settings.knowledge_graph.concurrency,
+        document_type="cv",
+    )
+    rfp_ingestor = PdfIngestor(
+        graph_service=graph_service,
+        transformer=transformer,
+        concurrency=settings.knowledge_graph.concurrency,
+        document_type="rfp",
     )
 
-    summary = await ingestor.ingest_directory(directory)
+    cv_summary = await cv_ingestor.ingest_directory(cvs_dir)
+    rfp_summary = await rfp_ingestor.ingest_directory(rfps_dir)
+
+    combined_files = tuple(cv_summary.ingested_files) + tuple(rfp_summary.ingested_files)
 
     archived_to = _archive_ingested_files(
-        source_files=summary.ingested_files,
+        source_files=combined_files,
         archive_root=archive_root,
     )
     if archived_to is not None:
         logger.info("Archived ingested PDFs to %s", archived_to)
 
-    return summary
+    total = _sum_summaries(cv_summary, rfp_summary)
+
+    return {
+        "total": _summary_to_dict(total),
+        "cvs": _summary_to_dict(cv_summary),
+        "rfps": _summary_to_dict(rfp_summary),
+        "archived_to": str(archived_to) if archived_to is not None else None,
+    }
 
 
-def ingest_programmer_cvs() -> dict[str, Any]:
+def ingest_pdf_files() -> dict[str, Any]:
     """
-    Synchronous wrapper for ingest_programmer_cvs_async
-    :return: ingestion summary as a plain dict
+    Synchronous wrapper for ingest_generated_pdfs_async
     """
+    return asyncio.run(_ingest_pdf_files_async())
 
-    summary = asyncio.run(ingest_programmer_cvs_async())
 
+def _summary_to_dict(summary: IngestionSummary) -> dict[str, Any]:
     return {
         "discovered_pdfs": summary.discovered_pdfs,
         "processed_pdfs": summary.processed_pdfs,
@@ -77,6 +99,19 @@ def ingest_programmer_cvs() -> dict[str, Any]:
         "stored_relationships": summary.stored_relationships,
         "ingested_files": list(summary.ingested_files),
     }
+
+
+def _sum_summaries(a: IngestionSummary, b: IngestionSummary) -> IngestionSummary:
+    return replace(
+        a,
+        discovered_pdfs=a.discovered_pdfs + b.discovered_pdfs,
+        processed_pdfs=a.processed_pdfs + b.processed_pdfs,
+        failed_pdfs=a.failed_pdfs + b.failed_pdfs,
+        stored_graph_documents=a.stored_graph_documents + b.stored_graph_documents,
+        stored_nodes=a.stored_nodes + b.stored_nodes,
+        stored_relationships=a.stored_relationships + b.stored_relationships,
+        ingested_files=tuple(a.ingested_files) + tuple(b.ingested_files),
+    )
 
 
 def _archive_ingested_files(*, source_files: tuple[str, ...], archive_root: Path) -> Path | None:

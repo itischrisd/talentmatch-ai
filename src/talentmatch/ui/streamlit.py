@@ -164,7 +164,7 @@ def run() -> None:
             st.rerun()
 
         st.divider()
-        st.caption("Tip: ask: “Generate a single RFP PDF”")
+        st.caption("Remember to start file processing, ex. say “Ingest current files”")
 
     _ensure_state(ui_cfg)
     _render_history()

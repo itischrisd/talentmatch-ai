@@ -27,12 +27,13 @@ class IngestionSummary:
     stored_graph_documents: int
     stored_nodes: int
     stored_relationships: int
+
     ingested_files: tuple[str, ...] = ()
 
 
-class CvPdfIngestor:
+class PdfIngestor:
     """
-    Converts CV PDFs into a Neo4j knowledge graph using LLMGraphTransformer
+    Converts PDFs into a Neo4j knowledge graph using LLMGraphTransformer
     """
 
     def __init__(
@@ -41,12 +42,14 @@ class CvPdfIngestor:
             graph_service: Neo4jGraphService,
             transformer: LLMGraphTransformer,
             concurrency: int,
+            document_type: str,
     ) -> None:
         """
         Create an ingestor
         :param graph_service: Neo4j graph service
         :param transformer: Schema-constrained graph transformer
         :param concurrency: Maximum number of concurrent LLM conversions
+        :param document_type: metadata marker, e.g. "cv" or "rfp"
         :raises ValueError: If concurrency is less than 1
         """
 
@@ -56,6 +59,7 @@ class CvPdfIngestor:
         self._graph_service = graph_service
         self._transformer = transformer
         self._concurrency = concurrency
+        self._document_type = str(document_type).strip() or "document"
 
     @staticmethod
     def _extract_pdf_text(pdf_path: Path) -> str:
@@ -70,13 +74,17 @@ class CvPdfIngestor:
             return ""
 
     async def _convert_pdf_to_graph_documents(self, pdf_path: Path) -> list[Any]:
-        logger.info("Processing %s", pdf_path.name)
+        logger.info("Processing %s (%s)", pdf_path.name, self._document_type)
+
         text = self._extract_pdf_text(pdf_path)
         if not text.strip():
             logger.warning("No text extracted from %s", pdf_path.name)
             return []
 
-        document = Document(page_content=text, metadata={"source": str(pdf_path), "type": "cv"})
+        document = Document(
+            page_content=text,
+            metadata={"source": str(pdf_path), "type": self._document_type},
+        )
 
         try:
             graph_documents = await self._transformer.aconvert_to_graph_documents([document])
@@ -85,8 +93,9 @@ class CvPdfIngestor:
                 nodes = len(getattr(first, "nodes", []))
                 relationships = len(getattr(first, "relationships", []))
                 logger.info(
-                    "Extracted graph from %s (nodes=%d, relationships=%d)",
+                    "Extracted graph from %s (%s) (nodes=%d, relationships=%d)",
                     pdf_path.name,
+                    self._document_type,
                     nodes,
                     relationships,
                 )
@@ -96,13 +105,12 @@ class CvPdfIngestor:
             return []
 
     def _store_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
-
         return self._graph_service.add_graph_documents(graph_documents)
 
     async def ingest_directory(self, pdf_directory: Path) -> IngestionSummary:
         """
         Process all PDFs in a directory
-        :param pdf_directory: path containing PDF CV files
+        :param pdf_directory: path containing PDFs
         :return: Ingestion summary
         """
 
@@ -127,7 +135,6 @@ class CvPdfIngestor:
         stored_docs = 0
         stored_nodes = 0
         stored_relationships = 0
-
         ingested_files: list[str] = []
 
         for path, documents in results:
@@ -146,7 +153,6 @@ class CvPdfIngestor:
             stored_docs += len(documents)
             stored_nodes += storage.nodes
             stored_relationships += storage.relationships
-
             ingested_files.append(str(path))
 
         return IngestionSummary(
@@ -157,4 +163,24 @@ class CvPdfIngestor:
             stored_nodes=stored_nodes,
             stored_relationships=stored_relationships,
             ingested_files=tuple(ingested_files),
+        )
+
+
+class CvPdfIngestor(PdfIngestor):
+    """
+    Backwards-compatible wrapper for CV ingestion.
+    """
+
+    def __init__(
+            self,
+            *,
+            graph_service: Neo4jGraphService,
+            transformer: LLMGraphTransformer,
+            concurrency: int,
+    ) -> None:
+        super().__init__(
+            graph_service=graph_service,
+            transformer=transformer,
+            concurrency=concurrency,
+            document_type="cv",
         )

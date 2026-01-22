@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
 
 from langchain_neo4j import Neo4jGraph
 
@@ -76,7 +75,7 @@ def run() -> int:
         import talentmatch.knowledge_graph as kg_module
 
         exported = set(getattr(kg_module, "__all__", []))
-        required = {"ingest_programmer_cvs", "ingest_programmer_cvs_async"}
+        required = {"ingest_pdf_files"}
         ok = assert_true(required.issubset(exported), ok="knowledge_graph public API __all__ ok",
                          fail="knowledge_graph __all__ missing items")
         if not ok:
@@ -125,12 +124,12 @@ def run() -> int:
         return 1
 
     try:
-        from talentmatch.knowledge_graph import ingest_programmer_cvs
+        from talentmatch.knowledge_graph import ingest_pdf_files
 
-        result = ingest_programmer_cvs()
-        print_ok("ingest_programmer_cvs() succeeded")
+        result = ingest_pdf_files()
+        print_ok("ingest_pdf_files() succeeded")
     except Exception as exc:
-        print_fail(f"ingest_programmer_cvs() failed: {exc}")
+        print_fail(f"ingest_pdf_files() failed: {exc}")
         return 1
 
     failures = 0

@@ -5,7 +5,7 @@ from typing import Any
 from langgraph.prebuilt import create_react_agent
 
 from talentmatch.infra.llm import AzureLlmProvider
-from talentmatch.tools.knowledge_graph_tools import ingest_programmer_cvs
+from talentmatch.tools.knowledge_graph_tools import ingest_files
 
 
 def create_kg_agent(
@@ -29,7 +29,7 @@ def create_kg_agent(
 
     return create_react_agent(
         model=llm,
-        tools=[ingest_programmer_cvs],
+        tools=[ingest_files],
         name=name,
         prompt=prompt_text,
     )
