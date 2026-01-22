@@ -106,6 +106,23 @@ class KnowledgeGraphSettings(BaseModel):
     concurrency: int = Field(..., gt=0)
 
 
+class LoggingSettings(BaseModel):
+    """
+    Logging configuration.
+    """
+
+    level: str = "INFO"
+
+    @field_validator("level")
+    @classmethod
+    def validate_level(cls, value: str) -> str:
+        allowed = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
+        normalized = str(value).upper()
+        if normalized not in allowed:
+            raise ConfigurationError(f"logging.level must be one of: {sorted(allowed)}")
+        return normalized
+
+
 class LlmUseCaseSettings(BaseModel):
     """
     LLM parameters for a specific generation use-case
@@ -339,6 +356,7 @@ class Settings(BaseModel):
     azure_openai: AzureOpenAiSettings
     neo4j: Neo4jSettings
     knowledge_graph: KnowledgeGraphSettings
+    logging: LoggingSettings = Field(default_factory=LoggingSettings)
 
     @classmethod
     def from_payload(cls, payload: dict[str, Any]) -> Settings:
