@@ -23,7 +23,7 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
     """
     Ingest generated PDFs into Neo4j (CVs + RFPs) using the configured transformer and connection settings.
 
-    After ingestion, move successfully ingested PDFs (from both directories) into:
+    After PDF ingestion, move successfully ingested PDFs into:
       {paths.archive_dir}/ingested_<timestamp>/
 
     As the final step, ingest structured files (JSON/XML/YAML) located anywhere under:
@@ -31,7 +31,7 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
     - {paths.rfps_dir}
     - {paths.projects_dir}
 
-    For structured files, the extracted graph is only injected if referenced Person and Project nodes already exist in Neo4j.
+    After structured ingestion, move successfully ingested structured files into the same archive folder used for PDFs.
 
     :return: dict with per-type and total ingestion summaries
     """
@@ -55,6 +55,19 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
 
     graph_service = Neo4jGraphService(neo4j=settings.neo4j)
 
+    archive_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    archive_dir: Path | None = None
+
+    def archive_files(source_files: tuple[str, ...]) -> int:
+        nonlocal archive_dir
+        if not source_files:
+            return 0
+
+        if archive_dir is None:
+            archive_dir = _prepare_archive_dir(archive_root=archive_root, timestamp=archive_timestamp)
+
+        return _archive_ingested_files(source_files=source_files, destination_dir=archive_dir)
+
     cv_ingestor = PdfIngestor(
         graph_service=graph_service,
         transformer=transformer,
@@ -71,14 +84,10 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
     cv_summary = await cv_ingestor.ingest_directory(cvs_dir)
     rfp_summary = await rfp_ingestor.ingest_directory(rfps_dir)
 
-    combined_files = tuple(cv_summary.ingested_files) + tuple(rfp_summary.ingested_files)
-
-    archived_to = _archive_ingested_files(
-        source_files=combined_files,
-        archive_root=archive_root,
-    )
-    if archived_to is not None:
-        logger.info("Archived ingested PDFs to %s", archived_to)
+    pdf_files = tuple(cv_summary.ingested_files) + tuple(rfp_summary.ingested_files)
+    moved_pdfs = archive_files(pdf_files)
+    if moved_pdfs > 0 and archive_dir is not None:
+        logger.info("Archived %d ingested PDF(s) to %s", moved_pdfs, archive_dir)
 
     structured_ingestor = StructuredFileIngestor(
         graph_service=graph_service,
@@ -91,13 +100,17 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
         (cvs_dir, rfps_dir, projects_dir),
     )
 
+    moved_structured = archive_files(tuple(structured_summary.ingested_files))
+    if moved_structured > 0 and archive_dir is not None:
+        logger.info("Archived %d ingested structured file(s) to %s", moved_structured, archive_dir)
+
     total_pdf = _sum_summaries(cv_summary, rfp_summary)
 
     return {
         "total": _summary_to_dict(total_pdf),
         "cvs": _summary_to_dict(cv_summary),
         "rfps": _summary_to_dict(rfp_summary),
-        "archived_to": str(archived_to) if archived_to is not None else None,
+        "archived_to": str(archive_dir) if archive_dir is not None else None,
         "structured": _structured_summary_to_dict(structured_summary),
         "missing_values": {
             "missing_person_ids": list(structured_summary.missing_person_ids),
@@ -157,23 +170,29 @@ def _sum_summaries(a: IngestionSummary, b: IngestionSummary) -> IngestionSummary
     )
 
 
-def _archive_ingested_files(*, source_files: tuple[str, ...], archive_root: Path) -> Path | None:
+def _prepare_archive_dir(*, archive_root: Path, timestamp: str) -> Path:
     """
-    Move successfully ingested PDF files into a timestamped archive folder:
+    Prepare a timestamped archive folder under archive_root:
       archive_root/ingested_<timestamp>/
+    """
+    destination_dir = archive_root.expanduser() / f"ingested_{timestamp}"
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    return destination_dir
+
+
+def _archive_ingested_files(*, source_files: tuple[str, ...], destination_dir: Path) -> int:
+    """
+    Move successfully ingested files into destination_dir.
 
     Best-effort:
     - If a file does not exist, it is skipped.
     - If a destination name conflicts, a numeric suffix is added.
     - Errors per file are logged but do not fail ingestion.
+
+    :return: number of files moved
     """
-
     if not source_files:
-        return None
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    destination_dir = archive_root.expanduser() / f"ingested_{timestamp}"
-    destination_dir.mkdir(parents=True, exist_ok=True)
+        return 0
 
     moved = 0
     for raw in source_files:
@@ -190,7 +209,7 @@ def _archive_ingested_files(*, source_files: tuple[str, ...], archive_root: Path
         except Exception:
             logger.exception("Failed to archive %s -> %s", src, dest)
 
-    return destination_dir if moved > 0 else None
+    return moved
 
 
 def _unique_destination(destination_dir: Path, filename: str) -> Path:
@@ -198,7 +217,6 @@ def _unique_destination(destination_dir: Path, filename: str) -> Path:
     Produce a unique destination path under destination_dir for filename.
     If filename exists, append _{n} before extension.
     """
-
     candidate = destination_dir / filename
     if not candidate.exists():
         return candidate

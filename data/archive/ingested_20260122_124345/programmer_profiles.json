@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1,
+    "name": "Alan Velazquez",
+    "email": "simmonsryan@example.com",
+    "location": "Underwoodmouth",
+    "skills": [
+      {
+        "name": "Rust",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Angular",
+        "proficiency": "Beginner"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Kubernetes",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Data Science",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Vue.js",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Java",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "projects": [
+      "PRJ-008"
+    ],
+    "certifications": [
+      "Certified Kubernetes Administrator",
+      "AWS Certified Solutions Architect",
+      "Google Cloud Professional"
+    ],
+    "person_id": "P-001",
+    "project_assignments": [
+      {
+        "project_id": "PRJ-008",
+        "project_name": "SmartCity Initiative \u2014 Payment Processing System",
+        "client": "SmartCity Initiative",
+        "assignment_start_date": "2026-01-17",
+        "assignment_end_date": "2026-09-24",
+        "allocation_percent": 50
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Stefanie Rodriguez",
+    "email": "tnicholson@example.org",
+    "location": "Floreston",
+    "skills": [
+      {
+        "name": "Kubernetes",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Microservices",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Go",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Django",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Git",
+        "proficiency": "Expert"
+      },
+      {
+        "name": "Rust",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Docker",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Python",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "Jenkins",
+        "proficiency": "Advanced"
+      }
+    ],
+    "projects": [
+      "PRJ-012",
+      "PRJ-006"
+    ],
+    "certifications": [
+      "Google Cloud Professional",
+      "AWS Certified Solutions Architect"
+    ],
+    "person_id": "P-002",
+    "project_assignments": [
+      {
+        "project_id": "PRJ-012",
+        "project_name": "DataSystems Inc \u2014 Data Analytics Dashboard",
+        "client": "DataSystems Inc",
+        "assignment_start_date": "2025-09-07",
+        "assignment_end_date": "2026-05-19",
+        "allocation_percent": 50
+      },
+      {
+        "project_id": "PRJ-006",
+        "project_name": "EduTech Solutions \u2014 Customer Portal",
+        "client": "EduTech Solutions",
+        "assignment_start_date": "2024-08-11",
+        "assignment_end_date": "2025-07-26",
+        "allocation_percent": 80
+      }
+    ]
+  }
+]
