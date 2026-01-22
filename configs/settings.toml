@@ -1,8 +1,11 @@
 [settings]
 includes = [
-  "settings/paths.toml",
-  "settings/generation.toml",
-  "settings/llm.toml",
-  "settings/datasets.toml",
-  "settings/knowledge_graph.toml",
+    "settings/paths.toml",
+    "settings/generation.toml",
+    "settings/llm.toml",
+    "settings/datasets.toml",
+    "settings/knowledge_graph.toml",
 ]
+
+[logging]
+level = "INFO"
