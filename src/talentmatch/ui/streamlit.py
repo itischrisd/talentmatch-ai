@@ -22,10 +22,12 @@ class UiConfig:
     page_title: str = "TalentMatch"
     page_icon: str = "🧠"
     layout: str = "centered"
-    chat_input_placeholder: str = "Ask me to generate an RFP..."
+    chat_input_placeholder: str = "Ask me to generate an RFP or ingest staged files..."
     system_message: str = (
-        "You are the TalentMatch assistant. If the user asks to generate an RFP, use the generation tool. "
-        "If the user asks to ingest CV PDFs, use the KG ingestion tool. "
+        "You are the TalentMatch assistant. "
+        "If the user asks to generate an RFP, use the generation tool. "
+        "If the user asks to ingest staged files, use the KG ingestion tool. "
+        "The user may stage CV PDFs, RFP PDFs, and structured files (JSON/XML/YAML). "
         "When a tool produces a file path, mention it in your final answer."
     )
 
@@ -122,26 +124,112 @@ def _render_downloads(artifacts: dict[str, Any]) -> None:
             )
 
 
-def _save_uploaded_cvs() -> int:
-    settings = load_settings()
-    target_dir = Path(settings.paths.programmers_dir)
-    ensure_dirs(target_dir)
-
+def _save_uploaded_files(
+        *,
+        label: str,
+        uploader_key: str,
+        target_dir: Path,
+        allowed_types: list[str],
+) -> int:
     uploaded = st.file_uploader(
-        "Upload CV PDFs to ingest",
-        type=["pdf"],
+        label,
+        type=allowed_types,
         accept_multiple_files=True,
+        key=uploader_key,
     )
 
     if not uploaded:
         return 0
+
+    ensure_dirs(target_dir)
 
     saved = 0
     for f in uploaded:
         dest = target_dir / f.name
         dest.write_bytes(f.getvalue())
         saved += 1
+
     return saved
+
+
+def _staging_panel() -> dict[str, Any]:
+    settings = load_settings()
+
+    cvs_dir = Path(settings.paths.programmers_dir)
+    rfps_dir = Path(settings.paths.rfps_dir)
+    projects_dir = Path(settings.paths.projects_dir)
+
+    ensure_dirs(cvs_dir, rfps_dir, projects_dir)
+
+    with st.sidebar:
+        st.subheader("File staging")
+        st.caption("Upload files to stage them for ingestion. Then ask: “Ingest staged files”.")
+
+        with st.expander("CV PDFs", expanded=False):
+            saved = _save_uploaded_files(
+                label="Upload CV PDFs",
+                uploader_key="upload_cvs",
+                target_dir=cvs_dir,
+                allowed_types=["pdf"],
+            )
+            if saved:
+                st.success(f"Saved {saved} file(s) to: {cvs_dir}")
+
+        with st.expander("RFP PDFs", expanded=False):
+            saved = _save_uploaded_files(
+                label="Upload RFP PDFs",
+                uploader_key="upload_rfps",
+                target_dir=rfps_dir,
+                allowed_types=["pdf"],
+            )
+            if saved:
+                st.success(f"Saved {saved} file(s) to: {rfps_dir}")
+
+        with st.expander("Structured data", expanded=False):
+            dest_choice = st.selectbox(
+                "Target folder",
+                options=[
+                    ("Programmers directory", "programmers"),
+                    ("RFPs directory", "rfps"),
+                    ("Projects directory", "projects"),
+                ],
+                format_func=lambda x: x[0],
+                index=2,
+                key="structured_dest_choice",
+            )[1]
+
+            destination = {"programmers": cvs_dir, "rfps": rfps_dir, "projects": projects_dir}[dest_choice]
+
+            saved = _save_uploaded_files(
+                label="Upload structured files (JSON/XML/YAML)",
+                uploader_key="upload_structured",
+                target_dir=destination,
+                allowed_types=["json", "xml", "yaml", "yml"],
+            )
+            if saved:
+                st.success(f"Saved {saved} file(s) to: {destination}")
+
+        st.divider()
+
+        with st.expander("Configured paths", expanded=False):
+            st.write(
+                {
+                    "programmers_dir": str(cvs_dir),
+                    "rfps_dir": str(rfps_dir),
+                    "projects_dir": str(projects_dir),
+                    "archive_dir": str(Path(settings.paths.archive_dir)),
+                }
+            )
+
+        if st.button("Clear chat", type="secondary"):
+            st.session_state.pop(_SESSION_MESSAGES_KEY, None)
+            st.rerun()
+
+    return {
+        "programmers_dir": str(cvs_dir),
+        "rfps_dir": str(rfps_dir),
+        "projects_dir": str(projects_dir),
+    }
 
 
 def run() -> None:
@@ -152,19 +240,9 @@ def run() -> None:
     ui_cfg = UiConfig()
 
     st.set_page_config(page_title=ui_cfg.page_title, page_icon=ui_cfg.page_icon, layout=ui_cfg.layout)
+    _staging_panel()
+
     st.title(ui_cfg.title)
-
-    with st.sidebar:
-        st.subheader("CV ingestion")
-        saved = _save_uploaded_cvs()
-        if saved:
-            st.success(f"Saved {saved} file(s) to the configured CV directory.")
-        if st.button("Clear chat"):
-            st.session_state.pop(_SESSION_MESSAGES_KEY, None)
-            st.rerun()
-
-        st.divider()
-        st.caption("Remember to start file processing, ex. say “Ingest current files”")
 
     _ensure_state(ui_cfg)
     _render_history()
