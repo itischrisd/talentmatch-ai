@@ -46,16 +46,22 @@ def generate_dataset() -> dict[str, Any]:
     logger.info("Generating %s programmer profiles", settings.generation.num_programmers)
     profiles = programmer_generator.generate(settings.generation.num_programmers)
 
+    for profile in profiles:
+        pid = int(profile.get("id", 0))
+        profile["person_id"] = f"P-{pid:03d}"
+
+    logger.info("Generating %s projects", settings.generation.num_projects)
+    projects = project_generator.generate(settings.generation.num_projects, profiles)
+
+    _enrich_profiles_with_project_assignments(profiles, projects)
+
     cv_files: list[str] = []
     for idx, profile in enumerate(profiles, start=1):
         logger.info("Generating CV %s/%s: %s", idx, settings.generation.num_programmers, profile["name"])
         markdown_content = documents.render_cv_markdown(profile)
-        filename = safe_filename(f"cv_{profile['id']:03d}_{profile['name']}")
+        filename = safe_filename(f"cv_{int(profile['id']):03d}_{profile['name']}")
         pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=programmers_dir)
         cv_files.append(str(pdf_path))
-
-    logger.info("Generating %s projects", settings.generation.num_projects)
-    projects = project_generator.generate(settings.generation.num_projects, profiles)
 
     logger.info("Generating %s RFPs", settings.generation.num_rfps)
     rfps = rfp_generator.generate(settings.generation.num_rfps)
@@ -114,6 +120,47 @@ def generate_single_rfp() -> dict[str, Any]:
     pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=rfps_dir)
 
     return {"rfp": rfp, "pdf_file": str(pdf_path)}
+
+
+def _enrich_profiles_with_project_assignments(
+        profiles: list[dict[str, Any]],
+        projects: list[dict[str, Any]],
+) -> None:
+    """
+    Add structured project assignment info (incl. allocation %) to programmer profiles so CV generation can include it.
+    """
+
+    by_id: dict[int, dict[str, Any]] = {int(p["id"]): p for p in profiles if p.get("id") is not None}
+    assignments_by_programmer: dict[int, list[dict[str, Any]]] = {int(p["id"]): [] for p in profiles if
+                                                                  p.get("id") is not None}
+
+    for project in projects:
+        for a in project.get("assigned_programmers", []) or []:
+            pid = a.get("programmer_id")
+            if pid is None:
+                continue
+            pid_int = int(pid)
+            if pid_int not in assignments_by_programmer:
+                continue
+
+            assignments_by_programmer[pid_int].append(
+                {
+                    "project_id": project.get("id", ""),
+                    "project_name": project.get("name", ""),
+                    "client": project.get("client", ""),
+                    "assignment_start_date": a.get("assignment_start_date", ""),
+                    "assignment_end_date": a.get("assignment_end_date", ""),
+                    "allocation_percent": a.get("allocation_percent", None),
+                }
+            )
+
+    for pid, profile in by_id.items():
+        items = assignments_by_programmer.get(pid, [])
+        items.sort(key=lambda x: str(x.get("assignment_start_date", "")), reverse=True)
+
+        profile["project_assignments"] = items
+        # keep a simple list too (useful for any old code / quick display)
+        profile["projects"] = [f"{i.get('project_id', '')}" for i in items if i.get("project_id")]
 
 
 def _prepare_settings_and_llms() -> tuple[Settings, Prompts, Faker, Any, Any]:

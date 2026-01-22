@@ -92,6 +92,7 @@ class ProjectGenerator:
         assignments_by_programmer: dict[int, list[tuple[date, date]]] = {int(p["id"]): [] for p in programmer_profiles}
 
         assignable = [p for p in projects if p.get("status") in set(projects_policy.assignable_statuses)]
+
         for project in assignable:
             if random.random() > float(assignments_policy.assignment_probability):
                 continue
@@ -100,24 +101,163 @@ class ProjectGenerator:
             if not eligible:
                 continue
 
-            team_size = int(project.get("team_size", 0))
+            team_size = max(int(project.get("team_size", 0)), 0)
+            if team_size <= 0:
+                continue
+
             selection = random.sample(eligible, min(team_size, len(eligible)))
-
             for programmer in selection:
-                start = date.fromisoformat(project["start_date"])
-                end = self._compute_assignment_end(project)
+                self._assign_one(programmer, project, assignments_by_programmer)
 
-                project["assigned_programmers"].append(
-                    {
-                        "programmer_name": programmer["name"],
-                        "programmer_id": programmer["id"],
-                        "assignment_start_date": start.isoformat(),
-                        "assignment_end_date": end.isoformat(),
-                    }
-                )
-                assignments_by_programmer[int(programmer["id"])].append((start, end))
+        self._ensure_min_programmers_per_project(assignable, programmer_profiles, assignments_by_programmer)
+        self._ensure_min_projects_per_programmer(assignable, programmer_profiles, assignments_by_programmer)
 
         return projects
+
+    def _assign_one(
+            self,
+            programmer: dict[str, Any],
+            project: dict[str, Any],
+            assignments_by_programmer: dict[int, list[tuple[date, date]]],
+    ) -> None:
+        programmer_id = int(programmer["id"])
+        already = {int(a.get("programmer_id")) for a in project.get("assigned_programmers", []) if
+                   a.get("programmer_id") is not None}
+        if programmer_id in already:
+            return
+
+        start = date.fromisoformat(project["start_date"])
+        end = self._compute_assignment_end(project)
+
+        allocation_percent = self._pick_allocation_percent()
+
+        project["assigned_programmers"].append(
+            {
+                "programmer_name": programmer["name"],
+                "programmer_id": programmer["id"],
+                "assignment_start_date": start.isoformat(),
+                "assignment_end_date": end.isoformat(),
+                "allocation_percent": int(allocation_percent),
+            }
+        )
+        assignments_by_programmer[programmer_id].append((start, end))
+
+    def _pick_allocation_percent(self) -> int:
+        policy = self._datasets.assignments.allocation_percent
+        values = policy.values()
+        return int(random.choice(values)) if values else 100
+
+    def _ensure_min_programmers_per_project(
+            self,
+            assignable_projects: list[dict[str, Any]],
+            programmer_profiles: list[dict[str, Any]],
+            assignments_by_programmer: dict[int, list[tuple[date, date]]],
+    ) -> None:
+        assignments_policy = self._datasets.assignments
+
+        minimum = int(assignments_policy.min_programmers_per_project)
+        if minimum <= 0:
+            return
+
+        for project in assignable_projects:
+            team_size = max(int(project.get("team_size", 0)), 0)
+            if team_size <= 0:
+                continue
+
+            required = min(team_size, minimum)
+            while len(project.get("assigned_programmers", [])) < required:
+                eligible = self._eligible_programmers(project, programmer_profiles, assignments_by_programmer)
+                if not eligible:
+                    break
+
+                already = {int(a.get("programmer_id")) for a in project.get("assigned_programmers", []) if
+                           a.get("programmer_id") is not None}
+                eligible = [p for p in eligible if int(p["id"]) not in already]
+                if not eligible:
+                    break
+
+                self._assign_one(random.choice(eligible), project, assignments_by_programmer)
+
+    def _ensure_min_projects_per_programmer(
+            self,
+            assignable_projects: list[dict[str, Any]],
+            programmer_profiles: list[dict[str, Any]],
+            assignments_by_programmer: dict[int, list[tuple[date, date]]],
+    ) -> None:
+        assignments_policy = self._datasets.assignments
+
+        minimum = int(assignments_policy.min_projects_per_programmer)
+        if minimum <= 0:
+            return
+
+        counts: dict[int, int] = {int(p["id"]): 0 for p in programmer_profiles}
+        for project in assignable_projects:
+            for a in project.get("assigned_programmers", []):
+                pid = a.get("programmer_id")
+                if pid is None:
+                    continue
+                counts[int(pid)] = counts.get(int(pid), 0) + 1
+
+        for programmer in programmer_profiles:
+            programmer_id = int(programmer["id"])
+            while counts.get(programmer_id, 0) < minimum:
+                candidates = self._candidate_projects_for_programmer(programmer, assignable_projects,
+                                                                     assignments_by_programmer)
+                if not candidates:
+                    break
+
+                candidates.sort(key=lambda p: len(p.get("assigned_programmers", [])))
+                top = candidates[: min(5, len(candidates))]
+                chosen = random.choice(top)
+
+                self._assign_one(programmer, chosen, assignments_by_programmer)
+                counts[programmer_id] = counts.get(programmer_id, 0) + 1
+
+    def _candidate_projects_for_programmer(
+            self,
+            programmer: dict[str, Any],
+            assignable_projects: list[dict[str, Any]],
+            assignments_by_programmer: dict[int, list[tuple[date, date]]],
+    ) -> list[dict[str, Any]]:
+        programmer_id = int(programmer["id"])
+
+        result: list[dict[str, Any]] = []
+        for project in assignable_projects:
+            team_size = max(int(project.get("team_size", 0)), 0)
+            if team_size <= 0:
+                continue
+            if len(project.get("assigned_programmers", [])) >= team_size:
+                continue
+
+            already = {int(a.get("programmer_id")) for a in project.get("assigned_programmers", []) if
+                       a.get("programmer_id") is not None}
+            if programmer_id in already:
+                continue
+
+            if not self._is_programmer_eligible_for_project(programmer, project, assignments_by_programmer):
+                continue
+
+            result.append(project)
+
+        return result
+
+    def _is_programmer_eligible_for_project(
+            self,
+            programmer: dict[str, Any],
+            project: dict[str, Any],
+            assignments_by_programmer: dict[int, list[tuple[date, date]]],
+    ) -> bool:
+        mandatory = [r for r in project.get("requirements", []) if r.get("is_mandatory")]
+        if not self._meets_mandatory_requirements(programmer, mandatory):
+            return False
+
+        project_start = date.fromisoformat(project["start_date"])
+        project_end = self._project_effective_end(project)
+        programmer_id = int(programmer["id"])
+        if self._has_overlap(assignments_by_programmer[programmer_id], project_start, project_end):
+            return False
+
+        return True
 
     def _eligible_programmers(
             self,

@@ -31,6 +31,29 @@ class IntRange(BaseModel):
         return randint(int(self.min), int(self.max))
 
 
+class PercentStepRange(BaseModel):
+    """
+    Inclusive percent range with a fixed step (e.g., 10..100 step 10).
+    """
+
+    min: int = Field(..., ge=0, le=100)
+    max: int = Field(..., ge=0, le=100)
+    step: int = Field(..., gt=0)
+
+    @model_validator(mode="after")
+    def validate_policy(self) -> "PercentStepRange":
+        if int(self.max) < int(self.min):
+            raise ConfigurationError("PercentStepRange max must be >= min")
+        if int(self.step) <= 0:
+            raise ConfigurationError("PercentStepRange step must be > 0")
+        if int(self.min) % int(self.step) != 0 or int(self.max) % int(self.step) != 0:
+            raise ConfigurationError("PercentStepRange min/max must align with step")
+        return self
+
+    def values(self) -> list[int]:
+        return list(range(int(self.min), int(self.max) + 1, int(self.step)))
+
+
 class PathsSettings(BaseModel):
     """
     Output paths for generated artifacts
@@ -266,6 +289,13 @@ class AssignmentsDataset(BaseModel):
 
     assignment_probability: float
     assignment_end_days_before: IntRange
+
+    allocation_percent: PercentStepRange = Field(
+        default_factory=lambda: PercentStepRange(min=10, max=100, step=10)
+    )
+
+    min_programmers_per_project: int = Field(0, ge=0)
+    min_projects_per_programmer: int = Field(0, ge=0)
 
     @field_validator("assignment_probability")
     @classmethod

@@ -1,5 +1,12 @@
 [datasets.assignments]
 assignment_probability = 0.8
+min_programmers_per_project = 1
+min_projects_per_programmer = 1
+
+[datasets.assignments.allocation_percent]
+min = 10
+max = 100
+step = 10
 
 [datasets.assignments.assignment_end_days_before]
 max = 30

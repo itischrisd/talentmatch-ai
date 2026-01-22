@@ -469,16 +469,37 @@ class DocumentService:
         """
 
         skills_text = ", ".join(f"{s.get('name')} ({s.get('proficiency')})" for s in profile.get("skills", []))
-        projects_text = ", ".join(profile.get("projects", []))
         certs_text = ", ".join(profile.get("certifications", []))
+
+        assignments = profile.get("project_assignments") or []
+        if assignments:
+            lines: list[str] = []
+            for a in assignments:
+                project_id = str(a.get("project_id", "")).strip()
+                project_name = str(a.get("project_name", "")).strip()
+                client = str(a.get("client", "")).strip()
+                start = str(a.get("assignment_start_date", "")).strip()
+                end = str(a.get("assignment_end_date", "")).strip()
+                alloc = a.get("allocation_percent")
+                alloc_text = f"{int(alloc)}%" if alloc is not None else ""
+                lines.append(
+                    f"- Project ID: {project_id} | Client: {client} | Name: {project_name} | "
+                    f"Allocation: {alloc_text} | Start: {start} | End: {end}"
+                )
+            project_assignments_text = "\n".join(lines)
+        else:
+            projects_text = ", ".join(profile.get("projects", []))
+            project_assignments_text = projects_text
 
         template = self._prompts.datasets.cv_markdown
         prompt = template.format(
+            person_id=profile.get("person_id", ""),
             name=profile.get("name", ""),
             email=profile.get("email", ""),
             location=profile.get("location", ""),
             skills=skills_text,
-            projects=projects_text,
+            projects=project_assignments_text,
+            project_assignments=project_assignments_text,
             certifications=certs_text,
             proficiency_levels=", ".join(self._proficiency_levels),
         )
