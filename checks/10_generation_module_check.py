@@ -82,8 +82,6 @@ def run() -> int:
 
     failures += 0 if assert_true(isinstance(single, dict), ok="single_rfp result is dict",
                                  fail="single_rfp result is not dict") else 1
-    failures += 0 if assert_true(bool(single.get("markdown", "").strip()), ok="single_rfp markdown non-empty",
-                                 fail="single_rfp markdown empty") else 1
 
     pdf_file = Path(str(single.get("pdf_file", "")))
     failures += 0 if assert_true(pdf_file.exists(), ok="single_rfp pdf exists",

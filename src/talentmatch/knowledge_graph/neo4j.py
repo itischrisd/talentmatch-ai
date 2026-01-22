@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True, slots=True)
 class StorageResult:
     """
-    Represents the number of nodes and relationships written to the graph
+    Represents the number of nodes and relationships written to the graph.
     """
 
     nodes: int
@@ -23,12 +24,12 @@ class StorageResult:
 
 class Neo4jGraphService:
     """
-    Provides Neo4j connection, schema setup, and basic maintenance operations
+    Provides Neo4j connection, schema setup, and basic maintenance operations.
     """
 
     def __init__(self, *, neo4j: Neo4jSettings) -> None:
         """
-        Create a Neo4j service
+        Create a Neo4j service.
         :param neo4j: Neo4j connection settings
         """
 
@@ -41,9 +42,12 @@ class Neo4jGraphService:
         logger.info("Connected to Neo4j")
         self._ensure_indexes()
 
-    def _safe_query(self, cypher: str) -> list[dict[str, Any]]:
+    def _safe_query(self, cypher: str, parameters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         try:
-            result = self._graph.query(cypher)
+            if parameters is None:
+                result = self._graph.query(cypher)
+            else:
+                result = self._graph.query(cypher, parameters)
             return list(result) if result else []
         except Exception:
             logger.exception("Neo4j query failed")
@@ -66,15 +70,59 @@ class Neo4jGraphService:
     def _ensure_indexes(self) -> None:
         statements = (
             "CREATE INDEX person_id IF NOT EXISTS FOR (p:Person) ON (p.id)",
+            "CREATE INDEX project_id IF NOT EXISTS FOR (p:Project) ON (p.id)",
             "CREATE INDEX company_id IF NOT EXISTS FOR (c:Company) ON (c.id)",
             "CREATE INDEX skill_id IF NOT EXISTS FOR (s:Skill) ON (s.id)",
         )
         for statement in statements:
             self._safe_query(statement)
 
+    @staticmethod
+    def _validate_label(label: str) -> str:
+        cleaned = str(label).strip()
+        if not cleaned or re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", cleaned) is None:
+            raise ValueError(f"Invalid Neo4j label: {label!r}")
+        return cleaned
+
+    def existing_node_ids(self, *, label: str, ids: set[str]) -> set[str]:
+        """
+        Return the subset of ids that exist in Neo4j as nodes of the given label with property 'id'.
+        :param label: Neo4j node label, e.g. "Person"
+        :param ids: node ids to check
+        :return: set of ids present in Neo4j
+        """
+
+        if not ids:
+            return set()
+
+        safe_label = self._validate_label(label)
+        query = f"""
+        UNWIND $ids AS node_id
+        MATCH (n:{safe_label} {{id: node_id}})
+        RETURN collect(node_id) AS existing
+        """
+        rows = self._safe_query(query, {"ids": sorted(ids)})
+        if not rows:
+            return set()
+
+        existing = rows[0].get("existing", []) or []
+        return {str(x).strip() for x in existing if str(x).strip()}
+
+    def missing_node_ids(self, *, label: str, ids: set[str]) -> set[str]:
+        """
+        Return the subset of ids that do not exist in Neo4j as nodes of the given label with property 'id'.
+        :param label: Neo4j node label, e.g. "Person"
+        :param ids: node ids to check
+        :return: set of ids absent in Neo4j
+        """
+
+        if not ids:
+            return set()
+        return set(ids) - self.existing_node_ids(label=label, ids=ids)
+
     def add_graph_documents(self, graph_documents: list[Any]) -> StorageResult:
         """
-        Persist graph documents in Neo4j
+        Persist graph documents in Neo4j.
         :param graph_documents: GraphDocument objects
         :return: Storage result
         :raises Exception: If Neo4j write fails

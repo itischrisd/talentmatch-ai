@@ -12,7 +12,7 @@ from langchain_experimental.graph_transformers import LLMGraphTransformer
 
 from talentmatch.config import load_settings
 from talentmatch.infra.llm import AzureLlmProvider
-from .ingestion import IngestionSummary, PdfIngestor
+from .ingestion import IngestionSummary, PdfIngestor, StructuredFileIngestor, StructuredIngestionSummary
 from .neo4j import Neo4jGraphService
 from .ontology import ALLOWED_NODES, ALLOWED_RELATIONSHIPS, NODE_PROPERTIES
 
@@ -26,12 +26,20 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
     After ingestion, move successfully ingested PDFs (from both directories) into:
       {paths.archive_dir}/ingested_<timestamp>/
 
+    As the final step, ingest structured files (JSON/XML/YAML) located anywhere under:
+    - {paths.programmers_dir}
+    - {paths.rfps_dir}
+    - {paths.projects_dir}
+
+    For structured files, the extracted graph is only injected if referenced Person and Project nodes already exist in Neo4j.
+
     :return: dict with per-type and total ingestion summaries
     """
 
     settings = load_settings()
     cvs_dir = Path(settings.paths.programmers_dir)
     rfps_dir = Path(settings.paths.rfps_dir)
+    projects_dir = Path(settings.paths.projects_dir)
     archive_root = Path(settings.paths.archive_dir)
 
     llm_provider = AzureLlmProvider(settings)
@@ -72,19 +80,37 @@ async def _ingest_pdf_files_async() -> dict[str, Any]:
     if archived_to is not None:
         logger.info("Archived ingested PDFs to %s", archived_to)
 
-    total = _sum_summaries(cv_summary, rfp_summary)
+    structured_ingestor = StructuredFileIngestor(
+        graph_service=graph_service,
+        transformer=transformer,
+        concurrency=settings.knowledge_graph.concurrency,
+        document_type="structured",
+    )
+
+    structured_summary = await structured_ingestor.ingest_directories(
+        (cvs_dir, rfps_dir, projects_dir),
+    )
+
+    total_pdf = _sum_summaries(cv_summary, rfp_summary)
 
     return {
-        "total": _summary_to_dict(total),
+        "total": _summary_to_dict(total_pdf),
         "cvs": _summary_to_dict(cv_summary),
         "rfps": _summary_to_dict(rfp_summary),
         "archived_to": str(archived_to) if archived_to is not None else None,
+        "structured": _structured_summary_to_dict(structured_summary),
+        "missing_values": {
+            "missing_person_ids": list(structured_summary.missing_person_ids),
+            "missing_project_ids": list(structured_summary.missing_project_ids),
+            "missing_person_identifier_count": structured_summary.missing_person_identifier_count,
+            "missing_project_identifier_count": structured_summary.missing_project_identifier_count,
+        },
     }
 
 
 def ingest_pdf_files() -> dict[str, Any]:
     """
-    Synchronous wrapper for ingest_generated_pdfs_async
+    Synchronous wrapper for _ingest_pdf_files_async.
     """
     return asyncio.run(_ingest_pdf_files_async())
 
@@ -98,6 +124,23 @@ def _summary_to_dict(summary: IngestionSummary) -> dict[str, Any]:
         "stored_nodes": summary.stored_nodes,
         "stored_relationships": summary.stored_relationships,
         "ingested_files": list(summary.ingested_files),
+    }
+
+
+def _structured_summary_to_dict(summary: StructuredIngestionSummary) -> dict[str, Any]:
+    return {
+        "discovered_files": summary.discovered_files,
+        "processed_files": summary.processed_files,
+        "failed_files": summary.failed_files,
+        "faulty_files": summary.faulty_files,
+        "stored_graph_documents": summary.stored_graph_documents,
+        "stored_nodes": summary.stored_nodes,
+        "stored_relationships": summary.stored_relationships,
+        "ingested_files": list(summary.ingested_files),
+        "missing_person_ids": list(summary.missing_person_ids),
+        "missing_project_ids": list(summary.missing_project_ids),
+        "missing_person_identifier_count": summary.missing_person_identifier_count,
+        "missing_project_identifier_count": summary.missing_project_identifier_count,
     }
 
 
