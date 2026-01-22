@@ -62,6 +62,7 @@ class PathsSettings(BaseModel):
     programmers_dir: str
     rfps_dir: str
     projects_dir: str
+    archive_dir: str
 
 
 class GenerationSettings(BaseModel):

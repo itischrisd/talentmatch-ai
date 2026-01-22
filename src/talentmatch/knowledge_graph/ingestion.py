@@ -27,6 +27,7 @@ class IngestionSummary:
     stored_graph_documents: int
     stored_nodes: int
     stored_relationships: int
+    ingested_files: tuple[str, ...] = ()
 
 
 class CvPdfIngestor:
@@ -110,7 +111,7 @@ class CvPdfIngestor:
 
         if not pdf_paths:
             logger.error("No PDF files found in %s", directory)
-            return IngestionSummary(0, 0, 0, 0, 0, 0)
+            return IngestionSummary(0, 0, 0, 0, 0, 0, ())
 
         semaphore = asyncio.Semaphore(self._concurrency)
 
@@ -127,16 +128,26 @@ class CvPdfIngestor:
         stored_nodes = 0
         stored_relationships = 0
 
-        for _path, documents in results:
+        ingested_files: list[str] = []
+
+        for path, documents in results:
             if not documents:
+                failed += 1
+                continue
+
+            try:
+                storage = self._store_graph_documents(documents)
+            except Exception:
+                logger.exception("Neo4j write failed for %s", path.name)
                 failed += 1
                 continue
 
             processed += 1
             stored_docs += len(documents)
-            storage = self._store_graph_documents(documents)
             stored_nodes += storage.nodes
             stored_relationships += storage.relationships
+
+            ingested_files.append(str(path))
 
         return IngestionSummary(
             discovered_pdfs=len(pdf_paths),
@@ -145,4 +156,5 @@ class CvPdfIngestor:
             stored_graph_documents=stored_docs,
             stored_nodes=stored_nodes,
             stored_relationships=stored_relationships,
+            ingested_files=tuple(ingested_files),
         )
