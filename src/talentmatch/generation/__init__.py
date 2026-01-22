@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from .api import generate_dataset, generate_single_rfp
+from .api import generate_dataset, generate_one_cv, generate_single_rfp
 
 __all__ = [
     "generate_dataset",
-    "generate_single_rfp"
+    "generate_one_cv",
+    "generate_single_rfp",
 ]

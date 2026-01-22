@@ -122,6 +122,44 @@ def generate_single_rfp() -> dict[str, Any]:
     return {"rfp": rfp, "pdf_file": str(pdf_path)}
 
 
+def generate_one_cv() -> dict[str, Any]:
+    """
+    Generate a single programmer CV (Markdown + PDF) and save it to the configured programmers_dir.
+
+    :return: dictionary with generated CV details
+    """
+
+    settings, prompts, faker, cv_llm, rfp_llm = _prepare_settings_and_llms()
+
+    programmers_dir = Path(settings.paths.programmers_dir)
+    projects_dir = Path(settings.paths.projects_dir)
+    ensure_dirs(programmers_dir)
+    ensure_dirs(projects_dir)
+
+    documents = DocumentService(
+        prompts=prompts,
+        proficiency_levels=settings.datasets.skills.proficiency_levels,
+        pdf_css=settings.datasets.rendering.pdf_css,
+        cv_llm=cv_llm,
+        rfp_llm=rfp_llm,
+    )
+
+    programmer_generator = ProgrammerGenerator(faker, settings.datasets)
+    project_generator = ProjectGenerator(faker, settings.datasets)
+
+    profiles = programmer_generator.generate(1)
+    projects_count = max(1, min(3, int(settings.generation.num_projects)))
+    projects = project_generator.generate(projects_count, profiles)
+    _enrich_profiles_with_project_assignments(profiles, projects)
+
+    profile = profiles[0]
+    markdown_content = documents.render_cv_markdown(profile)
+    filename = safe_filename(f"cv_{profile['id']}_{profile['name']}")
+    pdf_path = documents.write_markdown_pdf(markdown_content, filename=filename, output_dir=programmers_dir)
+
+    return {"profile": profile, "markdown": markdown_content, "pdf_file": str(pdf_path)}
+
+
 def _enrich_profiles_with_project_assignments(
         profiles: list[dict[str, Any]],
         projects: list[dict[str, Any]],

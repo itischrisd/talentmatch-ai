@@ -5,7 +5,7 @@ from typing import Any
 from langgraph.prebuilt import create_react_agent
 
 from talentmatch.infra.llm import AzureLlmProvider
-from talentmatch.tools.generation_tools import generate_single_rfp
+from talentmatch.tools.generation_tools import generate_dataset, generate_one_cv, generate_single_rfp
 
 
 def create_generation_agent(
@@ -16,10 +16,10 @@ def create_generation_agent(
         name: str = "generation_agent",
 ) -> Any:
     """
-    Create a ReAct agent for dataset / RFP generation (LangGraph prebuilt agent).
+    Create a ReAct agent for dataset / RFP / CV generation (LangGraph prebuilt agent).
 
     NOTE:
-    - langgraph-supervisor expects LangGraph-compatible agents that operate on {"messages": ...}
+    - langgraph-supervisor expects LangGraph-compatible agents that operate on {"messages": .}
     - prompt_text is treated as a system prompt for the LangGraph ReAct agent
 
     :param llm_provider: LLM provider instance (configured via settings)
@@ -33,7 +33,7 @@ def create_generation_agent(
 
     return create_react_agent(
         model=llm,
-        tools=[generate_single_rfp],
+        tools=[generate_single_rfp, generate_one_cv],
         name=name,
         prompt=prompt_text,
     )

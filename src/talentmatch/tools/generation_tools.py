@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 @tool
 def generate_dataset() -> dict[str, Any]:
     """
-    Generate the complete dataset based on configured policies and counts.
+    Generate dataset artifacts (programmers, projects, CV PDFs, and RFP PDFs).
 
     :return: Dictionary with generated dataset details.
     """
@@ -32,3 +32,16 @@ def generate_single_rfp() -> dict[str, Any]:
 
     logger.info("Tool call: generation.generate_single_rfp")
     return _generate_single_rfp()
+
+
+@tool
+def generate_one_cv() -> dict[str, Any]:
+    """
+    Generate a single programmer CV (Markdown + PDF) and save it to the configured programmers_dir.
+
+    :return: Dictionary with generated CV details.
+    """
+    from talentmatch.generation import generate_one_cv as _generate_one_cv
+
+    logger.info("Tool call: generation.generate_one_cv")
+    return _generate_one_cv()
