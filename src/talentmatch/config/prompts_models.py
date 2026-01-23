@@ -52,6 +52,15 @@ class KnowledgeGraphPrompts(BaseModel):
     answer_json: str
 
 
+class VectorStorePrompts(BaseModel):
+    """
+    Prompt templates for vector store querying and staffing.
+    """
+
+    answer_json: str
+    staffing_json: str
+
+
 class Prompts(BaseModel):
     """
     Prompts root model
@@ -60,3 +69,4 @@ class Prompts(BaseModel):
     datasets: DatasetPrompts
     agents: AgentsPrompts
     knowledge_graph: KnowledgeGraphPrompts
+    vector_store: VectorStorePrompts

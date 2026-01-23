@@ -22,6 +22,7 @@ class EnvironmentSettings(BaseSettings):
     AZURE_OPENAI_API_KEY: SecretStr
     AZURE_OPENAI_API_VERSION: str
     AZURE_OPENAI_CHAT_DEPLOYMENT: str
+    AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT: str = ""
 
     NEO4J_URI: str
     NEO4J_USERNAME: str
@@ -58,6 +59,7 @@ def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) 
         "api_key": env.AZURE_OPENAI_API_KEY,
         "api_version": env.AZURE_OPENAI_API_VERSION,
         "chat_deployment": env.AZURE_OPENAI_CHAT_DEPLOYMENT,
+        "embeddings_deployment": env.AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT or env.AZURE_OPENAI_CHAT_DEPLOYMENT,
     }
 
     payload["neo4j"] = {

@@ -84,6 +84,19 @@ class AzureOpenAiSettings(BaseModel):
     api_key: SecretStr
     api_version: str
     chat_deployment: str
+    embeddings_deployment: str = "default"
+
+
+class VectorStoreSettings(BaseModel):
+    """
+    Vector store (Chroma) settings
+    """
+
+    persist_dir: str = ".chroma"
+    collection_name: str = "talentmatch"
+    chunk_size: int = Field(1000, gt=0)
+    chunk_overlap: int = Field(200, ge=0)
+    top_k: int = Field(6, gt=0)
 
 
 class Neo4jSettings(BaseModel):
@@ -356,6 +369,7 @@ class Settings(BaseModel):
     azure_openai: AzureOpenAiSettings
     neo4j: Neo4jSettings
     knowledge_graph: KnowledgeGraphSettings
+    vector_store: VectorStoreSettings = Field(default_factory=VectorStoreSettings)
     logging: LoggingSettings = Field(default_factory=LoggingSettings)
 
     @classmethod

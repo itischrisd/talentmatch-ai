@@ -14,3 +14,15 @@ services:
       - ./data/neo4j/import:/var/lib/neo4j/import
       - ./data/neo4j/plugins:/plugins
     restart: unless-stopped
+
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: chroma
+    ports:
+      - "8000:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+    volumes:
+      - ./data/chroma:/chroma/chroma
+    restart: unless-stopped

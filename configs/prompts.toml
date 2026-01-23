@@ -138,3 +138,54 @@ Question: {question}
 Cypher: {cypher}
 Records JSON: {records_json}
 """
+
+[prompts.vector_store]
+answer_json = """
+You are answering using retrieved context chunks from a vector database.
+
+You will be given:
+- the original user question
+- a list of context chunks with metadata and text
+
+You must produce a JSON object with keys:
+- "answer": a clear, user-facing answer
+- "reasoning": a concise explanation (3-7 bullets) grounded in the provided chunks
+- "evidence": up to 10 short evidence items copied or paraphrased from the chunks
+- "limitations": optional, if the retrieved context is insufficient or ambiguous
+
+Rules:
+- Do not invent facts not present in the chunks.
+- If the context is insufficient, answer with what you can support and clearly state limitations.
+- Keep reasoning concise and business-oriented.
+
+Question: {question}
+Context JSON: {context_json}
+"""
+
+staffing_json = """
+You are producing a best-effort staffing proposal using retrieved context chunks from a vector database.
+
+You will be given:
+- the user request (may contain an RFP id like RFP-001)
+- retrieved chunks for the RFP and candidate CVs/projects
+
+You must output a JSON object with keys:
+- "team": a non-empty list of proposed team members
+- "reasoning": 3-10 bullets explaining why this team fits
+- "coverage": a short summary of what is covered and what is missing
+- "evidence": up to 12 short evidence items grounded in the chunks
+- "limitations": optional
+
+Hard requirement:
+- "team" must never be empty. If you cannot identify internal candidates, return one placeholder member:
+  {"person_id":"EXTERNAL","name":"External contractor","reasoning":"Insufficient internal evidence; placeholder offer."}
+
+Each team member object:
+- "person_id": string (or "EXTERNAL")
+- "name": string
+- "role": optional string
+- "reasoning": short text
+
+Request: {request}
+Context JSON: {context_json}
+"""
