@@ -1,0 +1,405 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-23T19:42:34",
+    "cases": 5
+  },
+  "summary": {
+    "total_cases": 5,
+    "graphrag_correct": 4,
+    "vector_rag_correct": 0,
+    "graphrag_accuracy": 0.8,
+    "vector_rag_accuracy": 0.0,
+    "graphrag_reasoning_rate": 1.0,
+    "vector_rag_reasoning_rate": 1.0
+  },
+  "results": [
+    {
+      "case": {
+        "case_id": "count_people_with_skill",
+        "question": "How many programmers have the skill Aws?",
+        "ground_truth": {
+          "question_type": "count",
+          "canonical": 21,
+          "cypher": "MATCH (p:Person)-[:HAS_SKILL]->(s:Skill {id: $skill_id})\n        RETURN count(DISTINCT p) AS value",
+          "parameters": {
+            "skill_id": "Aws"
+          }
+        }
+      },
+      "truth": {
+        "question_type": "count",
+        "canonical": 21,
+        "cypher": "MATCH (p:Person)-[:HAS_SKILL]->(s:Skill {id: $skill_id})\n        RETURN count(DISTINCT p) AS value",
+        "parameters": {
+          "skill_id": "Aws"
+        }
+      },
+      "graphrag": {
+        "system": "graphrag",
+        "answer": "There are 21 programmers who have the skill Aws.",
+        "reasoning": "[\"The query counts distinct people with a skill node labeled 'Aws'.\", 'The relationship HAS_SKILL connects programmers to their skills.', 'The result shows the total number of such programmers.']",
+        "raw": {
+          "question": "How many programmers have the skill Aws?",
+          "cypher": "MATCH (p:Person)-[:HAS_SKILL]->(s:Skill) WHERE toLower(s.id) = 'aws' RETURN count(DISTINCT p) AS num_programmers_with_aws_skill",
+          "answer": "There are 21 programmers who have the skill Aws.",
+          "reasoning": "[\"The query counts distinct people with a skill node labeled 'Aws'.\", 'The relationship HAS_SKILL connects programmers to their skills.', 'The result shows the total number of such programmers.']",
+          "evidence": [
+            "num_programmers_with_aws_skill: 21"
+          ],
+          "limitations": null,
+          "records_count": 1
+        },
+        "elapsed_s": 3.670947
+      },
+      "vector_rag": {
+        "system": "vector_rag",
+        "answer": "At least two programmers have the skill AWS: Joshua Cunningham and Kyle Hernandez.",
+        "reasoning": "[\"Joshua Cunningham's CV explicitly lists AWS as a skill at the Expert level.\", \"Kyle Hernandez's CV mentions integration of AWS services and an AWS Certified Solutions Architect certification.\", 'No other programmers are explicitly listed with AWS skills in the provided context.', 'Project assignments and requirements mention AWS but do not specify which assigned programmers possess the skill.', 'Therefore, only Joshua Cunningham and Kyle Hernandez can be confirmed to have AWS skills based on the evidence.']",
+        "raw": {
+          "question": "How many programmers have the skill Aws?",
+          "answer": "At least two programmers have the skill AWS: Joshua Cunningham and Kyle Hernandez.",
+          "reasoning": "[\"Joshua Cunningham's CV explicitly lists AWS as a skill at the Expert level.\", \"Kyle Hernandez's CV mentions integration of AWS services and an AWS Certified Solutions Architect certification.\", 'No other programmers are explicitly listed with AWS skills in the provided context.', 'Project assignments and requirements mention AWS but do not specify which assigned programmers possess the skill.', 'Therefore, only Joshua Cunningham and Kyle Hernandez can be confirmed to have AWS skills based on the evidence.']",
+          "evidence": [
+            "Joshua Cunningham: 'AWS: Expert' listed under Skills.",
+            "Joshua Cunningham: 'Architected and deployed 12+ microservices using AWS Lambda.'",
+            "Joshua Cunningham: 'Mentored 4 junior developers in best practices for AWS.'",
+            "Kyle Hernandez: 'Integrated AWS services for secure storage and data processing.'",
+            "Kyle Hernandez: 'AWS Certified Solutions Architect' certification.",
+            "Project requirements list AWS as a required skill but do not specify which programmers have it.",
+            "No other CVs or programmer assignments in the context explicitly mention AWS skills."
+          ],
+          "limitations": "The context only provides detailed CVs for two programmers with AWS skills. Other programmers assigned to AWS-requiring projects may also have the skill, but this cannot be confirmed from the provided data.",
+          "retrieved_chunks": 6
+        },
+        "elapsed_s": 4.347615
+      },
+      "scores": {
+        "graphrag": {
+          "expected": 21,
+          "predicted": 21,
+          "exact": true
+        },
+        "vector_rag": {
+          "expected": 21,
+          "predicted": null,
+          "exact": false
+        },
+        "graphrag_has_reasoning": true,
+        "vector_rag_has_reasoning": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "top_people_by_skill_count",
+        "question": "List the top 3 programmers by number of skills.",
+        "ground_truth": {
+          "question_type": "list",
+          "canonical": [
+            "Edward Hopkins",
+            "Kathryn Rodriguez",
+            "Shawn Fleming"
+          ],
+          "cypher": "MATCH (p:Person)\n        OPTIONAL MATCH (p)-[:HAS_SKILL]->(s:Skill)\n        WITH p, count(DISTINCT s) AS skill_count\n        RETURN coalesce(p.name, p.full_name, p.id) AS name, skill_count\n        ORDER BY skill_count DESC, name ASC\n        LIMIT $limit",
+          "parameters": {
+            "limit": 3
+          }
+        }
+      },
+      "truth": {
+        "question_type": "list",
+        "canonical": [
+          "Edward Hopkins",
+          "Kathryn Rodriguez",
+          "Shawn Fleming"
+        ],
+        "cypher": "MATCH (p:Person)\n        OPTIONAL MATCH (p)-[:HAS_SKILL]->(s:Skill)\n        WITH p, count(DISTINCT s) AS skill_count\n        RETURN coalesce(p.name, p.full_name, p.id) AS name, skill_count\n        ORDER BY skill_count DESC, name ASC\n        LIMIT $limit",
+        "parameters": {
+          "limit": 3
+        }
+      },
+      "graphrag": {
+        "system": "graphrag",
+        "answer": "The top 3 programmers by number of skills are Edward Hopkins, Kathryn Rodriguez, and Shawn Fleming, each with 13 skills.",
+        "reasoning": "['The query counts the number of skills for each programmer.', 'Results are ordered by skill count in descending order.', 'The top three programmers all have the highest skill count found: 13.', 'Their names are Edward Hopkins, Kathryn Rodriguez, and Shawn Fleming.']",
+        "raw": {
+          "question": "List the top 3 programmers by number of skills.",
+          "cypher": "MATCH (p:Person)-[:HAS_SKILL]->(s:Skill) \nWITH p, count(s) AS skill_count \nORDER BY skill_count DESC \nLIMIT 3 \nRETURN p.id AS person_id, skill_count",
+          "answer": "The top 3 programmers by number of skills are Edward Hopkins, Kathryn Rodriguez, and Shawn Fleming, each with 13 skills.",
+          "reasoning": "['The query counts the number of skills for each programmer.', 'Results are ordered by skill count in descending order.', 'The top three programmers all have the highest skill count found: 13.', 'Their names are Edward Hopkins, Kathryn Rodriguez, and Shawn Fleming.']",
+          "evidence": [
+            "Edward Hopkins: 13 skills",
+            "Kathryn Rodriguez: 13 skills",
+            "Shawn Fleming: 13 skills"
+          ],
+          "limitations": null,
+          "records_count": 3
+        },
+        "elapsed_s": 2.695508
+      },
+      "vector_rag": {
+        "system": "vector_rag",
+        "answer": "Based on the provided context, the top 3 programmers by number of skills cannot be determined, as the context only lists programmers assigned to projects but does not specify their individual skill sets. The available data does not include a mapping of skills to each programmer.",
+        "reasoning": "['The context contains project requirements and lists of assigned programmers.', 'Skill requirements are specified per project, not per programmer.', 'Programmer assignments are shown, but their individual skills are not detailed.', 'No evidence links specific skills to individual programmers.', 'Therefore, it is not possible to rank programmers by number of skills from the given data.']",
+        "raw": {
+          "question": "List the top 3 programmers by number of skills.",
+          "answer": "Based on the provided context, the top 3 programmers by number of skills cannot be determined, as the context only lists programmers assigned to projects but does not specify their individual skill sets. The available data does not include a mapping of skills to each programmer.",
+          "reasoning": "['The context contains project requirements and lists of assigned programmers.', 'Skill requirements are specified per project, not per programmer.', 'Programmer assignments are shown, but their individual skills are not detailed.', 'No evidence links specific skills to individual programmers.', 'Therefore, it is not possible to rank programmers by number of skills from the given data.']",
+          "evidence": [
+            "Project requirements list skills needed for each project.",
+            "Assigned programmers are listed by name and ID for some projects.",
+            "No section in the context details the skills possessed by each programmer."
+          ],
+          "limitations": "The context does not provide a mapping of skills to individual programmers, so the requested ranking cannot be produced.",
+          "retrieved_chunks": 6
+        },
+        "elapsed_s": 2.167612
+      },
+      "scores": {
+        "graphrag": {
+          "expected_items": [
+            "Edward Hopkins",
+            "Kathryn Rodriguez",
+            "Shawn Fleming"
+          ],
+          "hits": [
+            "Edward Hopkins",
+            "Kathryn Rodriguez",
+            "Shawn Fleming"
+          ],
+          "recall": 1.0,
+          "all_present": true
+        },
+        "vector_rag": {
+          "expected_items": [
+            "Edward Hopkins",
+            "Kathryn Rodriguez",
+            "Shawn Fleming"
+          ],
+          "hits": [],
+          "recall": 0.0,
+          "all_present": false
+        },
+        "graphrag_has_reasoning": true,
+        "vector_rag_has_reasoning": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "avg_skills_per_person",
+        "question": "What is the average number of skills per programmer?",
+        "ground_truth": {
+          "question_type": "float",
+          "canonical": 8.627450980392155,
+          "cypher": "MATCH (p:Person)\n        OPTIONAL MATCH (p)-[:HAS_SKILL]->(s:Skill)\n        WITH p, count(DISTINCT s) AS skill_count\n        RETURN avg(skill_count) AS value",
+          "parameters": {}
+        }
+      },
+      "truth": {
+        "question_type": "float",
+        "canonical": 8.627450980392155,
+        "cypher": "MATCH (p:Person)\n        OPTIONAL MATCH (p)-[:HAS_SKILL]->(s:Skill)\n        WITH p, count(DISTINCT s) AS skill_count\n        RETURN avg(skill_count) AS value",
+        "parameters": {}
+      },
+      "graphrag": {
+        "system": "graphrag",
+        "answer": "The average number of skills per programmer is approximately 8.8.",
+        "reasoning": "['The query calculates the number of skills each programmer has.', 'It then computes the average across all programmers.', 'The result is based on the direct relationships between programmers and their skills.']",
+        "raw": {
+          "question": "What is the average number of skills per programmer?",
+          "cypher": "MATCH (p:Person)-[:HAS_SKILL]->(s:Skill) WITH p, count(s) AS skill_count RETURN avg(skill_count) AS average_skills_per_programmer",
+          "answer": "The average number of skills per programmer is approximately 8.8.",
+          "reasoning": "['The query calculates the number of skills each programmer has.', 'It then computes the average across all programmers.', 'The result is based on the direct relationships between programmers and their skills.']",
+          "evidence": [
+            "average_skills_per_programmer: 8.8"
+          ],
+          "limitations": null,
+          "records_count": 1
+        },
+        "elapsed_s": 2.893224
+      },
+      "vector_rag": {
+        "system": "vector_rag",
+        "answer": "The average number of skills per programmer cannot be determined from the provided context.",
+        "reasoning": "['The context lists project skill requirements and assigned programmers for several projects.', 'Skill requirements are specified per project, not per individual programmer.', 'There is no information linking specific skills to individual programmers.', 'No data is provided on the total number of skills possessed by each programmer.', 'Without a mapping of skills to programmers, the average cannot be calculated.']",
+        "raw": {
+          "question": "What is the average number of skills per programmer?",
+          "answer": "The average number of skills per programmer cannot be determined from the provided context.",
+          "reasoning": "['The context lists project skill requirements and assigned programmers for several projects.', 'Skill requirements are specified per project, not per individual programmer.', 'There is no information linking specific skills to individual programmers.', 'No data is provided on the total number of skills possessed by each programmer.', 'Without a mapping of skills to programmers, the average cannot be calculated.']",
+          "evidence": [
+            "Project requirements include lists of skills (e.g., Git, AWS, Node.js, Django) but do not assign them to specific programmers.",
+            "\"assigned_programmers\": [] or lists of programmer names and IDs, but no skill details per programmer.",
+            "Example: \"assigned_programmers\": [ { \"programmer_name\": \"Gloria Hurley\", ... } ] — no skill breakdown.",
+            "Skill requirements are project-based, not individual-based.",
+            "No chunk provides a count of skills per programmer."
+          ],
+          "limitations": "The context does not contain data on the number of skills each programmer possesses, only project-level skill requirements and programmer assignments.",
+          "retrieved_chunks": 6
+        },
+        "elapsed_s": 2.911262
+      },
+      "scores": {
+        "graphrag": {
+          "expected": 8.627450980392155,
+          "predicted": 8.8,
+          "within_tolerance": true
+        },
+        "vector_rag": {
+          "expected": 8.627450980392155,
+          "predicted": null,
+          "within_tolerance": false
+        },
+        "graphrag_has_reasoning": true,
+        "vector_rag_has_reasoning": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "count_companies_using_technology",
+        "question": "How many companies have projects that used the technology Aws?",
+        "ground_truth": {
+          "question_type": "count",
+          "canonical": 5,
+          "cypher": "MATCH (c:Company)<-[:FOR_COMPANY]-(p:Project)-[:USED_TECHNOLOGY]->(t:Technology {id: $tech_id})\n        RETURN count(DISTINCT c) AS value",
+          "parameters": {
+            "tech_id": "Aws"
+          }
+        }
+      },
+      "truth": {
+        "question_type": "count",
+        "canonical": 5,
+        "cypher": "MATCH (c:Company)<-[:FOR_COMPANY]-(p:Project)-[:USED_TECHNOLOGY]->(t:Technology {id: $tech_id})\n        RETURN count(DISTINCT c) AS value",
+        "parameters": {
+          "tech_id": "Aws"
+        }
+      },
+      "graphrag": {
+        "system": "graphrag",
+        "answer": "5 companies have projects that used the technology Aws.",
+        "reasoning": "[\"The query counts distinct companies with projects using the technology 'Aws'.\", \"The technology match is case-insensitive for 'Aws'.\", 'The result directly provides the count of such companies.']",
+        "raw": {
+          "question": "How many companies have projects that used the technology Aws?",
+          "cypher": "MATCH (c:Company)<-[:FOR_COMPANY]-(p:Project)-[:USED_TECHNOLOGY]->(t:Technology) \nWHERE toLower(t.id) = toLower('Aws') \nRETURN count(DISTINCT c) AS companies_with_aws_projects",
+          "answer": "5 companies have projects that used the technology Aws.",
+          "reasoning": "[\"The query counts distinct companies with projects using the technology 'Aws'.\", \"The technology match is case-insensitive for 'Aws'.\", 'The result directly provides the count of such companies.']",
+          "evidence": [
+            "companies_with_aws_projects: 5"
+          ],
+          "limitations": null,
+          "records_count": 1
+        },
+        "elapsed_s": 3.401185
+      },
+      "vector_rag": {
+        "system": "vector_rag",
+        "answer": "At least five companies have projects that used AWS technology, based on the provided context.",
+        "reasoning": "[\"Each context chunk is from a different individual's CV, typically representing experience at different companies.\", 'Multiple CVs explicitly mention leading or contributing to projects using AWS.', 'Projects described include migrations, platform architecture, and service integrations involving AWS.', 'Certifications in AWS further support direct project involvement.', 'No evidence suggests overlap between companies in the retrieved context.']",
+        "raw": {
+          "question": "How many companies have projects that used the technology Aws?",
+          "answer": "At least five companies have projects that used AWS technology, based on the provided context.",
+          "reasoning": "[\"Each context chunk is from a different individual's CV, typically representing experience at different companies.\", 'Multiple CVs explicitly mention leading or contributing to projects using AWS.', 'Projects described include migrations, platform architecture, and service integrations involving AWS.', 'Certifications in AWS further support direct project involvement.', 'No evidence suggests overlap between companies in the retrieved context.']",
+          "evidence": [
+            "Led migration of 12+ services from legacy infrastructure to AWS (Christine Ball)",
+            "Led a team of 5 engineers in migrating legacy services to AWS (Linda Griffith)",
+            "Designed and implemented a scalable order processing system on AWS using Lambda, DynamoDB, and API Gateway (Joshua Cunningham)",
+            "Architected and implemented a scalable, multi-tenant SaaS platform using AWS (Jodi Farley)",
+            "Integrated AWS services for secure storage and data processing (Kyle Hernandez)"
+          ],
+          "limitations": "The context does not specify company names or confirm that each CV represents a unique company. There may be more companies using AWS not captured in these chunks.",
+          "retrieved_chunks": 6
+        },
+        "elapsed_s": 2.24849
+      },
+      "scores": {
+        "graphrag": {
+          "expected": 5,
+          "predicted": 5,
+          "exact": true
+        },
+        "vector_rag": {
+          "expected": 5,
+          "predicted": null,
+          "exact": false
+        },
+        "graphrag_has_reasoning": true,
+        "vector_rag_has_reasoning": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "count_available_people",
+        "question": "How many programmers are available on 2026-01-23?",
+        "ground_truth": {
+          "question_type": "count",
+          "canonical": 51,
+          "cypher": "MATCH (p:Person)\n        OPTIONAL MATCH (p)-[a:ASSIGNED_TO]->(:Project)\n        WHERE\n          coalesce(a.start_date, a.assignment_start_date) <= $date_iso\n          AND coalesce(a.end_date, a.assignment_end_date) >= $date_iso\n        WITH p, sum(coalesce(a.allocation_percent, 0)) AS allocation\n        WITH p, (100 - allocation) AS availability\n        RETURN sum(CASE WHEN availability > 0 THEN 1 ELSE 0 END) AS value",
+          "parameters": {
+            "date_iso": "2026-01-23"
+          }
+        }
+      },
+      "truth": {
+        "question_type": "count",
+        "canonical": 51,
+        "cypher": "MATCH (p:Person)\n        OPTIONAL MATCH (p)-[a:ASSIGNED_TO]->(:Project)\n        WHERE\n          coalesce(a.start_date, a.assignment_start_date) <= $date_iso\n          AND coalesce(a.end_date, a.assignment_end_date) >= $date_iso\n        WITH p, sum(coalesce(a.allocation_percent, 0)) AS allocation\n        WITH p, (100 - allocation) AS availability\n        RETURN sum(CASE WHEN availability > 0 THEN 1 ELSE 0 END) AS value",
+        "parameters": {
+          "date_iso": "2026-01-23"
+        }
+      },
+      "graphrag": {
+        "system": "graphrag",
+        "answer": "I cannot determine how many programmers are available on 2026-01-23 from the knowledge graph.",
+        "reasoning": "[\"The query searched for people with the 'programmer' skill.\", 'It excluded programmers assigned to projects active on 2026-01-23.', 'The result set is empty, indicating no available programmers were found or the data is missing.', 'No count of available programmers was returned.']",
+        "raw": {
+          "question": "How many programmers are available on 2026-01-23?",
+          "cypher": "MATCH (p:Person)-[:HAS_SKILL]->(s:Skill)\nWHERE toLower(s.id) = 'programmer'\nAND NOT (p)-[:ASSIGNED_TO]->(:Project)-[:FOR_COMPANY]->(:Company)\n  WHERE date('2026-01-23') >= date(coalesce(:Project.start_date, '0001-01-01'))\n    AND date('2026-01-23') <= date(coalesce(:Project.end_date, '9999-12-31'))\nRETURN count(DISTINCT p) AS available_programmers",
+          "answer": "I cannot determine how many programmers are available on 2026-01-23 from the knowledge graph.",
+          "reasoning": "[\"The query searched for people with the 'programmer' skill.\", 'It excluded programmers assigned to projects active on 2026-01-23.', 'The result set is empty, indicating no available programmers were found or the data is missing.', 'No count of available programmers was returned.']",
+          "evidence": [
+            "No records were returned for available programmers on 2026-01-23."
+          ],
+          "limitations": "The knowledge graph may lack data on programmers, their assignments, or project dates for the specified date.",
+          "records_count": 0
+        },
+        "elapsed_s": 3.329139
+      },
+      "vector_rag": {
+        "system": "vector_rag",
+        "answer": "On 2026-01-23, there are four programmers assigned to active or planned projects.",
+        "reasoning": "['Reviewed all programmer assignments and their start/end dates.', 'Filtered for assignments where 2026-01-23 falls within the assignment period.', 'Identified programmers with assignments active on that date.', 'No evidence of additional programmers assigned to other projects during this period.']",
+        "raw": {
+          "question": "How many programmers are available on 2026-01-23?",
+          "answer": "On 2026-01-23, there are four programmers assigned to active or planned projects.",
+          "reasoning": "['Reviewed all programmer assignments and their start/end dates.', 'Filtered for assignments where 2026-01-23 falls within the assignment period.', 'Identified programmers with assignments active on that date.', 'No evidence of additional programmers assigned to other projects during this period.']",
+          "evidence": [
+            "Gloria Hurley: assigned 2025-10-02 to 2026-11-26 (active on 2026-01-23)",
+            "Christopher Romero: assigned 2025-10-02 to 2026-12-05 (active on 2026-01-23)",
+            "Bernard Leach: assigned 2025-02-24 to 2026-03-01 (active on 2026-01-23)",
+            "John Weeks: assigned 2025-02-24 to 2026-03-06 (active on 2026-01-23)",
+            "Angela Cardenas, Mason Gentry, Shawn Fleming: assignments end in 2025, not available in 2026",
+            "Mary Ellis, Bernard Leach (other assignment): assignments end in 2024, not available in 2026",
+            "Tina Carlson: assignment ends 2025-01-24, not available in 2026",
+            "Other projects listed have no assigned programmers for this period"
+          ],
+          "limitations": "The context only includes programmers assigned to projects; if there are unassigned programmers or assignments in other documents, they are not reflected here.",
+          "retrieved_chunks": 6
+        },
+        "elapsed_s": 4.666496
+      },
+      "scores": {
+        "graphrag": {
+          "expected": 51,
+          "predicted": 2026,
+          "exact": false
+        },
+        "vector_rag": {
+          "expected": 51,
+          "predicted": 2026,
+          "exact": false
+        },
+        "graphrag_has_reasoning": true,
+        "vector_rag_has_reasoning": true
+      }
+    }
+  ]
+}
