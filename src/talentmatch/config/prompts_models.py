@@ -14,7 +14,7 @@ class RequirementLabels(BaseModel):
 
 class RemoteWorkLabels(BaseModel):
     """
-    Labels for remote work policies in RFPs
+    Labels for remote work modes
     """
 
     allowed: str
@@ -23,7 +23,7 @@ class RemoteWorkLabels(BaseModel):
 
 class DatasetPrompts(BaseModel):
     """
-    Prompts templates for dataset generation
+    Prompt templates for dataset generation
     """
 
     cv_markdown: str
@@ -35,16 +35,21 @@ class DatasetPrompts(BaseModel):
 class AgentsPrompts(BaseModel):
     """
     Prompt templates for the supervisor system and its worker agents.
-
-    Notes:
-    - For langgraph.prebuilt.create_react_agent these are treated as system prompts.
-    - Keep them short, role-specific, and tool-usage oriented.
     """
 
     generation_react: str
     kg_react: str
+    query_react: str
     supervisor: str
 
+
+class KnowledgeGraphPrompts(BaseModel):
+    """
+    Prompt templates for knowledge graph querying.
+    """
+
+    cypher_generation: str
+    answer_json: str
 
 
 class Prompts(BaseModel):
@@ -54,3 +59,4 @@ class Prompts(BaseModel):
 
     datasets: DatasetPrompts
     agents: AgentsPrompts
+    knowledge_graph: KnowledgeGraphPrompts

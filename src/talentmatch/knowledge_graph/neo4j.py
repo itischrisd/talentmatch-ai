@@ -141,3 +141,11 @@ class Neo4jGraphService:
         )
 
         return StorageResult(nodes=nodes, relationships=relationships)
+
+    @property
+    def graph(self) -> Neo4jGraph:
+        """
+        Return the underlying Neo4j graph client.
+        :return: Neo4jGraph instance used by this service
+        """
+        return self._graph

@@ -20,3 +20,17 @@ def ingest_files() -> dict[str, Any]:
 
     logger.info("Tool call: knowledge_graph.ingest_files")
     return _ingest_pdf_files()
+
+
+@tool
+def query_knowledge_graph(question: str) -> dict[str, Any]:
+    """
+    Query the knowledge graph using a natural language question and return an answer with reasoning.
+
+    :param question: user question
+    :return: dict with answer, reasoning, evidence, cypher and basic metadata
+    """
+    from talentmatch.knowledge_graph import query_knowledge_graph as _query_knowledge_graph
+
+    logger.info("Tool call: knowledge_graph.query_knowledge_graph")
+    return _query_knowledge_graph(question)

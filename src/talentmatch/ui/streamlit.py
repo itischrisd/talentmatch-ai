@@ -30,7 +30,7 @@ class UiConfig:
     layout: str = "wide"
 
     title: str = "TalentMatch"
-    chat_input_placeholder: str = "Ask the supervisor to generate or ingest..."
+    chat_input_placeholder: str = "Give me a task or ask about what you can do..."
 
 
 def _append(role: str, content: str) -> None:

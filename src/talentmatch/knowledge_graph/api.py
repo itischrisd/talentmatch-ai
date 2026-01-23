@@ -229,3 +229,16 @@ def _unique_destination(destination_dir: Path, filename: str) -> Path:
             return alt
 
     return destination_dir / f"{stem}_{datetime.now().strftime('%H%M%S%f')}{suffix}"
+
+
+def query_knowledge_graph(question: str) -> dict[str, Any]:
+    """
+    Query the knowledge graph using a natural language question.
+
+    :param question: user question
+    :return: dict with answer, reasoning, evidence, cypher and basic metadata
+    """
+    from .querying import query_knowledge_graph as _query_knowledge_graph
+
+    logger.info("API call: knowledge_graph.query_knowledge_graph")
+    return _query_knowledge_graph(question)

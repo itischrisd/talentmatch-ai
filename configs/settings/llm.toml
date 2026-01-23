@@ -40,3 +40,9 @@ max_tokens = 1200
 top_p = 1.0
 request_timeout_s = 120
 
+[llm.use_cases.query_agent]
+model = "gpt-4.1"
+temperature = 0.0
+max_tokens = 2200
+top_p = 1.0
+request_timeout_s = 120
