@@ -30,26 +30,37 @@ def ingest_pdf_files() -> dict[str, Any]:
     projects_dir = Path(settings.paths.projects_dir)
     archive_root = Path(settings.paths.archive_dir)
 
+    logger.info("Vector ingestion started")
+    logger.info("Scanning directories: cvs=%s, rfps=%s, projects=%s, archive=%s", str(cvs_dir), str(rfps_dir), str(projects_dir), str(archive_root))
+
     store = get_vector_store_service()
     ingestor = VectorStoreIngestor(store=store)
 
     cv_summary = ingestor.ingest_paths(_discover_files(cvs_dir), document_type="cv")
+    logger.info("CV ingestion summary: %s", cv_summary.to_dict())
+
     rfp_summary = ingestor.ingest_paths(_discover_files(rfps_dir), document_type="rfp")
+    logger.info("RFP ingestion summary: %s", rfp_summary.to_dict())
+
     structured_summary = ingestor.ingest_paths(_discover_structured_files(projects_dir), document_type="project_struct")
+    logger.info("Structured ingestion summary: %s", structured_summary.to_dict())
+
 
     archive_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     archive_dir = _prepare_archive_dir(archive_root=archive_root, timestamp=archive_timestamp)
 
     moved = 0
-    moved += _archive_ingested_files(tuple(cv_summary.ingested_files), destination_dir=archive_dir)
-    moved += _archive_ingested_files(tuple(rfp_summary.ingested_files), destination_dir=archive_dir)
-    moved += _archive_ingested_files(tuple(structured_summary.ingested_files), destination_dir=archive_dir)
+    moved += _archive_ingested_files(source_files=tuple(cv_summary.ingested_files), destination_dir=archive_dir)
+    moved += _archive_ingested_files(source_files=tuple(rfp_summary.ingested_files), destination_dir=archive_dir)
+    moved += _archive_ingested_files(source_files=tuple(structured_summary.ingested_files), destination_dir=archive_dir)
 
     total = {
         "stored_chunks": int(cv_summary.stored_chunks + rfp_summary.stored_chunks + structured_summary.stored_chunks),
         "moved_to_archive": int(moved),
         "archive_dir": str(archive_dir),
     }
+
+    logger.info("Vector ingestion finished: %s", total)
 
     return {
         "cv": cv_summary.to_dict(),

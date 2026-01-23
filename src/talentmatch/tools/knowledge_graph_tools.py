@@ -5,46 +5,66 @@ from typing import Any
 
 from langchain_core.tools import tool
 
+from talentmatch.config import load_settings
+
 logger = logging.getLogger(__name__)
+
+
+def _backend() -> str:
+    return load_settings().storage.backend
 
 
 @tool
 def ingest_files() -> dict[str, Any]:
     """
-    Ingest staged PDFs (and structured files, if present) into Neo4j using the configured transformer and
-    connection settings.
+    Ingest generated PDFs into the configured storage backend.
 
-    :return: Ingestion summary as a plain dictionary.
+    :return: ingestion summary
     """
-    from talentmatch.knowledge_graph import ingest_pdf_files as _ingest_pdf_files
+    backend = _backend()
+    logger.info("Tool call: ingest_files (backend=%s)", backend)
 
-    logger.info("Tool call: knowledge_graph.ingest_files")
-    return _ingest_pdf_files()
+    if backend == "vector_store":
+        from talentmatch.vector_store import ingest_pdf_files as ingest_pdf_files
+    else:
+        from talentmatch.knowledge_graph import ingest_pdf_files as ingest_pdf_files
+
+    return ingest_pdf_files()
 
 
 @tool
 def query_knowledge_graph(question: str) -> dict[str, Any]:
     """
-    Query the knowledge graph using a natural language question and return an answer with reasoning.
+    Query the configured storage backend using a natural-language question.
 
     :param question: user question
-    :return: dict with answer, reasoning, evidence, cypher and basic metadata
+    :return: dict containing answer and reasoning
     """
-    from talentmatch.knowledge_graph import query_knowledge_graph as _query_knowledge_graph
+    backend = _backend()
+    logger.info("Tool call: query_knowledge_graph (backend=%s)", backend)
 
-    logger.info("Tool call: knowledge_graph.query_knowledge_graph")
-    return _query_knowledge_graph(question)
+    if backend == "vector_store":
+        from talentmatch.vector_store import query_vector_store as query
+    else:
+        from talentmatch.knowledge_graph import query_knowledge_graph as query
+
+    return query(question)
 
 
 @tool
 def propose_staffing(request: str) -> dict[str, Any]:
     """
-    Propose a best-effort staffing for an RFP and return an explainable proposal with reasoning.
+    Propose a staffing plan for the given request using the configured storage backend.
 
-    :param request: user request containing an RFP id (e.g. "RFP-001") or a short staffing request
-    :return: dict with proposed team, coverage and reasoning
+    :param request: RFP id or staffing request
+    :return: dict with team proposal and reasoning
     """
-    from talentmatch.knowledge_graph import propose_staffing as _propose_staffing
+    backend = _backend()
+    logger.info("Tool call: propose_staffing (backend=%s)", backend)
 
-    logger.info("Tool call: knowledge_graph.propose_staffing")
-    return _propose_staffing(request)
+    if backend == "vector_store":
+        from talentmatch.vector_store import propose_staffing as propose
+    else:
+        from talentmatch.knowledge_graph import propose_staffing as propose
+
+    return propose(request)

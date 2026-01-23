@@ -9,3 +9,6 @@ includes = [
 
 [logging]
 level = "INFO"
+
+[storage]
+backend = "chroma"

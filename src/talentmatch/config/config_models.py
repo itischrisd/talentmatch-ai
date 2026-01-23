@@ -92,7 +92,7 @@ class VectorStoreSettings(BaseModel):
     Vector store (Chroma) settings
     """
 
-    persist_dir: str = ".chroma"
+    persist_dir: str = "./data/chroma"
     collection_name: str = "talentmatch"
     chunk_size: int = Field(1000, gt=0)
     chunk_overlap: int = Field(200, ge=0)
@@ -108,6 +108,32 @@ class Neo4jSettings(BaseModel):
     username: str
     password: SecretStr
     database: str
+
+
+class StorageSettings(BaseModel):
+    """
+    Storage backend switch for ingestion and querying.
+    """
+
+    backend: str = "neo4j"
+
+    @field_validator("backend")
+    @classmethod
+    def normalize_backend(cls, value: str) -> str:
+        normalized = str(value).strip().lower()
+        aliases = {
+            "kg": "neo4j",
+            "knowledge_graph": "neo4j",
+            "graph": "neo4j",
+            "chroma": "vector_store",
+            "vector": "vector_store",
+            "vs": "vector_store",
+        }
+        normalized = aliases.get(normalized, normalized)
+        allowed = {"neo4j", "vector_store"}
+        if normalized not in allowed:
+            raise ConfigurationError(f"storage.backend must be one of: {sorted(allowed)}")
+        return normalized
 
 
 class KnowledgeGraphSettings(BaseModel):
@@ -370,6 +396,7 @@ class Settings(BaseModel):
     neo4j: Neo4jSettings
     knowledge_graph: KnowledgeGraphSettings
     vector_store: VectorStoreSettings = Field(default_factory=VectorStoreSettings)
+    storage: StorageSettings = Field(default_factory=StorageSettings)
     logging: LoggingSettings = Field(default_factory=LoggingSettings)
 
     @classmethod

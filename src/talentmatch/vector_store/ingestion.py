@@ -52,6 +52,7 @@ class VectorStoreIngestor:
 
     def ingest_paths(self, paths: Iterable[Path], *, document_type: str) -> VectorIngestionSummary:
         files = [p for p in paths if p.is_file()]
+        logger.info("Ingesting %s file(s) as type=%s", len(files), document_type)
         processed = 0
         failed = 0
         stored = 0
@@ -61,6 +62,7 @@ class VectorStoreIngestor:
             try:
                 chunks = self._load_and_split(path, document_type=document_type)
                 if not chunks:
+                    logger.warning("No chunks produced for %s (type=%s)", path.name, document_type)
                     failed += 1
                     continue
                 stored += self._store.add_documents(chunks)
@@ -69,6 +71,15 @@ class VectorStoreIngestor:
             except Exception:
                 logger.exception("Vector ingestion failed for %s", path)
                 failed += 1
+
+        logger.info(
+            "Ingestion result type=%s: discovered=%s processed=%s failed=%s stored_chunks=%s",
+            document_type,
+            len(files),
+            processed,
+            failed,
+            stored,
+        )
 
         return VectorIngestionSummary(
             discovered_files=len(files),

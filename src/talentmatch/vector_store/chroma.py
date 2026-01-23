@@ -25,7 +25,12 @@ class VectorStoreService:
     def add_documents(self, documents: list[Document]) -> int:
         if not documents:
             return 0
-        self.store.add_documents(documents)
+        try :
+            self.store.add_documents(documents)
+        except Exception as e:
+            logger.error("Error adding documents to Chroma: %s", e)
+            raise e
+        logger.info("Added %s document chunk(s) to Chroma", len(documents))
         return len(documents)
 
     def similarity_search(self, query: str, *, k: int) -> list[Document]:

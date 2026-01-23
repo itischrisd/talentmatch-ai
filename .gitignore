@@ -355,4 +355,4 @@ x64/
 x86/
 ~$*
 /data/neo4j/
-/data_test_set/neo4j/
+/data_ready/neo4j/

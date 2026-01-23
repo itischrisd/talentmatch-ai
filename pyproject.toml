@@ -15,6 +15,7 @@ dependencies = [
     "reportlab>=4.4.9",
     "unstructured[pdf]>=0.17.2",
     "streamlit>=1.53.0",
+    "langchain-chroma>=0.2.6",
 ]
 
 [build-system]

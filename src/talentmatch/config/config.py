@@ -29,6 +29,8 @@ class EnvironmentSettings(BaseSettings):
     NEO4J_PASSWORD: SecretStr
     NEO4J_DATABASE: str
 
+    STORAGE_BACKEND: str = ""
+
 
 def resolve_repo_root() -> Path:
     """
@@ -69,6 +71,12 @@ def build_settings_payload(toml_data: dict[str, Any], env: EnvironmentSettings) 
         "password": env.NEO4J_PASSWORD,
         "database": env.NEO4J_DATABASE,
     }
+
+    if env.STORAGE_BACKEND.strip():
+        payload["storage"] = {
+            **payload.get("storage", {}),
+            "backend": env.STORAGE_BACKEND,
+        }
 
     return payload
 
