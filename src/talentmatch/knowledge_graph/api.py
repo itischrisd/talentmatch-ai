@@ -242,3 +242,16 @@ def query_knowledge_graph(question: str) -> dict[str, Any]:
 
     logger.info("API call: knowledge_graph.query_knowledge_graph")
     return _query_knowledge_graph(question)
+
+
+def propose_staffing(request: str) -> dict[str, Any]:
+    """
+    Propose a best-effort staffing for an RFP based on the current knowledge graph.
+
+    :param request: user request containing an RFP id (e.g. "RFP-001") or a short staffing request
+    :return: dict with staffing proposal and explainable reasoning
+    """
+    from .staffing import propose_staffing as _propose_staffing
+
+    logger.info("API call: knowledge_graph.propose_staffing")
+    return _propose_staffing(request)

@@ -5,7 +5,7 @@ from typing import Any
 from langgraph.prebuilt import create_react_agent
 
 from talentmatch.infra.llm import AzureLlmProvider
-from talentmatch.tools.knowledge_graph_tools import query_knowledge_graph
+from talentmatch.tools.knowledge_graph_tools import propose_staffing, query_knowledge_graph
 
 
 def create_query_agent(
@@ -29,7 +29,7 @@ def create_query_agent(
 
     return create_react_agent(
         model=llm,
-        tools=[query_knowledge_graph],
+        tools=[query_knowledge_graph, propose_staffing],
         name=name,
         prompt=prompt_text,
     )

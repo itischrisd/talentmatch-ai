@@ -34,3 +34,17 @@ def query_knowledge_graph(question: str) -> dict[str, Any]:
 
     logger.info("Tool call: knowledge_graph.query_knowledge_graph")
     return _query_knowledge_graph(question)
+
+
+@tool
+def propose_staffing(request: str) -> dict[str, Any]:
+    """
+    Propose a best-effort staffing for an RFP and return an explainable proposal with reasoning.
+
+    :param request: user request containing an RFP id (e.g. "RFP-001") or a short staffing request
+    :return: dict with proposed team, coverage and reasoning
+    """
+    from talentmatch.knowledge_graph import propose_staffing as _propose_staffing
+
+    logger.info("Tool call: knowledge_graph.propose_staffing")
+    return _propose_staffing(request)
