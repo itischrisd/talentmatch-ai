@@ -247,8 +247,8 @@ Warstwa konwersacyjna jest zbudowana jako **graf agentów z supervisorem** (rout
     - Wyjście: propozycja zespołu, coverage i uzasadnienie (zależnie od backendu)
     - Kiedy: gdy użytkownik chce shortlistę kandydatów i powody dopasowania
 
-> Przełączanie backendu (Neo4j kontra VectorDB) odbywa się na poziomie warstwy tooli na podstawie ustawień (
-`storage.backend` w `settings.toml`).
+> Przełączanie backendu (Neo4j kontra VectorDB) odbywa się na poziomie warstwy tooli na podstawie ustawień
+(`storage.backend` w `settings.toml`).
 
 #### 2.3.5 Frontend Layer (UI)
 
@@ -695,8 +695,8 @@ W zależności od konfiguracji backendu działa to jako:
   Lista kandydatów spełniających warunek (opcjonalnie: z projektami/firmami jako kontekst).
 
 - **Uzasadnienie:**  
-  Zapytanie przechodzi przez kilka relacji grafu (multi-hop) i łączy warunek branżowy (Industry) z technologicznym (
-  Technology).
+  Zapytanie przechodzi przez kilka relacji grafu (multi-hop) i łączy warunek branżowy (Industry) z technologicznym
+  (Technology).
 
 ---
 
